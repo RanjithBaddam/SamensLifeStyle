@@ -1,0 +1,13 @@
+//
+//  adsScrollCollectionViewCell.m
+//  samens
+//
+//  Created by All time Support on 11/06/17.
+//  Copyright © 2017 All time Support. All rights reserved.
+//
+
+#import "adsScrollCollectionViewCell.h"
+
+@implementation adsScrollCollectionViewCell
+
+@end
