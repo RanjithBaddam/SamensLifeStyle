@@ -10,11 +10,12 @@
 #import "filterItemModel.h"
 #import "CategoryModel.h"
 #import "IndivisualFilterModel.h"
+#import "SortModel.h"
 
 @interface FetchFilterViewController : UIViewController
 @property(nonatomic,strong)filterItemModel *filterModel;
 @property(nonatomic,strong)CategoryModel *catModel;
 @property(nonatomic,weak)IBOutlet UITableView *FilterItemTableview;
 @property(nonatomic,strong)IndivisualFilterModel *indivisualFilterModel;
-
+@property(nonatomic,strong)SortModel *sortModel;
 @end

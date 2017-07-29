@@ -1,14 +1,14 @@
 //
-//  SortDisplayModel.h
+//  FetchSortColorModelDetails.h
 //  samens
 //
-//  Created by All time Support on 19/06/17.
+//  Created by All time Support on 27/07/17.
 //  Copyright © 2017 All time Support. All rights reserved.
 //
 
 #import <Foundation/Foundation.h>
 
-@interface SortDisplayModel : NSObject
+@interface FetchSortColorModelDetails : NSObject
 @property(nonatomic,strong)NSString *Name;
 @property(nonatomic,strong)NSString *color;
 @property(nonatomic,strong)NSString *color_code;
@@ -16,16 +16,12 @@
 @property(nonatomic,strong)NSString *image2;
 @property(nonatomic,strong)NSString *image3;
 @property(nonatomic,strong)NSString *image4;
-@property(nonatomic,strong)NSString *pid;
-@property(nonatomic,strong)NSString *price;
 @property(nonatomic,strong)NSString *off_price;
 @property(nonatomic,strong)NSString *offer;
+@property(nonatomic,strong)NSString *pid;
+@property(nonatomic,strong)NSString *price;
 @property(nonatomic,strong)NSString *rating;
 
-
-
-
--(void)getSortDisplay:(NSDictionary *)sortDict;
-
+-(void)getColor1DetailsModelWithDictionary:(NSDictionary *)dict;
 
 @end

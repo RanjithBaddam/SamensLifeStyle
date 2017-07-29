@@ -16,10 +16,10 @@
     NSLog(@"%@",self.price);
     self.pid = [dict valueForKey:@"pid"];
     self.color_code = [dict valueForKey:@"color_code"];
-    self.image2 = [NSString stringWithFormat:@"http://samenslifestyle.com/samenslifestyle123.com/admin_dashboard/image/%@",[dict valueForKey:@"image2"]];
+    self.image2 = [dict valueForKey:@"image2"];
 
-    self.image3 = [NSString stringWithFormat:@"http://samenslifestyle.com/samenslifestyle123.com/admin_dashboard/image/%@",[dict valueForKey:@"image3"]];
-    self.image4 = [NSString stringWithFormat:@"http://samenslifestyle.com/samenslifestyle123.com/admin_dashboard/image/%@",[dict valueForKey:@"image4"]];
+    self.image3 = [dict valueForKey:@"image3"];
+    self.image4 = [dict valueForKey:@"image4"];
     
     self.color = [dict valueForKey:@"color"];
     NSLog(@"%@",self.color);
@@ -27,7 +27,8 @@
     NSLog(@"%@",self.off_price);
     self.offer = [dict valueForKey:@"offer"];
     NSLog(@"%@",self.offer);
-    self.rating = [dict valueForKey:@"rating"];
+    self.rating = [NSString stringWithFormat:@"%@",[dict valueForKey:@"rating"]];
+    NSLog(@"%@",self.rating);
     
     self.like_v = [dict valueForKey:@"like_v"];
     NSLog(@"%@",self.like_v);

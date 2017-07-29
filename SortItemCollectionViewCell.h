@@ -10,5 +10,10 @@
 
 @interface SortItemCollectionViewCell : UICollectionViewCell
 @property(nonatomic,weak)IBOutlet UIImageView *sortItemDisplayImageView;
-@property(nonatomic,weak)IBOutlet UILabel *sortItemDisplayLabel;
+@property(nonatomic,weak)IBOutlet UILabel *DisplayItemTextLabel;
+@property(nonatomic,weak)IBOutlet UILabel *priceLabel;
+@property(nonatomic,weak)IBOutlet UILabel *priceOffLabel;
+@property(nonatomic,weak)IBOutlet UILabel *StarRatingLabel;
+@property(nonatomic,weak)IBOutlet UIButton *WishListButton;
+@property(nonatomic,weak)IBOutlet UILabel *offerLabel;
 @end

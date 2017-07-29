@@ -41,7 +41,7 @@
     [imgView setContentMode:UIViewContentModeScaleAspectFit];
     self.navigationItem.titleView = imgView;
     
-    self.scrollView.contentSize = CGSizeMake(self.view.frame.size.width, 835);
+    self.scrollView.contentSize = CGSizeMake(self.view.frame.size.width, 900);
     CALayer *border = [CALayer layer];
     CGFloat borderWidth = 2;
     border.borderColor = [UIColor darkGrayColor].CGColor;

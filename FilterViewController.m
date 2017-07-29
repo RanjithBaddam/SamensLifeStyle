@@ -37,8 +37,11 @@
 -(IBAction)SliderChange:(id)sender{
     UISlider *slider = (UISlider *)sender;
     NSString *newValue ;
-    newValue = [NSString stringWithFormat:@"%f",slider.value];
-    self.sliderLabel.text = newValue;
+    NSString *newValue2;
+   newValue = [NSString stringWithFormat:@"%f",slider.value];
+    int newValue1 = [newValue intValue];
+    newValue2 = [NSString stringWithFormat:@"%d",newValue1];
+    self.sliderLabel.text = newValue2;
     
 }
 -(NSInteger)numberOfSectionsInTableView:(UITableView *)tableView{
@@ -48,8 +51,9 @@
     return 1;
 }
 -(UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath{
-    UITableViewCell *cell = [[UITableViewCell alloc]initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"cell"];
+    UITableViewCell *cell = [[UITableViewCell alloc]initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:@"cell"];
     if (indexPath.section==0) {
+
         cell.imageView.image = nil;
         cell.textLabel.text = @"Color";
         UIFont *myFont = [ UIFont fontWithName: @"Arial" size: 18.0 ];
@@ -72,6 +76,9 @@
         cell.textLabel.text = @"Price";
         UIFont *myFont = [ UIFont fontWithName: @"Arial" size: 18.0 ];
         cell.textLabel.font  = myFont;
+        cell.detailTextLabel.text = @"Select your price";
+        UIFont *myFont1 = [ UIFont fontWithName: @"Arial" size: 13.0 ];
+        cell.detailTextLabel.font  = myFont1;
         [cell setAccessoryType:UITableViewCellAccessoryDisclosureIndicator];
     }else if (indexPath.section==3){
         cell.imageView.image = nil;
@@ -82,36 +89,58 @@
         UIFont *myFont1 = [ UIFont fontWithName: @"Arial" size: 13.0 ];
         cell.detailTextLabel.font  = myFont1;
         [cell setAccessoryType:UITableViewCellAccessoryDisclosureIndicator];
-    }else if (indexPath.section==4){
-        cell.imageView.image = nil;
-        cell.textLabel.text = @"Color";
-        UIFont *myFont = [ UIFont fontWithName: @"Arial" size: 18.0 ];
-        cell.textLabel.font  = myFont;
-    [cell setAccessoryType:UITableViewCellAccessoryDisclosureIndicator];
-        
-    }
- 
+    } 
     return cell;
 }
 -(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath{
+    if ([[NSUserDefaults.standardUserDefaults valueForKey:@"Direct"]isEqualToString:@"DirectFilter"]) {
     if (indexPath.section==0) {
+        
+
         [ NSUserDefaults.standardUserDefaults setValue:@"color" forKey:@"index"];
+
         FetchFilterViewController *fetchFilterVc = [self.storyboard instantiateViewControllerWithIdentifier:@"FetchFilterViewController"];
-        NSLog(@"%@",self.catModel);
+        
         fetchFilterVc.catModel = self.catModel;
-        NSLog(@"%@",fetchFilterVc.catModel);
         [self.navigationController pushViewController:fetchFilterVc animated:YES];
     }else if (indexPath.section==1){
         [NSUserDefaults.standardUserDefaults setValue:@"size" forKey:@"index"];
      FetchFilterViewController *fetchFilterVc = [self.storyboard instantiateViewControllerWithIdentifier:@"FetchFilterViewController"];
          fetchFilterVc.catModel = self.catModel;
+        fetchFilterVc.sortModel = self.sortModel;
+
         [self.navigationController pushViewController:fetchFilterVc animated:YES];
 
     }else{
         [NSUserDefaults.standardUserDefaults setValue:@"price" forKey:@"index"];
         FetchFilterViewController *fetchFilterVc = [self.storyboard instantiateViewControllerWithIdentifier:@"FetchFilterViewController"];
-         fetchFilterVc.catModel = self.catModel; 
+         fetchFilterVc.catModel = self.catModel;
+        fetchFilterVc.sortModel = self.sortModel;
+
         [self.navigationController pushViewController:fetchFilterVc animated:YES];
+    }
+    }else{
+        if (indexPath.section == 0) {
+            [NSUserDefaults.standardUserDefaults setValue:@"color1" forKey:@"index"];
+        FetchFilterViewController *fetchFilterVc = [self.storyboard instantiateViewControllerWithIdentifier:@"FetchFilterViewController"];
+            fetchFilterVc.sortModel = self.sortModel;
+            [self.navigationController pushViewController:fetchFilterVc animated:YES];
+
+        }else if (indexPath.section==1){
+            [NSUserDefaults.standardUserDefaults setValue:@"size" forKey:@"index"];
+            FetchFilterViewController *fetchFilterVc = [self.storyboard instantiateViewControllerWithIdentifier:@"FetchFilterViewController"];
+            fetchFilterVc.sortModel = self.sortModel;
+            
+            [self.navigationController pushViewController:fetchFilterVc animated:YES];
+            
+        }else{
+            [NSUserDefaults.standardUserDefaults setValue:@"price" forKey:@"index"];
+            FetchFilterViewController *fetchFilterVc = [self.storyboard instantiateViewControllerWithIdentifier:@"FetchFilterViewController"];
+            fetchFilterVc.sortModel = self.sortModel;
+            
+            [self.navigationController pushViewController:fetchFilterVc animated:YES];
+        }
+
     }
 }
 @end

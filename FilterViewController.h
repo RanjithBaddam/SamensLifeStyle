@@ -11,6 +11,7 @@
 #import "CatProductModel.h"
 #import "CategoryModel.h"
 #import "filterItemModel.h"
+#import "SortModel.h"
 
 @interface FilterViewController : UIViewController
 @property(nonatomic,strong)IBOutlet UISlider *slider;
@@ -18,4 +19,5 @@
 -(IBAction)SliderChange:(id)sender;
 @property(nonatomic,weak)IBOutlet UITableView *FilterListTableView;
 @property(nonatomic,strong)CategoryModel *catModel;
+@property(nonatomic,strong)SortModel *sortModel;
 @end
