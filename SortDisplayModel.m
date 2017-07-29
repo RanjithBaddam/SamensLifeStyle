@@ -21,6 +21,10 @@
     self.pid = [sortDict valueForKey:@"pid"];
     NSLog(@"%@",self.pid);
     self.price = [sortDict valueForKey:@"price"];
+    self.off_price = [sortDict valueForKey:@"off_price"];
+    self.offer = [sortDict valueForKey:@"offer"];
+    self.rating = [sortDict valueForKey:@"rating"];
+
 
 }
 

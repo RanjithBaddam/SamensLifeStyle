@@ -25,5 +25,5 @@
 @property(nonatomic,strong)LoginDetailsModel *loginModel;
 @property(nonatomic,strong)CatProductModel *Catmodel;
 
-
+@property(nonatomic,weak)IBOutlet UISearchBar *searchBar;
 @end

@@ -20,9 +20,10 @@
 #import <MBProgressHUD.h>
 #import "SubSubViewController.h"
 #import "SliderModel.h"
+#import "SearchViewController.h"
 
 
-@interface homeViewController ()<UICollectionViewDelegate,UICollectionViewDataSource,UITableViewDataSource,UITableViewDelegate,UIAlertViewDelegate>{
+@interface homeViewController ()<UICollectionViewDelegate,UICollectionViewDataSource,UITableViewDataSource,UITableViewDelegate,UIAlertViewDelegate,UISearchBarDelegate>{
     
     UIActivityIndicatorView *imageActivity;
     
@@ -66,6 +67,7 @@
     NSLog(@"%@",loginModel);
     
     self.navigationItem.hidesBackButton = YES;
+    self.searchBar.delegate = self;
     
 
     
@@ -350,6 +352,7 @@
 }
 -(void)viewWillAppear:(BOOL)animated{
     [super viewWillAppear:animated];
+    [_searchBar resignFirstResponder];
     [[self.tabBarController.tabBar.items objectAtIndex:0] setTitle:@"Home"];
     if ([[NSUserDefaults.standardUserDefaults valueForKey:@"LoggedIn"]isEqualToString:@"yes"])
  {
@@ -369,10 +372,12 @@
     product_id = _Catmodel.pid;
     NSLog(@"%@",product_id);
    
-   
+    dispatch_async(dispatch_get_main_queue(), ^(void){
+ 
     MBProgressHUD * hud = [MBProgressHUD showHUDAddedTo:self.view animated:YES];
     NSString *strloadingText = [NSString stringWithFormat:@"Loading Data."];
     hud.label.text = strloadingText;
+    });
     NSString *urlInstring =[NSString stringWithFormat:@"http://samenslifestyle.com/samenslifestyle123.com/samens_mob/fetch_indevisuallist_sliderImage.php"];
     NSURL *url=[NSURL URLWithString:urlInstring];
     NSMutableURLRequest *request=[NSMutableURLRequest requestWithURL:url];
@@ -458,5 +463,17 @@
         [self refreshMethod];
     }
 }
+- (BOOL)searchBarShouldBeginEditing:(UISearchBar *)searchBar{
+    SearchViewController *searchBarVc = [self.storyboard instantiateViewControllerWithIdentifier:@"SearchViewController"];
+  [self.navigationController pushViewController:searchBarVc animated:YES];
+    return NO;
+}
+
+//-(void)searchBar:(UISearchBar *)searchBar textDidChange:(NSString *)searchText{
+//    SearchViewController *searchBarVc = [self.storyboard instantiateViewControllerWithIdentifier:@"SearchViewController"];
+//    [self.navigationController pushViewController:searchBarVc animated:YES];
+//    
+//}
+\
 
 @end

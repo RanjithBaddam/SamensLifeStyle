@@ -458,6 +458,7 @@
 
 -(void)getColor_code:(NSString *)colorCode{
     _mainColorCode = colorCode;
+      NSLog(@"%@",_mainColorCode);
 }
 -(void)getProductDescription{
     NSDictionary *headers = @{ @"content-type": @"multipart/form-data; boundary=----WebKitFormBoundary7MA4YWxkTrZu0gW",
@@ -778,6 +779,7 @@
                           [[NSNumber numberWithDouble:[(UIStepper *)stepper value]] intValue]];
     if (stepperValue <= _sliderModel.quantity) {
     double value = [stepper value];
+        NSLog(@"%f",value);
     [valueShowLabel setText:[NSString stringWithFormat:@"%d", (int)value]];
     }else{
         UIAlertView *alert = [[UIAlertView alloc]initWithTitle:nil message:@"No more quantities" delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil, nil];
@@ -1100,8 +1102,8 @@ NSLog(@"%@",params);
         
         [paramsArray addObject:[NSString stringWithFormat:@"size=%@",sizemodel.size]];
         [paramsArray addObject:[NSString stringWithFormat:@"color=%@",colorModel.color]];
-
-        [paramsArray addObject:[NSString stringWithFormat:@"quantity=%.0f",_quantityStepper.value]];
+        NSLog(@"%@",valueShowLabel.text);
+        [paramsArray addObject:[NSString stringWithFormat:@"quantity=%@",valueShowLabel.text]];
         
         NSString *params = [paramsArray componentsJoinedByString:@"&"];
         NSLog(@"%@",params);

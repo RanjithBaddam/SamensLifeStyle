@@ -13,6 +13,7 @@
     self.name = [dict valueForKey:@"name"];
     NSLog(@"%@",self.name);
     self.sub_catid = [dict valueForKey:@"sub_catid"];
+    NSLog(@"%@",self.sub_catid);
 }
 
 @end

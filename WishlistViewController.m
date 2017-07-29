@@ -15,7 +15,6 @@
 
 @interface WishlistViewController ()<UITableViewDelegate,UITableViewDataSource,UIAlertViewDelegate>{
     WishlistModel *wishlistModel;
-    NSMutableArray *wishListDataArray;
     IBOutlet UIImageView *emptyWishlistImage;
 }
 
@@ -79,21 +78,24 @@
             }
 
         }else{
-            [_wishlistTableView reloadData];
+//            [_wishlistTableView reloadData];
             id jsonData = [NSJSONSerialization JSONObjectWithData:data options:kNilOptions error:&error];
             NSLog(@"%@",jsonData);
             NSArray *dammyArray = [jsonData valueForKey:@"categories"];
             int index;
-            wishListDataArray = [[NSMutableArray alloc]init];
+            _wishListDataArray = [[NSMutableArray alloc]init];
             for (index=0; index<dammyArray.count; index++) {
                 NSDictionary *dict = dammyArray[index];
                 wishlistModel = [[WishlistModel alloc]init];
                 [wishlistModel getWishListModelWithDictionary:dict];
-                [wishListDataArray addObject:wishlistModel];
-                NSLog(@"%@",wishListDataArray);
-               
+                [_wishListDataArray addObject:wishlistModel];
             }
-                if (wishListDataArray.count==0) {
+            
+            NSLog(@"%@",_wishListDataArray);
+            [[NSUserDefaults standardUserDefaults] setObject:dammyArray forKey:@"WishListData"];
+            [[NSUserDefaults standardUserDefaults] synchronize];
+            
+                if (_wishListDataArray.count==0) {
                     _wishlistTableView.hidden = YES;
                     emptyWishlistImage.hidden = NO;
                 }
@@ -136,13 +138,13 @@
 
 }
 -(NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section{
-    NSLog(@"%lu",(unsigned long)wishListDataArray.count);
-    return wishListDataArray.count;
+    NSLog(@"%lu",(unsigned long)_wishListDataArray.count);
+    return _wishListDataArray.count;
 
 }
 -(UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath{
     WishlistTableViewCell *cell = [_wishlistTableView dequeueReusableCellWithIdentifier:@"WishlistTableViewCell"];
-    wishlistModel = [wishListDataArray objectAtIndex:indexPath.row];
+    wishlistModel = [_wishListDataArray objectAtIndex:indexPath.row];
     [cell.productImage setImageWithURL:[NSURL URLWithString:wishlistModel.image] placeholderImage:nil];
     cell.NameLabel.text = wishlistModel.Name;
     NSLog(@"%@",wishlistModel.Name);
@@ -166,7 +168,7 @@
     NSURL *url=[NSURL URLWithString:urlInstring];
     NSMutableURLRequest *request=[NSMutableURLRequest requestWithURL:url];
     [request setHTTPMethod:@"POST"];
-    wishlistModel = [wishListDataArray objectAtIndex:sender.tag];
+    wishlistModel = [_wishListDataArray objectAtIndex:sender.tag];
     NSString *params = [NSString stringWithFormat:@"cid=%@&api=%@&pid=%@",[NSUserDefaults.standardUserDefaults valueForKey:@"custid"],[NSUserDefaults.standardUserDefaults valueForKey:@"api"],wishlistModel.pid];
     NSLog(@"%@",params);
     
@@ -206,7 +208,7 @@
                 dispatch_async(dispatch_get_main_queue(), ^{
                     
                     [MBProgressHUD hideHUDForView:self.view animated:YES];
-                    [wishListDataArray removeObjectAtIndex:sender.tag];
+                    [_wishListDataArray removeObjectAtIndex:sender.tag];
                     [_wishlistTableView reloadData];
                     
                     UIAlertView *alert = [[UIAlertView alloc]initWithTitle:nil message:@"User successfully deleted" delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil, nil];
