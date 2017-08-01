@@ -138,7 +138,7 @@
     NSLog(@"%@",searchListModel.name);
     itemDisplayVc.searchName = searchListModel.name;
     NSLog(@"%@",itemDisplayVc.searchName);
-    [NSUserDefaults.standardUserDefaults setValue:@"search" forKey:@"index"];
+    [NSUserDefaults.standardUserDefaults setValue:@"search" forKey:@"Direct"];
     [self.navigationController pushViewController:itemDisplayVc animated:YES];
     
 }

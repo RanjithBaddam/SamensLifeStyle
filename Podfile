@@ -1,6 +1,8 @@
 # Uncomment the next line to define a global platform for your project
 # platform :ios, '9.0'
 pod 'Google/SignIn'
+pod 'Firebase/Core'
+
 pod 'IQKeyboardManager'
 pod 'MBProgressHUD', '~> 1.0.0'
 pod 'AFNetworking', '~> 3.0'

@@ -25,16 +25,17 @@
 #import "FetchSortFilterSizeModel.h"
 #import "FilterPriceItemModel.h"
 #import "PriceItemModel.h"
+#import "SearchDataModel.h"
+#import "SearchViewController.h"
 
 
 
-@interface ItemsDisplayViewController ()<UICollectionViewDelegate,UICollectionViewDataSource,UITableViewDelegate,UITableViewDataSource>
+@interface ItemsDisplayViewController ()<UICollectionViewDelegate,UICollectionViewDataSource,UITableViewDelegate,UITableViewDataSource,UISearchBarDelegate>
 {
     
     NSMutableArray *sortMainData;
     UILabel *headerLabel;
     NSString *getMainSortId;
-    NSString *PopUpNameText;
     NSString *priceMainId;
     NSString *pidMainId;
     NSMutableArray *indivisualFilterDataArray;
@@ -48,6 +49,8 @@
     NSMutableArray *priceDataArray1;
     FilterPriceItemModel *PriceModel;
     PriceItemModel *priceModel1;
+    NSMutableArray *searchDataArray;
+    SearchDataModel *searchDataModel;
 }
 @end
 
@@ -66,14 +69,18 @@
     [self getName:_categoryMainName];
     [self getId:_categoryMainId];
     [self getSortId:getMainSortId];
+    self.searchBar.delegate = self;
+
    // [self getItemImages];
     
 }
 -(void)viewWillAppear:(BOOL)animated{
    [self getItemImages];
+    [_searchBar resignFirstResponder];
+
 }
 -(void)getItemImages{
-    if ([[NSUserDefaults.standardUserDefaults valueForKey:@"index"]isEqualToString:@"yes"]) {
+    if ([[NSUserDefaults.standardUserDefaults valueForKey:@"Direct"]isEqualToString:@"yes"]) {
       dispatch_async(dispatch_get_main_queue(), ^{
     [MBProgressHUD showHUDAddedTo:self.view animated:YES];
       });
@@ -146,6 +153,8 @@
                                                         NSLog(@"%@",_subCatMainData);
                                                    
                                                         dispatch_async(dispatch_get_main_queue(), ^{
+                                                            self.DisplayItemsCollectionView.hidden = NO;
+
                                                             [MBProgressHUD hideHUDForView:self.view animated:YES];
                                                             self.DisplayItemsCollectionView.delegate = self;
                                                             self.DisplayItemsCollectionView.dataSource = self;
@@ -215,6 +224,8 @@
                     NSLog(@"%@",self.dammyArray);
                  
                     dispatch_async(dispatch_get_main_queue(), ^{
+                        self.DisplayItemsCollectionView.hidden = NO;
+
                         [MBProgressHUD hideHUDForView:self.view animated:YES];
                         self.DisplayItemsCollectionView.delegate = self;
                         self.DisplayItemsCollectionView.dataSource = self;
@@ -290,6 +301,8 @@
             
             
             dispatch_async(dispatch_get_main_queue(), ^{
+                self.DisplayItemsCollectionView.hidden = NO;
+
                 [MBProgressHUD hideHUDForView:self.view animated:YES];
                 self.DisplayItemsCollectionView.delegate = self;
                 self.DisplayItemsCollectionView.dataSource = self;
@@ -367,6 +380,8 @@
                     
          
             dispatch_async(dispatch_get_main_queue(), ^{
+                self.DisplayItemsCollectionView.hidden = NO;
+
                 [MBProgressHUD hideHUDForView:self.view animated:YES];
                 self.DisplayItemsCollectionView.delegate = self;
                 self.DisplayItemsCollectionView.dataSource = self;
@@ -444,6 +459,8 @@
                     NSLog(@"%@",Color1DataArray);
                   
                     dispatch_async(dispatch_get_main_queue(), ^{
+                        self.DisplayItemsCollectionView.hidden = NO;
+
                         [MBProgressHUD hideHUDForView:self.view animated:YES];
                         self.DisplayItemsCollectionView.delegate = self;
                         self.DisplayItemsCollectionView.dataSource = self;
@@ -519,6 +536,8 @@
                     NSLog(@"%@",Size1DataArray);
                   
                     dispatch_async(dispatch_get_main_queue(), ^{
+                        self.DisplayItemsCollectionView.hidden = NO;
+
                         [MBProgressHUD hideHUDForView:self.view animated:YES];
                         self.DisplayItemsCollectionView.delegate = self;
                         self.DisplayItemsCollectionView.dataSource = self;
@@ -592,6 +611,8 @@
                         NSLog(@"%@",priceDataArray1);
                      
                         dispatch_async(dispatch_get_main_queue(), ^{
+                        self.DisplayItemsCollectionView.hidden = NO;
+
                             [MBProgressHUD hideHUDForView:self.view animated:YES];
                             self.DisplayItemsCollectionView.delegate = self;
                             self.DisplayItemsCollectionView.dataSource = self;
@@ -604,16 +625,16 @@
             }];
             [task resume];
         }
-}else if ([[NSUserDefaults.standardUserDefaults valueForKey:@"index"]isEqualToString:@"search"]){
+}else if ([[NSUserDefaults.standardUserDefaults valueForKey:@"Direct"]isEqualToString:@"search"]){
         dispatch_async(dispatch_get_main_queue(), ^{
             [MBProgressHUD showHUDAddedTo:self.view animated:YES];
             
         });
-        NSString *urlInstring =[NSString stringWithFormat:@"http://samenslifestyle.com/samenslifestyle123.com/samens_mob/fetch_filterd_sub_category_item.php"];
+        NSString *urlInstring =[NSString stringWithFormat:@"http://samenslifestyle.com/samenslifestyle123.com/samens_mob/fetch_sub_category_item.php"];
         NSURL *url=[NSURL URLWithString:urlInstring];
         NSMutableURLRequest *request=[NSMutableURLRequest requestWithURL:url];
         [request setHTTPMethod:@"POST"];
-        NSString *params = [NSString stringWithFormat:@"subCatId=%@",self.searchName];
+        NSString *params = [NSString stringWithFormat:@"subCatId=%@&api=%@&cid=%@",self.searchName,[NSUserDefaults.standardUserDefaults valueForKey:@"api"],[NSUserDefaults.standardUserDefaults valueForKey:@"custid"]];
         
         NSLog(@"%@",params);
         
@@ -650,6 +671,31 @@
             }else{
                 id jsonData = [NSJSONSerialization JSONObjectWithData:data options:kNilOptions error:&error];
                 NSLog(@"%@",jsonData);
+                if([[NSNumber numberWithBool:[[[NSJSONSerialization JSONObjectWithData:data options:kNilOptions error:&error] objectForKey:@"success"] boolValue]] isEqualToNumber:[NSNumber numberWithInt:0]]){
+                    dispatch_async(dispatch_get_main_queue(), ^{
+                        [MBProgressHUD hideHUDForView:self.view animated:YES];
+                        self.DisplayItemsCollectionView.hidden = YES;
+                    });
+                }else{
+                NSArray *dammyArray = [jsonData valueForKey:@"categories"];
+                int index ;
+                searchDataArray = [[NSMutableArray alloc]init];
+                for (index = 0; index < dammyArray.count; index++) {
+                    NSDictionary *dict = dammyArray[index];
+                    searchDataModel = [[SearchDataModel alloc]init];
+                    [searchDataModel getSearchDataModelWithDictionary:dict];
+                    [searchDataArray addObject:searchDataModel];
+                }
+                NSLog(@"%@",searchDataArray);
+                dispatch_async(dispatch_get_main_queue(), ^{
+                    self.DisplayItemsCollectionView.hidden = NO;
+
+                    [MBProgressHUD hideHUDForView:self.view animated:YES];
+                    self.DisplayItemsCollectionView.delegate = self;
+                    self.DisplayItemsCollectionView.dataSource = self;
+                    [self.DisplayItemsCollectionView reloadData];
+                });
+            }
             }
         }];
         [task resume];
@@ -657,7 +703,7 @@
 }
 
 - (NSInteger)collectionView:(UICollectionView *)collectionView numberOfItemsInSection:(NSInteger)section{
-    if ([[NSUserDefaults.standardUserDefaults valueForKey:@"index"]isEqualToString:@"yes"]) {
+    if ([[NSUserDefaults.standardUserDefaults valueForKey:@"Direct"]isEqualToString:@"yes"]) {
         
     return _subCatMainData.count;
     }else if ([[NSUserDefaults.standardUserDefaults valueForKey:@"Direct"]isEqualToString:@"DirectFilter"]){
@@ -670,7 +716,7 @@
         }else{
             return priceDataArray.count;
         }
-    }else{
+    }else if ([[NSUserDefaults.standardUserDefaults valueForKey:@"Direct"]isEqualToString:@"IndirectFilter"]){
         if ([[NSUserDefaults.standardUserDefaults valueForKey:@"index"]isEqualToString:@"color1"]) {
             return Color1DataArray.count;
         }else if ([[NSUserDefaults.standardUserDefaults valueForKey:@"index"]isEqualToString:@"size"]){
@@ -679,12 +725,15 @@
         }else{
             return priceDataArray1.count;
         }
+    }else{
+        NSLog(@"%lu",(unsigned long)searchDataArray.count);
+        return searchDataArray.count;
     }
 
 }
 
 - (__kindof UICollectionViewCell *)collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath{
-    if ([[NSUserDefaults.standardUserDefaults valueForKey:@"index"]isEqualToString:@"yes"]) {
+    if ([[NSUserDefaults.standardUserDefaults valueForKey:@"Direct"]isEqualToString:@"yes"]) {
 
     DisplayItemsCollectionViewCell *cell = [_DisplayItemsCollectionView dequeueReusableCellWithReuseIdentifier:@"DisplayItemsCollectionViewCell" forIndexPath:indexPath];
     self.subModel = [_subCatMainData objectAtIndex:indexPath.item];
@@ -886,7 +935,7 @@
         }
 
     }
-    }else{
+    }else if ([[NSUserDefaults.standardUserDefaults valueForKey:@"Direct"]isEqualToString:@"IndirectFilter"]){
         if ([[NSUserDefaults.standardUserDefaults valueForKey:@"index"]isEqualToString:@"color1"]) {
             DisplayItemsCollectionViewCell *cell = [_DisplayItemsCollectionView dequeueReusableCellWithReuseIdentifier:@"DisplayItemsCollectionViewCell" forIndexPath:indexPath ];
            fetchColor1DetailsModel = [Color1DataArray objectAtIndex:indexPath.item];
@@ -1022,11 +1071,66 @@
                 return cell;
             }
         }
+    }else{
+        DisplayItemsCollectionViewCell *cell = [_DisplayItemsCollectionView dequeueReusableCellWithReuseIdentifier:@"DisplayItemsCollectionViewCell" forIndexPath:indexPath];
+        searchDataModel = [searchDataArray objectAtIndex:indexPath.item];
+        
+        [cell.displayItemImage setImageWithURL:[NSURL URLWithString:searchDataModel.image] placeholderImage:nil];
+        cell.displayItemTextLabel.text = searchDataModel.Name;
+        cell.wishListButton.tag = indexPath.item;
+        NSLog(@"%ld",(long)cell.wishListButton.tag);
+        
+        [cell.wishListButton addTarget:self action:@selector(ClickOnWishlist:) forControlEvents:UIControlEventTouchUpInside];
+        if ([searchDataModel.like_v isKindOfClass:[NSNull class]]) {
+            cell.wishListButton.backgroundColor = [UIColor whiteColor];
+            NSLog(@"%@",searchDataModel.like_v);
+        }else if ([searchDataModel.like_v isEqualToString:@"N"]){
+            cell.wishListButton.backgroundColor = [UIColor whiteColor];
+            NSLog(@"%@",searchDataModel.like_v);
+            
+        }else{
+            cell.wishListButton.backgroundColor = [UIColor redColor];
+            NSLog(@"%@",searchDataModel.like_v);
+        }
+        cell.starRatingLabel.text = searchDataModel.rating;
+        if ([searchDataModel.offer isEqualToString:@"yes"]) {
+            cell.priceLabel.text = searchDataModel.off_price;
+            
+            NSAttributedString *priceOffString = [[NSAttributedString alloc]initWithString:cell.priceOffLabel.text= searchDataModel.price attributes:@{NSStrikethroughStyleAttributeName:
+                                                                                                                                                     [NSNumber numberWithInteger:NSUnderlineStyleSingle]}];
+            [cell.priceOffLabel setAttributedText:priceOffString];
+            NSString *string = cell.priceLabel.text;
+            NSLog(@"%@",string);
+            float value = [string floatValue];
+            NSString *string1 = cell.priceOffLabel.text;
+            NSLog(@"%@",string1);
+            float value1 = [string1 floatValue];
+            float pers = 100;
+            float percentage = (value * pers)/value1;
+            NSLog(@"%f",percentage);
+            int totalValue = pers - percentage;
+            NSLog(@"%d",totalValue);
+            NSString *persentage = [NSString stringWithFormat:@"%d%@",totalValue,@"%"];
+            NSLog(@"%@",persentage);
+            cell.offerLabel.text = persentage;
+            NSLog(@"%@",cell.offerLabel.text);
+            cell.offerLabel.backgroundColor = [UIColor redColor];
+            cell.offerLabel.layer.cornerRadius = 13;
+            cell.offerLabel.clipsToBounds = YES;
+            return cell;
+            
+        }else{
+            cell.priceLabel.text = searchDataModel.price;
+            cell.priceOffLabel.text = nil;
+            cell.offerLabel.text = nil;
+            return cell;
+        }
+        
     }
 }
 
 -(void)collectionView:(UICollectionView *)collectionView didSelectItemAtIndexPath:(NSIndexPath *)indexPath{
-    if ([[NSUserDefaults.standardUserDefaults valueForKey:@"index"]isEqualToString:@"yes"]) {
+    if ([[NSUserDefaults.standardUserDefaults valueForKey:@"Direct"]isEqualToString:@"yes"]) {
     SubSubViewController *subsubVc = [self.storyboard instantiateViewControllerWithIdentifier:@"SubSubViewController"];
      _subModel = [_subCatMainData objectAtIndex:indexPath.item];
     subsubVc.subCategoryModel = _subModel;
@@ -1074,7 +1178,7 @@
             [subsubVc getItemPrice:PriceModel.price];
             [self.navigationController pushViewController:subsubVc animated:YES];
         }
-    }else{
+    }else if ([[NSUserDefaults.standardUserDefaults valueForKey:@"Direct"]isEqualToString:@"IndirectFilter"]){
         if ([[NSUserDefaults.standardUserDefaults valueForKey:@"index"]isEqualToString:@"color1"]) {
             SubSubViewController *subsubVc = [self.storyboard instantiateViewControllerWithIdentifier:@"SubSubViewController"];
             fetchColor1DetailsModel = [Color1DataArray objectAtIndex:indexPath.item];
@@ -1110,6 +1214,17 @@
             [self.navigationController pushViewController:subsubVc animated:YES];
         }
 
+    }else{
+        SubSubViewController *subsubVc = [self.storyboard instantiateViewControllerWithIdentifier:@"SubSubViewController"];
+        searchDataModel = [searchDataArray objectAtIndex:indexPath.item];
+        [subsubVc getId:searchDataModel.pid];
+        [subsubVc getColor_code:searchDataModel.color_code];
+        
+        [subsubVc getItemName:searchDataModel.Name];
+        NSLog(@"%@",searchDataModel.Name);
+        [subsubVc getItemPrice:searchDataModel.price];
+        [self.navigationController pushViewController:subsubVc animated:YES];
+
     }
 
 }
@@ -1128,7 +1243,7 @@
 
 -(IBAction)ClickOnWishlist:(UIButton *)sender{
    
-    if ([[NSUserDefaults.standardUserDefaults valueForKey:@"LoggedIn"]isEqualToString:@"yes"])
+    if ([[NSUserDefaults.standardUserDefaults valueForKey:@"LoggedIn"]isEqualToString:@"yes"] || [[NSUserDefaults.standardUserDefaults valueForKey:@"login"]isEqualToString:@"google"] || [[NSUserDefaults.standardUserDefaults valueForKey:@"login"]isEqualToString:@"facebook"])
  {
 
      NSArray *token = [[NSUserDefaults standardUserDefaults] objectForKey:@"WishListData"];
@@ -1139,10 +1254,12 @@
      NSArray *token1 = [token valueForKey:@"pid"];
      NSLog(@"%@",token1);
          if ([token1 containsObject:_subModel.pid]) {
-             
+             dispatch_async(dispatch_get_main_queue(), ^{
+    
          MBProgressHUD * hud = [MBProgressHUD showHUDAddedTo:self.view animated:YES];
          NSString *strloadingText = [NSString stringWithFormat:@"Loading Data."];
          hud.label.text = strloadingText;
+             });
          NSString *urlInstring =[NSString stringWithFormat:@"http://samenslifestyle.com/samenslifestyle123.com/samens_mob/send_indivi_like.php"];
          NSURL *url=[NSURL URLWithString:urlInstring];
          NSMutableURLRequest *request=[NSMutableURLRequest requestWithURL:url];
@@ -1217,9 +1334,12 @@
          [task resume];
  
      }else{
+         dispatch_async(dispatch_get_main_queue(), ^{
+
          MBProgressHUD * hud = [MBProgressHUD showHUDAddedTo:self.view animated:YES];
          NSString *strloadingText = [NSString stringWithFormat:@"Loading Data."];
          hud.label.text = strloadingText;
+         });
          NSString *urlInstring =[NSString stringWithFormat:@"http://samenslifestyle.com/samenslifestyle123.com/samens_mob/send_indivi_like.php"];
          NSURL *url=[NSURL URLWithString:urlInstring];
          NSMutableURLRequest *request=[NSMutableURLRequest requestWithURL:url];
@@ -1381,6 +1501,12 @@
                                                     }
                                                     id sortData = [NSJSONSerialization JSONObjectWithData:data options:kNilOptions error:&error];
                                                     NSLog(@"%@",sortData);
+                                                    if([[NSNumber numberWithBool:[[[NSJSONSerialization JSONObjectWithData:data options:kNilOptions error:&error] objectForKey:@"success"] boolValue]] isEqualToNumber:[NSNumber numberWithInt:0]]){
+                                                        dispatch_async(dispatch_get_main_queue(), ^{
+                                                            [MBProgressHUD hideHUDForView:self.view animated:YES];
+                                                            self.DisplayItemsCollectionView.hidden = YES;
+                                                        });
+                                                    }else{
                                                     
                                                     NSArray *sortDammyArr = [sortData valueForKey:@"category"];
                                                     sortMainData = [[NSMutableArray alloc]init];
@@ -1400,7 +1526,7 @@
                                                         self.sortTableView.dataSource = self;
                                                         [self.sortTableView reloadData];
                                                     });
-                                                    
+                                                    }
                                                 }];
     [dataTask resume];
     
@@ -1408,8 +1534,9 @@
 }
 
 -(IBAction)clickOnSort:(UIButton *)sender{
-    [self getPopUpName:PopUpNameText];
-    self.popUpTextLabel.text = PopUpNameText;
+    [NSUserDefaults.standardUserDefaults setValue:@"DirectSort" forKey:@"Direct"];
+    [self getPopUpName:_PopUpNameText];
+    self.popUpTextLabel.text = _PopUpNameText;
     self.sortPopUpView.hidden = NO;
     self.DisplayItemsCollectionView.alpha = 0.3;
     [self GetSortData];
@@ -1426,6 +1553,7 @@
 }
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath{
     UITableViewCell *cell = [[UITableViewCell alloc]initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"cell"];
+    
     SortModel *displayModel = [sortMainData objectAtIndex:indexPath.row];
     NSLog(@"%@",displayModel);
         NSLog(@"%@",displayModel.name);
@@ -1433,16 +1561,30 @@
     return cell;
 }
 -(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath{
-   
+    if ([[NSUserDefaults.standardUserDefaults valueForKey:@"Direct"]isEqualToString:@"DirectSort"]) {
+        
     SortItemDisplayViewController *sortItemVc = [self.storyboard instantiateViewControllerWithIdentifier:@"SortItemDisplayViewController"];
     [self.navigationController pushViewController:sortItemVc animated:YES];
     sortmodel = [sortMainData objectAtIndex:indexPath.row];
     NSLog(@"%@",sortmodel.sub_catid);
+    sortItemVc.categoryMainId = self.categoryMainId;
     [sortItemVc getSortItemId:sortmodel.sub_catid];
     NSLog(@"%@",sortmodel.name);
     [sortItemVc getSortItemName:sortmodel.name];
     sortItemVc.sortModel = sortmodel;
-    
+    sortItemVc.PopUpNameText = self.PopUpNameText;
+    }else{
+        SortItemDisplayViewController *sortItemVc = [self.storyboard instantiateViewControllerWithIdentifier:@"SortItemDisplayViewController"];
+        [self.navigationController pushViewController:sortItemVc animated:YES];
+        sortmodel = [sortMainData objectAtIndex:indexPath.row];
+        NSLog(@"%@",sortmodel.sub_catid);
+        sortItemVc.categoryMainId = self.categoryMainId;
+        [sortItemVc getSortItemId:sortmodel.sub_catid];
+        NSLog(@"%@",sortmodel.name);
+        [sortItemVc getSortItemName:sortmodel.name];
+        sortItemVc.sortModel = sortmodel;
+        sortItemVc.PopUpNameText = self.PopUpNameText;
+    }
     
 }
 -(void)getSortId:(NSString *)SortItemId{
@@ -1460,7 +1602,7 @@
     
 }
 -(void)getPopUpName:(NSString *)popUpName{
-    PopUpNameText = popUpName;
+    _PopUpNameText = popUpName;
 }
 -(IBAction)ClickOnSortClose:(id)sender{
     self.sortPopUpView.hidden = YES;
@@ -1480,6 +1622,11 @@
     NSLog(@"%@",filterVc.catModel);
     [self.navigationController pushViewController:filterVc animated:YES];
     
+}
+- (BOOL)searchBarShouldBeginEditing:(UISearchBar *)searchBar{
+    SearchViewController *searchBarVc = [self.storyboard instantiateViewControllerWithIdentifier:@"SearchViewController"];
+    [self.navigationController pushViewController:searchBarVc animated:YES];
+    return NO;
 }
 //- (CGSize)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout*)collectionViewLayout sizeForItemAtIndexPath:(NSIndexPath *)indexPath{
 //    CGFloat widthOfCell =(self.view.frame.size.width-3)/2;

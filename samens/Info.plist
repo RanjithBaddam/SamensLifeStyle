@@ -21,16 +21,32 @@
 		<dict>
 			<key>CFBundleURLSchemes</key>
 			<array>
-				<string>fb307063489741157</string>
+				<string>fb107375419949078</string>
+			</array>
+		</dict>
+		<dict>
+			<key>CFBundleTypeRole</key>
+			<string>Editor</string>
+			<key>CFBundleURLSchemes</key>
+			<array>
+				<string>com.googleusercontent.apps.84639970237-palh5655t5edrvivoti55luuqgq7nb36</string>
+			</array>
+		</dict>
+		<dict>
+			<key>CFBundleTypeRole</key>
+			<string>Editor</string>
+			<key>CFBundleURLSchemes</key>
+			<array>
+				<string>com.enrichtechnosoft.ranjith</string>
 			</array>
 		</dict>
 	</array>
 	<key>CFBundleVersion</key>
 	<string>1</string>
 	<key>FacebookAppID</key>
-	<string>307063489741157</string>
+	<string>107375419949078</string>
 	<key>FacebookDisplayName</key>
-	<string>Samens</string>
+	<string>samenslifestyle</string>
 	<key>LSApplicationQueriesSchemes</key>
 	<array>
 		<string>fbapi</string>

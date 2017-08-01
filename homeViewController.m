@@ -79,9 +79,12 @@
 
 }
 -(void)getAnimationImages{
+    dispatch_async(dispatch_get_main_queue(), ^{
+
     MBProgressHUD * hud = [MBProgressHUD showHUDAddedTo:self.view animated:YES];
     NSString *strloadingText = [NSString stringWithFormat:@"Loading Data."];
     hud.label.text = strloadingText;
+    });
     NSDictionary *headers = @{ @"catagory_id": @"catagory_id",
                                @"cache-control": @"no-cache",
                                @"postman-token": @"1508bc44-9828-16e6-258a-472db435fa2f" };
@@ -167,9 +170,12 @@
 }
 
 -(void)getcatagory{
+    dispatch_async(dispatch_get_main_queue(), ^(void){
+
     MBProgressHUD * hud = [MBProgressHUD showHUDAddedTo:self.view animated:YES];
     NSString *strloadingText = [NSString stringWithFormat:@"Loading Data."];
     hud.label.text = strloadingText;
+    });
     NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:[NSURL URLWithString:@"http://samenslifestyle.com/samenslifestyle123.com/samens_mob/newfetchmaa.php"]
                                                            cachePolicy:NSURLRequestUseProtocolCachePolicy
                                                        timeoutInterval:20.0];
@@ -300,7 +306,7 @@
         NSLog(@"%@",items.CatModel);
        //items.CatModel = catModel.product[indexPath.row];
         NSLog(@"%@",items.CatModel);
-        [NSUserDefaults.standardUserDefaults setValue:@"yes" forKey:@"index"];
+        [NSUserDefaults.standardUserDefaults setValue:@"yes" forKey:@"Direct"];
          [self.navigationController pushViewController:items animated:YES];
     }else{
         
@@ -446,16 +452,16 @@
     [[NSNotificationCenter defaultCenter]removeObserver:self];
     
 }
--(void) tabBarController:(UITabBarController *)tabBarController didSelectViewController:(UIViewController *)viewController{
-    NSLog(@"%lu",(unsigned long)tabBarController.selectedIndex);
-    if (tabBarController.selectedIndex==0) {
-        
-//            [(UINavigationController *)viewController popToRootViewControllerAnimated:NO];
-        }else{
-            
-        }
-   
-}
+//-(void) tabBarController:(UITabBarController *)tabBarController didSelectViewController:(UIViewController *)viewController{
+//    NSLog(@"%lu",(unsigned long)tabBarController.selectedIndex);
+//    if (tabBarController.selectedIndex==0) {
+//        
+////            [(UINavigationController *)viewController popToRootViewControllerAnimated:NO];
+//        }else{
+//            
+//        }
+//   
+//}
 -(void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex{
     if (buttonIndex == 001) {
         [self refreshMethod];

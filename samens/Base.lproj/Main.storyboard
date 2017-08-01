@@ -135,11 +135,17 @@
                                 <rect key="frame" x="218" y="657" width="168" height="30"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMinX="YES" widthSizable="YES" flexibleMaxX="YES" flexibleMinY="YES" heightSizable="YES" flexibleMaxY="YES"/>
                                 <state key="normal" title="Button"/>
+                                <connections>
+                                    <action selector="didTapSignIn:" destination="BYZ-38-t0r" eventType="touchUpInside" id="z0G-Sx-zQA"/>
+                                </connections>
                             </button>
                             <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="ltG-vq-oCk">
                                 <rect key="frame" x="34" y="657" width="161" height="30"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMinX="YES" widthSizable="YES" flexibleMaxX="YES" flexibleMinY="YES" heightSizable="YES" flexibleMaxY="YES"/>
                                 <state key="normal" title="Button"/>
+                                <connections>
+                                    <action selector="didTapSignOut:" destination="BYZ-38-t0r" eventType="touchUpInside" id="RwI-mN-g3E"/>
+                                </connections>
                             </button>
                         </subviews>
                         <color key="backgroundColor" red="0.93725490570000003" green="0.93725490570000003" blue="0.95686274770000002" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
@@ -150,7 +156,6 @@
                     <connections>
                         <outlet property="adsScrollCollectionView" destination="YCy-7u-dsi" id="Dgv-5P-nkE"/>
                         <outlet property="emailTextField" destination="d6g-T8-XRF" id="fIE-BN-gkf"/>
-                        <outlet property="loginWithGoogle" destination="NYI-Fe-7zf" id="qks-Fe-twG"/>
                         <outlet property="passwordTextField" destination="OLt-Vp-LNk" id="Gbo-vK-ujK"/>
                     </connections>
                 </viewController>
@@ -1006,8 +1011,8 @@ Choose Request Return.</string>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <collectionView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" fixedFrame="YES" dataMode="prototypes" translatesAutoresizingMaskIntoConstraints="NO" id="qSl-uq-129">
-                                <rect key="frame" x="0.0" y="59" width="414" height="677"/>
-                                <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                                <rect key="frame" x="0.0" y="154" width="414" height="582"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMinX="YES" widthSizable="YES" flexibleMaxX="YES" flexibleMinY="YES" heightSizable="YES" flexibleMaxY="YES"/>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                 <collectionViewFlowLayout key="collectionViewLayout" minimumLineSpacing="0.5" minimumInteritemSpacing="0.5" id="yAu-UZ-ztq">
                                     <size key="itemSize" width="203" height="364"/>
@@ -1133,31 +1138,36 @@ Choose Request Return.</string>
                             </view>
                             <view contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="ai1-8F-zdk">
                                 <rect key="frame" x="0.0" y="59" width="414" height="57"/>
-                                <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES" flexibleMaxY="YES"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMinX="YES" widthSizable="YES" flexibleMaxX="YES" flexibleMinY="YES" heightSizable="YES" flexibleMaxY="YES"/>
                                 <subviews>
-                                    <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="ngt-cl-snP">
-                                        <rect key="frame" x="-1" y="0.0" width="211" height="57"/>
-                                        <autoresizingMask key="autoresizingMask" flexibleMinX="YES" widthSizable="YES" flexibleMaxX="YES" flexibleMinY="YES" heightSizable="YES" flexibleMaxY="YES"/>
-                                        <color key="backgroundColor" red="1" green="0.69590630379999996" blue="0.35437171229999997" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                                        <fontDescription key="fontDescription" type="system" weight="medium" pointSize="18"/>
-                                        <state key="normal" title="SORT"/>
-                                        <connections>
-                                            <action selector="clickOnSort:" destination="wd0-nB-p6x" eventType="touchUpInside" id="aqp-VD-wKz"/>
-                                        </connections>
-                                    </button>
-                                    <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Gb9-s3-Iyr">
-                                        <rect key="frame" x="211" y="0.0" width="201" height="57"/>
-                                        <autoresizingMask key="autoresizingMask" flexibleMinX="YES" widthSizable="YES" flexibleMaxX="YES" flexibleMinY="YES" heightSizable="YES" flexibleMaxY="YES"/>
-                                        <color key="backgroundColor" red="0.15191623570000001" green="0.68851286170000003" blue="0.91373163459999995" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                                        <fontDescription key="fontDescription" type="system" weight="medium" pointSize="18"/>
-                                        <state key="normal" title="FILTER"/>
-                                        <connections>
-                                            <action selector="ClickOnFilter1:" destination="wd0-nB-p6x" eventType="touchUpInside" id="F8N-Om-vZI"/>
-                                        </connections>
-                                    </button>
+                                    <searchBar contentMode="redraw" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="zqW-d1-gDO">
+                                        <rect key="frame" x="0.0" y="-8" width="414" height="44"/>
+                                        <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMaxY="YES"/>
+                                        <textInputTraits key="textInputTraits"/>
+                                    </searchBar>
                                 </subviews>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                             </view>
+                            <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="ngt-cl-snP">
+                                <rect key="frame" x="0.0" y="96" width="211" height="57"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMinX="YES" widthSizable="YES" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <color key="backgroundColor" red="1" green="0.69590630379999996" blue="0.35437171229999997" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                <fontDescription key="fontDescription" type="system" weight="medium" pointSize="18"/>
+                                <state key="normal" title="SORT"/>
+                                <connections>
+                                    <action selector="clickOnSort:" destination="wd0-nB-p6x" eventType="touchUpInside" id="aqp-VD-wKz"/>
+                                </connections>
+                            </button>
+                            <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Gb9-s3-Iyr">
+                                <rect key="frame" x="211" y="96" width="201" height="57"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMinX="YES" widthSizable="YES" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <color key="backgroundColor" red="0.15191623570000001" green="0.68851286170000003" blue="0.91373163459999995" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                <fontDescription key="fontDescription" type="system" weight="medium" pointSize="18"/>
+                                <state key="normal" title="FILTER"/>
+                                <connections>
+                                    <action selector="ClickOnFilter1:" destination="wd0-nB-p6x" eventType="touchUpInside" id="F8N-Om-vZI"/>
+                                </connections>
+                            </button>
                         </subviews>
                         <color key="backgroundColor" red="0.93725490199999995" green="0.93725490199999995" blue="0.95686274510000002" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                     </view>
@@ -1166,6 +1176,7 @@ Choose Request Return.</string>
                     <connections>
                         <outlet property="DisplayItemsCollectionView" destination="qSl-uq-129" id="dNO-oJ-gFV"/>
                         <outlet property="popUpTextLabel" destination="CSx-0m-57l" id="9t4-tn-7ra"/>
+                        <outlet property="searchBar" destination="zqW-d1-gDO" id="Jqq-JN-JiH"/>
                         <outlet property="sortPopUpView" destination="2az-hZ-B9K" id="Ni5-jn-Y8u"/>
                         <outlet property="sortTableView" destination="owE-1E-Wm7" id="TD4-uO-oWW"/>
                     </connections>
@@ -1196,7 +1207,7 @@ Choose Request Return.</string>
                                 </scopeButtonTitles>
                             </searchBar>
                             <collectionView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" fixedFrame="YES" dataMode="prototypes" translatesAutoresizingMaskIntoConstraints="NO" id="Mdw-qq-vB6">
-                                <rect key="frame" x="0.0" y="164" width="414" height="564"/>
+                                <rect key="frame" x="0.0" y="164" width="414" height="572"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMinX="YES" widthSizable="YES" flexibleMaxX="YES" flexibleMinY="YES" heightSizable="YES" flexibleMaxY="YES"/>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                 <collectionViewFlowLayout key="collectionViewLayout" minimumLineSpacing="10" minimumInteritemSpacing="10" id="HKK-Q1-jwZ">
@@ -1208,7 +1219,7 @@ Choose Request Return.</string>
                                 <cells>
                                     <collectionViewCell opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" reuseIdentifier="SortItemCollectionViewCell" id="Qff-zZ-J1o" customClass="SortItemCollectionViewCell">
                                         <rect key="frame" x="0.0" y="0.0" width="199" height="364"/>
-                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                        <autoresizingMask key="autoresizingMask"/>
                                         <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center">
                                             <rect key="frame" x="0.0" y="0.0" width="199" height="364"/>
                                             <autoresizingMask key="autoresizingMask"/>
@@ -1298,6 +1309,34 @@ Choose Request Return.</string>
                                     </collectionViewCell>
                                 </cells>
                             </collectionView>
+                            <view hidden="YES" contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="PlU-TN-giR">
+                                <rect key="frame" x="48" y="259" width="296" height="384"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMinX="YES" widthSizable="YES" flexibleMaxX="YES" flexibleMinY="YES" heightSizable="YES" flexibleMaxY="YES"/>
+                                <subviews>
+                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Label" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="udY-Nw-WI1">
+                                        <rect key="frame" x="9" y="26" width="290" height="59"/>
+                                        <autoresizingMask key="autoresizingMask" flexibleMinX="YES" widthSizable="YES" flexibleMaxX="YES" flexibleMinY="YES" heightSizable="YES" flexibleMaxY="YES"/>
+                                        <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                        <nil key="textColor"/>
+                                        <nil key="highlightedColor"/>
+                                    </label>
+                                    <tableView clipsSubviews="YES" contentMode="scaleToFill" fixedFrame="YES" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" rowHeight="44" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="qkT-4r-VcF">
+                                        <rect key="frame" x="-2" y="89" width="301" height="313"/>
+                                        <autoresizingMask key="autoresizingMask" flexibleMinX="YES" widthSizable="YES" flexibleMaxX="YES" flexibleMinY="YES" heightSizable="YES" flexibleMaxY="YES"/>
+                                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                    </tableView>
+                                    <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="123-sS-6do">
+                                        <rect key="frame" x="260" y="2" width="30" height="22"/>
+                                        <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                        <state key="normal" title="Button" image="cancellbuttonwithround"/>
+                                        <connections>
+                                            <action selector="ClickOnSortClose:" destination="wd0-nB-p6x" eventType="touchUpInside" id="p4J-mA-1cA"/>
+                                            <action selector="ClickOnSortPopUpClose:" destination="HVh-ev-rmv" eventType="touchUpInside" id="khL-zY-sUq"/>
+                                        </connections>
+                                    </button>
+                                </subviews>
+                                <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                            </view>
                             <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="9S4-Id-bkC">
                                 <rect key="frame" x="0.0" y="116" width="200" height="46"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMinX="YES" widthSizable="YES" flexibleMaxX="YES" flexibleMaxY="YES"/>
@@ -1324,6 +1363,10 @@ Choose Request Return.</string>
                     <navigationItem key="navigationItem" title="Sort Items" id="ce1-Q6-k78"/>
                     <simulatedNavigationBarMetrics key="simulatedTopBarMetrics" prompted="NO"/>
                     <connections>
+                        <outlet property="SortpopupView" destination="PlU-TN-giR" id="yLP-rn-GeK"/>
+                        <outlet property="popupTextLabel" destination="udY-Nw-WI1" id="yKp-Dd-rJx"/>
+                        <outlet property="searchBar" destination="ViP-RD-41C" id="Y1k-SZ-Prh"/>
+                        <outlet property="sortTableView" destination="qkT-4r-VcF" id="jdE-Io-qKa"/>
                         <outlet property="sortitemDisplayCollectionView" destination="Mdw-qq-vB6" id="zIa-TQ-5ZU"/>
                     </connections>
                 </viewController>
@@ -1468,7 +1511,7 @@ Choose Request Return.</string>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
                                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="VV7-ca-e4U">
-                                                    <rect key="frame" x="44" y="3" width="20" height="23"/>
+                                                    <rect key="frame" x="40" y="-1" width="19" height="28"/>
                                                     <autoresizingMask key="autoresizingMask" flexibleMinX="YES" widthSizable="YES" flexibleMaxX="YES" flexibleMinY="YES" heightSizable="YES" flexibleMaxY="YES"/>
                                                     <color key="backgroundColor" red="0.1049839743" green="0.34043627980000002" blue="0.062432454530000001" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                                     <fontDescription key="fontDescription" type="system" pointSize="17"/>
@@ -1476,39 +1519,39 @@ Choose Request Return.</string>
                                                     <nil key="highlightedColor"/>
                                                 </label>
                                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="rMR-9K-KHw">
-                                                    <rect key="frame" x="140" y="3" width="264" height="23"/>
+                                                    <rect key="frame" x="135" y="-1" width="263" height="28"/>
                                                     <autoresizingMask key="autoresizingMask" flexibleMinX="YES" widthSizable="YES" flexibleMaxX="YES" flexibleMinY="YES" heightSizable="YES" flexibleMaxY="YES"/>
                                                     <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                                     <nil key="textColor"/>
                                                     <nil key="highlightedColor"/>
                                                 </label>
                                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="5" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="xZU-dL-zcS">
-                                                    <rect key="frame" x="8" y="31" width="401" height="66"/>
+                                                    <rect key="frame" x="6" y="29" width="394" height="76"/>
                                                     <autoresizingMask key="autoresizingMask" flexibleMinX="YES" widthSizable="YES" flexibleMaxX="YES" flexibleMinY="YES" heightSizable="YES" flexibleMaxY="YES"/>
                                                     <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                                     <nil key="textColor"/>
                                                     <nil key="highlightedColor"/>
                                                 </label>
                                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="2D3-3k-mmE">
-                                                    <rect key="frame" x="8" y="118" width="183" height="25"/>
+                                                    <rect key="frame" x="6" y="121" width="184" height="30"/>
                                                     <autoresizingMask key="autoresizingMask" flexibleMinX="YES" widthSizable="YES" flexibleMaxX="YES" flexibleMinY="YES" heightSizable="YES" flexibleMaxY="YES"/>
                                                     <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                                     <nil key="textColor"/>
                                                     <nil key="highlightedColor"/>
                                                 </label>
                                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="3Xt-mO-Zq9">
-                                                    <rect key="frame" x="216" y="118" width="188" height="25"/>
+                                                    <rect key="frame" x="214" y="121" width="184" height="30"/>
                                                     <autoresizingMask key="autoresizingMask" flexibleMinX="YES" widthSizable="YES" flexibleMaxX="YES" flexibleMinY="YES" heightSizable="YES" flexibleMaxY="YES"/>
                                                     <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                                     <nil key="textColor"/>
                                                     <nil key="highlightedColor"/>
                                                 </label>
                                                 <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" image="UserIcon" translatesAutoresizingMaskIntoConstraints="NO" id="SBE-OX-PrW">
-                                                    <rect key="frame" x="8" y="3" width="31" height="23"/>
+                                                    <rect key="frame" x="6" y="-1" width="32" height="28"/>
                                                     <autoresizingMask key="autoresizingMask" flexibleMinX="YES" widthSizable="YES" flexibleMaxX="YES" flexibleMinY="YES" heightSizable="YES" flexibleMaxY="YES"/>
                                                 </imageView>
                                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="★" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="mWp-zR-dPH">
-                                                    <rect key="frame" x="59" y="3" width="25" height="23"/>
+                                                    <rect key="frame" x="54" y="-1" width="28" height="28"/>
                                                     <autoresizingMask key="autoresizingMask" flexibleMinX="YES" widthSizable="YES" flexibleMaxX="YES" flexibleMinY="YES" heightSizable="YES" flexibleMaxY="YES"/>
                                                     <color key="backgroundColor" red="0.1049839743" green="0.34043627980000002" blue="0.062432454530000001" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                                     <fontDescription key="fontDescription" type="system" pointSize="27"/>
@@ -2117,7 +2160,7 @@ Choose Request Return.</string>
                     <toolbarItems/>
                     <freeformSimulatedSizeMetrics key="simulatedDestinationMetrics"/>
                     <size key="freeformSize" width="414" height="736"/>
-                    <navigationBar key="navigationBar" contentMode="scaleToFill" id="XZk-Rg-I9s">
+                    <navigationBar key="navigationBar" contentMode="scaleToFill" misplaced="YES" id="XZk-Rg-I9s">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="44"/>
                         <autoresizingMask key="autoresizingMask"/>
                         <color key="barTintColor" red="0.15037587285041809" green="0.18476241827011108" blue="0.34043627977371216" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
@@ -2326,7 +2369,7 @@ Choose Request Return.</string>
                 <navigationController automaticallyAdjustsScrollViewInsets="NO" id="OQc-8f-6qC" sceneMemberID="viewController">
                     <tabBarItem key="tabBarItem" title="Cart" image="cartIcon" id="5Sn-wT-QEk"/>
                     <toolbarItems/>
-                    <navigationBar key="navigationBar" contentMode="scaleToFill" id="Llq-lc-W0D">
+                    <navigationBar key="navigationBar" contentMode="scaleToFill" misplaced="YES" id="Llq-lc-W0D">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="44"/>
                         <autoresizingMask key="autoresizingMask"/>
                     </navigationBar>
@@ -2345,7 +2388,7 @@ Choose Request Return.</string>
                 <navigationController automaticallyAdjustsScrollViewInsets="NO" id="9tf-Ah-Zzx" sceneMemberID="viewController">
                     <tabBarItem key="tabBarItem" title="Account" image="profile" id="44b-sf-4cB"/>
                     <toolbarItems/>
-                    <navigationBar key="navigationBar" contentMode="scaleToFill" id="Qda-a8-ns2">
+                    <navigationBar key="navigationBar" contentMode="scaleToFill" misplaced="YES" id="Qda-a8-ns2">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="44"/>
                         <autoresizingMask key="autoresizingMask"/>
                     </navigationBar>
@@ -2364,7 +2407,7 @@ Choose Request Return.</string>
                 <navigationController automaticallyAdjustsScrollViewInsets="NO" id="Qcv-Vu-pTm" sceneMemberID="viewController">
                     <tabBarItem key="tabBarItem" title="Wishlist" image="WishList" id="l6g-Ef-7ki"/>
                     <toolbarItems/>
-                    <navigationBar key="navigationBar" contentMode="scaleToFill" id="4C0-j1-boK">
+                    <navigationBar key="navigationBar" contentMode="scaleToFill" misplaced="YES" id="4C0-j1-boK">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="44"/>
                         <autoresizingMask key="autoresizingMask"/>
                     </navigationBar>
@@ -2383,7 +2426,7 @@ Choose Request Return.</string>
                 <navigationController automaticallyAdjustsScrollViewInsets="NO" id="NZB-I1-yjk" sceneMemberID="viewController">
                     <tabBarItem key="tabBarItem" title="Search" image="search" id="cvE-te-ZrN"/>
                     <toolbarItems/>
-                    <navigationBar key="navigationBar" contentMode="scaleToFill" id="Pjg-vY-UNJ">
+                    <navigationBar key="navigationBar" contentMode="scaleToFill" misplaced="YES" id="Pjg-vY-UNJ">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="44"/>
                         <autoresizingMask key="autoresizingMask"/>
                     </navigationBar>

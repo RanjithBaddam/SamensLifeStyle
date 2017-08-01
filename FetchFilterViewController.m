@@ -11,6 +11,7 @@
 #import "ItemsDisplayViewController.h"
 #import "IndivisualFilterModel.h"
 #import "FetchSortColorModel.h"
+#import "SortItemDisplayViewController.h"
 
 @interface FetchFilterViewController ()<UITableViewDelegate,UITableViewDataSource>{
     NSMutableArray *filterDataArray;
@@ -85,6 +86,12 @@
             }
             
         }else{
+            if([[NSNumber numberWithBool:[[[NSJSONSerialization JSONObjectWithData:data options:kNilOptions error:&error] objectForKey:@"success"] boolValue]] isEqualToNumber:[NSNumber numberWithInt:0]]){
+                dispatch_async(dispatch_get_main_queue(), ^{
+                    [MBProgressHUD hideHUDForView:self.view animated:YES];
+                    self.FilterItemTableview.hidden = YES;
+                });
+            }else{
 
             id jsonData = [NSJSONSerialization JSONObjectWithData:data options:kNilOptions error:&error];
             NSLog(@"%@",response);
@@ -100,15 +107,16 @@
                 [filterDataArray addObject:_filterModel];
             }
             NSLog(@"%@",filterDataArray);
+    
+        dispatch_async(dispatch_get_main_queue(),^{
+            self.FilterItemTableview.hidden = NO;
+            [MBProgressHUD hideHUDForView:self.view animated:YES];
             _FilterItemTableview.delegate = self;
             _FilterItemTableview.dataSource = self;
-        }
-        dispatch_async(dispatch_get_main_queue(),^{
-            [MBProgressHUD hideHUDForView:self.view animated:YES];
             [_FilterItemTableview reloadData];
-
         });
-                        
+        }
+        }
     }];
         [task resume];
     }else if([[NSUserDefaults.standardUserDefaults valueForKey:@"index"]isEqualToString:@"size"]){
@@ -170,6 +178,12 @@
                 id jsonData = [NSJSONSerialization JSONObjectWithData:data options:kNilOptions error:&error];
                 NSLog(@"%@",response);
                 NSLog(@"%@",jsonData);
+                if([[NSNumber numberWithBool:[[[NSJSONSerialization JSONObjectWithData:data options:kNilOptions error:&error] objectForKey:@"success"] boolValue]] isEqualToNumber:[NSNumber numberWithInt:0]]){
+                    dispatch_async(dispatch_get_main_queue(), ^{
+                        [MBProgressHUD hideHUDForView:self.view animated:YES];
+                        self.FilterItemTableview.hidden = YES;
+                    });
+                }else{
                 NSArray *dammyArray = [jsonData valueForKey:@"categories"];
                 int index;
                 fetchSortColorDataArray = [[NSMutableArray alloc]init];
@@ -180,13 +194,15 @@
                     [fetchSortColorDataArray addObject:fetchSortColorModel];
                 }
                 NSLog(@"%@",fetchSortColorDataArray);
-                _FilterItemTableview.delegate = self;
-                _FilterItemTableview.dataSource = self;
+               
             }
             dispatch_async(dispatch_get_main_queue(),^{
-                [_FilterItemTableview reloadData];
                 [MBProgressHUD hideHUDForView:self.view animated:YES];
+                [_FilterItemTableview reloadData];
+                _FilterItemTableview.delegate = self;
+                _FilterItemTableview.dataSource = self;
             });
+            }
         }];
         [task resume];
         }else if ([[NSUserDefaults.standardUserDefaults valueForKey:@"index"]isEqualToString:@"size"]){
@@ -355,32 +371,32 @@ if ([[NSUserDefaults.standardUserDefaults valueForKey:@"Direct"]isEqualToString:
     }else{
          if ([[NSUserDefaults.standardUserDefaults valueForKey:@"index"]isEqualToString:@"color1"]){
          fetchSortColorModel = [fetchSortColorDataArray objectAtIndex:indexPath.row];
-         ItemsDisplayViewController *itemDisplayVc = [self.storyboard instantiateViewControllerWithIdentifier:@"ItemsDisplayViewController"];
-         itemDisplayVc.ColorCode1 = fetchSortColorModel.color_code;
-         itemDisplayVc.sortModel = self.sortModel;
-         [self.navigationController pushViewController:itemDisplayVc animated:YES];
+         SortItemDisplayViewController *sortItemVc = [self.storyboard instantiateViewControllerWithIdentifier:@"SortItemDisplayViewController"];
+         sortItemVc.ColorCode1 = fetchSortColorModel.color_code;
+         sortItemVc.sortModel = self.sortModel;
+         [self.navigationController pushViewController:sortItemVc animated:YES];
          }else if ([[NSUserDefaults.standardUserDefaults valueForKey:@"index"]isEqualToString:@"size"]){
-             ItemsDisplayViewController *itemDisplayVc = [self.storyboard instantiateViewControllerWithIdentifier:@"ItemsDisplayViewController"];
+             SortItemDisplayViewController *sortItemVc = [self.storyboard instantiateViewControllerWithIdentifier:@"SortItemDisplayViewController"];
              NSArray *sizeIndexArray = [sizeArray objectAtIndex:indexPath.row ];
              NSLog(@"%@",sizeIndexArray);
              NSLog(@"%@",_catModel);
-             itemDisplayVc.CatModel = _catModel;
-             NSLog(@"%@",itemDisplayVc.CatModel);
-             itemDisplayVc.sortModel = self.sortModel;
-             NSLog(@"%@",itemDisplayVc.sortModel);
-             itemDisplayVc.sizeIndexArray = sizeIndexArray;
-             [self.navigationController pushViewController:itemDisplayVc animated:YES];
+             sortItemVc.catModel = _catModel;
+             NSLog(@"%@",sortItemVc.catModel);
+             sortItemVc.sortModel = self.sortModel;
+             NSLog(@"%@",sortItemVc.sortModel);
+             sortItemVc.sizeIndexArray = sizeIndexArray;
+             [self.navigationController pushViewController:sortItemVc animated:YES];
          }else if ([[NSUserDefaults.standardUserDefaults valueForKey:@"index"]isEqualToString:@"price"]){
-             ItemsDisplayViewController *itemDisplayVc = [self.storyboard instantiateViewControllerWithIdentifier:@"ItemsDisplayViewController"];
+             SortItemDisplayViewController *sortItemVc = [self.storyboard instantiateViewControllerWithIdentifier:@"SortItemDisplayViewController"];
              NSString *priceIndex = [priceArray objectAtIndex:indexPath.row];
-             itemDisplayVc.CatModel = _catModel;
-             itemDisplayVc.sortModel = self.sortModel;
-             NSLog(@"%@",itemDisplayVc.sortModel);
+             sortItemVc.catModel = _catModel;
+             sortItemVc.sortModel = self.sortModel;
+             NSLog(@"%@",sortItemVc.sortModel);
              NSArray *separatedArray = [priceIndex componentsSeparatedByString:@"-"];
              NSArray * lastArray = [separatedArray lastObject];
              NSLog(@"%@",lastArray);
-             itemDisplayVc.priceIndexArray = lastArray;
-             [self.navigationController pushViewController:itemDisplayVc animated:YES];
+             sortItemVc.priceIndexArray = lastArray;
+             [self.navigationController pushViewController:sortItemVc animated:YES];
          }
 }
     }
@@ -402,8 +418,6 @@ if ([[NSUserDefaults.standardUserDefaults valueForKey:@"Direct"]isEqualToString:
     
 
 }
--(IBAction)clickOnDone:(UIButton *)sender{
-    
-}
+
 
 @end

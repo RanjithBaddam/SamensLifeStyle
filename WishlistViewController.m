@@ -12,10 +12,13 @@
 #import "WishlistTableViewCell.h"
 #import <MBProgressHUD.h>
 #import <UIImageView+AFNetworking.h>
+#import "ViewController.h"
+#import "AccountViewController.h"
 
-@interface WishlistViewController ()<UITableViewDelegate,UITableViewDataSource,UIAlertViewDelegate>{
+@interface WishlistViewController ()<UITableViewDelegate,UITableViewDataSource,UIAlertViewDelegate,UITabBarControllerDelegate>{
     WishlistModel *wishlistModel;
     IBOutlet UIImageView *emptyWishlistImage;
+    NSMutableArray *dammyArray1;
 }
 
 @end
@@ -32,6 +35,7 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     // Do any additional setup after loading the view.
+    self.tabBarController.delegate = self;
 }
 
 - (void)didReceiveMemoryWarning {
@@ -39,6 +43,7 @@
     // Dispose of any resources that can be recreated.
 }
 -(void)FetchWishlistData{
+    if ([[NSUserDefaults.standardUserDefaults valueForKey:@"LoggedIn"]isEqualToString:@"yes"] || [[NSUserDefaults.standardUserDefaults valueForKey:@"login"]isEqualToString:@"google"] || [[NSUserDefaults.standardUserDefaults valueForKey:@"login"]isEqualToString:@"facebook"]){
     [MBProgressHUD showHUDAddedTo:self.view animated:YES];
     NSString *urlInstring =[NSString stringWithFormat:@"http://samenslifestyle.com/samenslifestyle123.com/samens_mob/wishlist.php"];
     NSURL *url=[NSURL URLWithString:urlInstring];
@@ -81,18 +86,20 @@
 //            [_wishlistTableView reloadData];
             id jsonData = [NSJSONSerialization JSONObjectWithData:data options:kNilOptions error:&error];
             NSLog(@"%@",jsonData);
-            NSArray *dammyArray = [jsonData valueForKey:@"categories"];
+            dammyArray1 = [[NSMutableArray alloc]init];
+           dammyArray1= [jsonData valueForKey:@"categories"];
+            
             int index;
             _wishListDataArray = [[NSMutableArray alloc]init];
-            for (index=0; index<dammyArray.count; index++) {
-                NSDictionary *dict = dammyArray[index];
+            for (index=0; index<dammyArray1.count; index++) {
+                NSDictionary *dict = dammyArray1[index];
                 wishlistModel = [[WishlistModel alloc]init];
                 [wishlistModel getWishListModelWithDictionary:dict];
                 [_wishListDataArray addObject:wishlistModel];
             }
             
             NSLog(@"%@",_wishListDataArray);
-            [[NSUserDefaults standardUserDefaults] setObject:dammyArray forKey:@"WishListData"];
+            [[NSUserDefaults standardUserDefaults] setObject:dammyArray1 forKey:@"WishListData"];
             [[NSUserDefaults standardUserDefaults] synchronize];
             
                 if (_wishListDataArray.count==0) {
@@ -109,6 +116,13 @@
         }
     }];
     [task resume];
+    }else{
+        
+//        ViewController *vc= [self.storyboard instantiateViewControllerWithIdentifier:@"ViewController"];
+//        [self.navigationController pushViewController:vc animated:YES];
+        [self.tabBarController setSelectedIndex:3];
+
+    }
 }
 
 -(NSInteger)numberOfSectionsInTableView:(UITableView *)tableView{
@@ -227,6 +241,14 @@
         [self FetchWishlistData];
     }else{
         [self FetchWishlistData];
+    }
+}
+-(void) tabBarController:(UITabBarController *)tabBarController didSelectViewController:(UIViewController *)viewController
+{
+    NSLog(@"Selected INDEX OF TAB-BAR ==> %lu", (unsigned long)tabBarController.selectedIndex);
+    
+    if (tabBarController.selectedIndex == 2) {
+       
     }
 }
 @end

@@ -62,6 +62,5 @@
 @property(nonatomic,strong)SubCategoryModel *subCategoryModel;
 @property(nonatomic,strong)SliderModel *sliderModel;
 @property (strong, nonatomic) IBOutletCollection(UIButton) NSArray *btn_outlets;
-
 @property(nonatomic,weak)IBOutlet UILabel *rateShowLabel1;
 @end

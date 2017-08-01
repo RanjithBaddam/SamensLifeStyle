@@ -11,8 +11,10 @@
 #import "TermsAndConditionsViewController.h"
 #import "SupportViewController.h"
 #import "AccountSettingViewController.h"
+#import <FBSDKLoginKit/FBSDKLoginKit.h>
+#import <FBSDKCoreKit/FBSDKCoreKit.h>
 
-@interface AccountViewController ()<UITableViewDelegate,UITableViewDataSource>{
+@interface AccountViewController ()<UITableViewDelegate,UITableViewDataSource,UITabBarControllerDelegate>{
     NSMutableArray *ImgArray,*secImgArray;
     NSMutableArray *firstSectionArray;
     NSMutableArray *detailArray;
@@ -20,6 +22,7 @@
     NSMutableArray *thirdSectionArray;
     NSMutableArray *fourthSectionArray;
     NSMutableArray *fifthSectionArray;
+    NSMutableArray *wishlistArray;
 }
 
 @end
@@ -30,7 +33,6 @@
     [super viewDidLoad];
     // Do any additional setup after loading the view.
     [self.navigationItem setHidesBackButton:YES];
-    if (    [[NSUserDefaults.standardUserDefaults valueForKey:@"LoggedIn"]isEqualToString:@"yes"]) {
         self.scrollView.contentSize = CGSizeMake(414, 718);
         
         ImgArray = [[NSMutableArray alloc]initWithObjects:@"cancelBtn", nil];
@@ -45,12 +47,8 @@
         
         self.AccountTableView.delegate = self;
         self.AccountTableView.dataSource = self;
-    }else{
-        ViewController *vc = [self.storyboard instantiateViewControllerWithIdentifier:@"ViewController"];
-        [self.navigationController pushViewController:vc animated:YES];
-    }
+    self.tabBarController.delegate = self;
     
-   
    
 }
 -(void)viewWillAppear:(BOOL)animated{
@@ -232,31 +230,45 @@
     }
 }
 
-//- (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
-//    CGFloat height;
-//        if (indexPath.section == 0) {
-//            height = 100;
-//             return height;
-//        }else{
-//            height = 45;
-//             return height;
-//        }
-//    
-//    }
 
-//-(UIView *)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section{
-//        UIView *headerView = [[UIView alloc]initWithFrame:CGRectMake(0, 64, 414, 85)];
-//        headerView.backgroundColor = [UIColor redColor];
-//        [_AccountTableView addSubview:headerView];
-//        return headerView;
-//}
 -(void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex
 {
      if (alertView.tag == 100){
         if (buttonIndex == 1){
             [[NSUserDefaults standardUserDefaults] setValue:@"no" forKey:@"LoggedIn"];
+            [[NSUserDefaults standardUserDefaults] setValue:@"no" forKey:@"login"];
+            [[NSUserDefaults standardUserDefaults] setValue:@"no" forKey:@"login"];
+
+            
+            FBSDKLoginManager *loginManager = [[FBSDKLoginManager alloc] init];
+            [loginManager logOut];
+            [FBSDKAccessToken setCurrentAccessToken:nil];
+
             [_AccountTableView reloadData];
+            wishlistArray = [[NSMutableArray alloc]init];
+            wishlistArray = [NSUserDefaults.standardUserDefaults valueForKey:@"WishListData"];
+            NSLog(@"%@",wishlistArray);
+            wishlistArray = [[NSMutableArray alloc]init];
         }
+    }
+}
+
+-(void) tabBarController:(UITabBarController *)tabBarController didSelectViewController:(UIViewController *)viewController
+{
+    NSLog(@"Selected INDEX OF TAB-BAR ==> %lu", (unsigned long)tabBarController.selectedIndex);
+    if ([[NSUserDefaults.standardUserDefaults valueForKey:@"LoggedIn"]isEqualToString:@"no"]) {
+    if (tabBarController.selectedIndex == 3) {
+        [_AccountTableView reloadData];
+    }else if (tabBarController.selectedIndex == 2){
+        [self.tabBarController setSelectedIndex:3];
+        [_AccountTableView reloadData];
+    }else if (tabBarController.selectedIndex == 4){
+        [self.tabBarController setSelectedIndex:3];
+    }else{
+        
+    }
+    }else{
+        
     }
 }
 @end

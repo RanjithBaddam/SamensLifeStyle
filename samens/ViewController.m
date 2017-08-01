@@ -14,9 +14,10 @@
 #import "homeViewController.h"
 #import "adsScrollCollectionViewCell.h"
 #import "signupViewController.h"
-#import <FBSDKLoginKit/FBSDKLoginKit.h>
 #import "ForgotViewController.h"
 #import "LoginDetailsModel.h"
+#import "AccountViewController.h"
+#import <FBSDKCoreKit/FBSDKCoreKit.h>
 #import "AccountViewController.h"
 
 
@@ -43,21 +44,76 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-   
-    
+        [GIDSignIn sharedInstance].uiDelegate = self;
+
+    [NSUserDefaults.standardUserDefaults setValue:@"facebook" forKey:@"login"];
     FBSDKLoginButton *loginButton = [[FBSDKLoginButton alloc] init];
-    loginButton.frame = CGRectMake(34, 656, 190, 30);
+    loginButton.readPermissions =
+    @[@"public_profile", @"email"];
+    NSLog(@"%@",loginButton.readPermissions);
+
+    // Optional: Place the button in the center of your view.
+    loginButton.center = self.view.center;
     [self.view addSubview:loginButton];
+    if ([FBSDKAccessToken currentAccessToken]) {
+        // User is logged in, do work such as go to next view controller.
+        NSLog(@"Token is available : %@",[[FBSDKAccessToken currentAccessToken]tokenString]);
+        NSMutableDictionary* parameters = [NSMutableDictionary dictionary];
+        [parameters setValue:@"id,name,email,first_name,last_name,picture.type(large)" forKey:@"fields"];
+        [[[FBSDKGraphRequest alloc] initWithGraphPath:@"me" parameters:parameters]
+         startWithCompletionHandler:^(FBSDKGraphRequestConnection *connection, id result, NSError *error) {
+             if (!error) {
+                 NSString *fbPhotoUrl = [[[result objectForKey:@"picture"]objectForKey:@"data"]objectForKey:@"url"];
+                 NSLog(@"%@",fbPhotoUrl);
+                 NSString *email = [result objectForKey:@"email"];
+                 NSString *name = [result objectForKey:@"name"];
+                 NSString *userid = [result objectForKey:@"id"];
+                 
+                 NSLog(@"%@%@%@",email,name,userid);
+            
+//                 MBProgressHUD * hud = [MBProgressHUD showHUDAddedTo:self.view animated:YES];
+//                 NSString *strloadingText = [NSString stringWithFormat:@"Loading Data."];
+//                 hud.label.text = strloadingText;
+                 NSString *urlInstring =[NSString stringWithFormat:@"http://samenslifestyle.com/samenslifestyle123.com/samens_mob/registration_ios_social-media.php"];
+                 
+                 NSURL *url=[NSURL URLWithString:urlInstring];
+                 NSMutableURLRequest *request=[NSMutableURLRequest requestWithURL:url];
+                 [request setHTTPMethod:@"POST"];
+                 NSString *params = [NSString stringWithFormat:@"userid=%@&name=%@&type=%@&image=%@&email=%@",userid,name,@"F",fbPhotoUrl,email];
+                 NSLog(@"%@",params);
+                 NSData *requestData = [params dataUsingEncoding:NSUTF8StringEncoding];
+                 NSLog(@"%@",requestData);
+                 [request setHTTPBody:requestData];
+                 NSURLSessionConfiguration *config=[NSURLSessionConfiguration defaultSessionConfiguration];
+                 [config setTimeoutIntervalForRequest:30.0];
+                 NSURLSession *session=[NSURLSession sessionWithConfiguration:config];
+                 NSURLSessionDataTask *task = [session dataTaskWithRequest:request completionHandler:^(NSData *data , NSURLResponse *response , NSError *error){
+                     if (error){
+                         NSLog(@"%@",error);
+                     }else{
+                         id jsonData = [NSJSONSerialization JSONObjectWithData:data options:kNilOptions error:&error];
+                         NSLog(@"%@",jsonData);
+                     }
+                 }];
+                 [task resume];
+                 
+        
+    }
+         }];
+    }
+    
     [self.navigationItem setHidesBackButton:YES];
 
-    emailTextField.text = @"ranjith@gmail.com";
-    passwordTextField.text = @"brreddy123";
+    emailTextField.text = @"baddamranjith@gmail.com";
+    passwordTextField.text = @"baddam123";
 
     [self getAdsImages];
     UIImage *image = [UIImage imageNamed:@"Title head"];
     self.navigationItem.titleView = [[UIImageView alloc] initWithImage:image];
     [self.navigationItem.backBarButtonItem setAccessibilityElementsHidden:YES];
     [self.navigationItem setHidesBackButton:YES animated:YES];
+    
+
 
 }
 
@@ -69,11 +125,12 @@
         [alert show];
        
     }else{
-        
+        dispatch_async(dispatch_get_main_queue(), ^{
+
         MBProgressHUD * hud = [MBProgressHUD showHUDAddedTo:self.view animated:YES];
         NSString *strloadingText = [NSString stringWithFormat:@"Loading Data."];
         hud.label.text = strloadingText;
-        
+        });
         NSString *urlInstring =[NSString stringWithFormat:@"http://samenslifestyle.com/samenslifestyle123.com/samens_mob/login_samens.php"];
         
         NSURL *url=[NSURL URLWithString:urlInstring];
@@ -131,6 +188,8 @@
                     dispatch_async(dispatch_get_main_queue(), ^{
 
                         [[NSUserDefaults standardUserDefaults] setValue:@"yes" forKey:@"LoggedIn"];
+ //                       [NSUserDefaults.standardUserDefaults setValue:@"normal" forKey:@"login"];
+
 //                        self.tabBarController.selectedIndex = 0;
 
                         [MBProgressHUD hideHUDForView:self.view animated:YES];
@@ -153,9 +212,12 @@
    
 }
 -(void)getAdsImages{
+    dispatch_async(dispatch_get_main_queue(), ^{
+
     MBProgressHUD * hud = [MBProgressHUD showHUDAddedTo:self.view animated:YES];
     NSString *strloadingText = [NSString stringWithFormat:@"Loading Data."];
     hud.label.text = strloadingText;
+    });
     NSString *urlInstring =[NSString stringWithFormat:@"http://samenslifestyle.com/samenslifestyle123.com/samens_mob/fetch_page_indicater_image.php"];
     
     NSURL *url=[NSURL URLWithString:urlInstring];
@@ -238,5 +300,29 @@
     
 }
 
+- (void)signInWillDispatch:(GIDSignIn *)signIn error:(NSError *)error {
+    //[myActivityIndicator stopAnimating];
+    NSLog(@"%@",signIn);
+
+}
+
+// Present a view that prompts the user to sign in with Google
+- (void)signIn:(GIDSignIn *)signIn
+presentViewController:(UIViewController *)viewController {
+    [self presentViewController:viewController animated:YES completion:nil];
+}
+
+// Dismiss the "Sign in with Google" view
+- (void)signIn:(GIDSignIn *)signIn
+dismissViewController:(UIViewController *)viewController {
+    [self dismissViewControllerAnimated:YES completion:nil];
+}
+- (IBAction)didTapSignIn:(id)sender {
+    [NSUserDefaults.standardUserDefaults setValue:@"google" forKey:@"login"];
+    [[GIDSignIn sharedInstance] signIn];
+}
+- (IBAction)didTapSignOut:(id)sender {
+    [[GIDSignIn sharedInstance] signOut];
+}
         
 @end

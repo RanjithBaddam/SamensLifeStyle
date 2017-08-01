@@ -10,10 +10,10 @@
 #import <MBProgressHUD.h>
 #import "filterItemModel.h"
 #import "FetchFilterViewController.h"
+#import "ItemsDisplayViewController.h"
 
 @interface FilterViewController ()<UITableViewDelegate,UITableViewDataSource>
-{
-}
+
 @end
 
 @implementation FilterViewController
@@ -23,6 +23,20 @@
     // Do any additional setup after loading the view.
     self.FilterListTableView.delegate = self;
     self.FilterListTableView.dataSource = self;
+    [self.navigationItem setHidesBackButton:YES];
+    
+    UIImage *backButtonImage = [UIImage imageNamed:@"home"];
+    UIButton *button = [UIButton buttonWithType:UIButtonTypeCustom];
+    [button setImage:backButtonImage forState:UIControlStateNormal];
+    button.frame = CGRectMake(0, 0, backButtonImage.size.width, backButtonImage.size.height);
+    [button addTarget:self action:@selector(back) forControlEvents:UIControlEventTouchUpInside];
+    
+    UIView *backButtonView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, backButtonImage.size.width, backButtonImage.size.height)];
+    [backButtonView addSubview:button];
+    
+    UIBarButtonItem *customBarItem = [[UIBarButtonItem alloc] initWithCustomView:backButtonView];
+    self.navigationItem.leftBarButtonItem = customBarItem;
+    
     
 
 }
@@ -71,7 +85,7 @@
         UIFont *myFont1 = [ UIFont fontWithName: @"Arial" size: 13.0 ];
         cell.detailTextLabel.font  = myFont1;
         [cell setAccessoryType:UITableViewCellAccessoryDisclosureIndicator];
-    }else if (indexPath.section==2){
+    }else{
         cell.imageView.image = nil;
         cell.textLabel.text = @"Price";
         UIFont *myFont = [ UIFont fontWithName: @"Arial" size: 18.0 ];
@@ -80,16 +94,7 @@
         UIFont *myFont1 = [ UIFont fontWithName: @"Arial" size: 13.0 ];
         cell.detailTextLabel.font  = myFont1;
         [cell setAccessoryType:UITableViewCellAccessoryDisclosureIndicator];
-    }else if (indexPath.section==3){
-        cell.imageView.image = nil;
-        cell.textLabel.text = @"Size";
-        UIFont *myFont = [ UIFont fontWithName: @"Arial" size: 18.0 ];
-        cell.textLabel.font  = myFont;
-        cell.detailTextLabel.text = @"Price show level";
-        UIFont *myFont1 = [ UIFont fontWithName: @"Arial" size: 13.0 ];
-        cell.detailTextLabel.font  = myFont1;
-        [cell setAccessoryType:UITableViewCellAccessoryDisclosureIndicator];
-    } 
+    }
     return cell;
 }
 -(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath{
@@ -142,5 +147,10 @@
         }
 
     }
+}
+-(void)back{
+    [NSUserDefaults.standardUserDefaults setValue:@"yes" forKey:@"Direct"];
+    [self.navigationController popViewControllerAnimated:YES];
+
 }
 @end

@@ -53,4 +53,7 @@
 @property(nonatomic,strong) NSString *categoryMainName;
 @property(nonatomic,strong)NSString *searchName;
 @property(nonatomic,strong)NSArray *dammyArray;
+@property(nonatomic,strong)    NSString *PopUpNameText;
+@property(nonatomic,weak)IBOutlet UISearchBar *searchBar;
+
 @end

@@ -13,6 +13,7 @@
 #import <UIImageView+AFNetworking.h>
 #import <MBProgressHUD.h>
 #import "DetailsTableViewCell.h"
+#import "ViewController.h"
 
 @interface AddToCartViewController ()<UITableViewDelegate,UITableViewDataSource,UIAlertViewDelegate>{
     AddToCartModel *addToCartModel;
@@ -30,7 +31,7 @@
     NSMutableArray *idsArray;
     NSMutableArray *sizeArray;
     NSMutableArray *colorArray;
-    NSMutableArray *dammyArray;
+    NSArray *dammyArray;
     IBOutlet UIImageView *emptyCartImageView;
 }
 
@@ -56,6 +57,7 @@
     // Dispose of any resources that can be recreated.
 }
 -(void)FetchAddToCart{
+        if ([[NSUserDefaults.standardUserDefaults valueForKey:@"LoggedIn"]isEqualToString:@"yes"] || [[NSUserDefaults.standardUserDefaults valueForKey:@"login"]isEqualToString:@"google"] || [[NSUserDefaults.standardUserDefaults valueForKey:@"login"]isEqualToString:@"facebook"]){
     [MBProgressHUD showHUDAddedTo:self.view animated:YES];
     quantityArray = [[NSMutableArray alloc]init];
     priceArray = [[NSMutableArray alloc]init];
@@ -127,6 +129,7 @@
                 [idsArray addObject:dict[@"cid"]];
 
             }
+            [NSUserDefaults.standardUserDefaults setObject:dammyArray forKey:@"AddToCart"];
             NSLog(@"%@",quantityArray);
             NSLog(@"%@",jsonData);
             finalSum = [NSString stringWithFormat:@"%.0f",eachPrice];
@@ -151,7 +154,10 @@
 
     }];
     [task resume];
-    
+        }else{
+            [self.tabBarController setSelectedIndex:3];
+            
+        }
 }
 -(NSInteger)numberOfSectionsInTableView:(UITableView *)tableView{
    
