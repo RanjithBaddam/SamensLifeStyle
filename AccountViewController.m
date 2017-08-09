@@ -13,6 +13,7 @@
 #import "AccountSettingViewController.h"
 #import <FBSDKLoginKit/FBSDKLoginKit.h>
 #import <FBSDKCoreKit/FBSDKCoreKit.h>
+#import "homeViewController.h"
 
 @interface AccountViewController ()<UITableViewDelegate,UITableViewDataSource,UITabBarControllerDelegate>{
     NSMutableArray *ImgArray,*secImgArray;
@@ -54,6 +55,7 @@
 -(void)viewWillAppear:(BOOL)animated{
 
     [_AccountTableView reloadData];
+
     
 }
 - (void)didReceiveMemoryWarning {
@@ -204,6 +206,7 @@
             
         }else{
             ViewController *vc = [self.storyboard instantiateViewControllerWithIdentifier:@"ViewController"];
+            self.tabBarController.tabBar.hidden = YES;
             [self.navigationController pushViewController:vc animated:YES];
         }
         }else if (indexPath.row==1){
@@ -236,8 +239,8 @@
      if (alertView.tag == 100){
         if (buttonIndex == 1){
             [[NSUserDefaults standardUserDefaults] setValue:@"no" forKey:@"LoggedIn"];
-            [[NSUserDefaults standardUserDefaults] setValue:@"no" forKey:@"login"];
-            [[NSUserDefaults standardUserDefaults] setValue:@"no" forKey:@"login"];
+//            [[NSUserDefaults standardUserDefaults] setValue:@"no" forKey:@"login"];
+//            [[NSUserDefaults standardUserDefaults] setValue:@"no" forKey:@"login"];
 
             
             FBSDKLoginManager *loginManager = [[FBSDKLoginManager alloc] init];
@@ -264,11 +267,16 @@
         [_AccountTableView reloadData];
     }else if (tabBarController.selectedIndex == 4){
         [self.tabBarController setSelectedIndex:3];
-    }else{
-        
+    }else if (tabBarController.selectedIndex == 0){
+        [self.tabBarController setSelectedIndex:0];
     }
     }else{
-        
+        if (tabBarController.selectedIndex == 0) {
+            homeViewController *homeVc = [self.storyboard instantiateViewControllerWithIdentifier:@"homeViewController"];
+            [self.navigationController pushViewController:homeVc animated:YES];
+            [self.tabBarController setSelectedIndex:0];
+            
+        }
     }
 }
 @end

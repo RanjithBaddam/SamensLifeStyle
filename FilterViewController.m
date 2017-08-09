@@ -59,7 +59,7 @@
     
 }
 -(NSInteger)numberOfSectionsInTableView:(UITableView *)tableView{
-    return 6;
+    return 3;
 }
 -(NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section{
     return 1;
@@ -105,43 +105,66 @@
         [ NSUserDefaults.standardUserDefaults setValue:@"color" forKey:@"index"];
 
         FetchFilterViewController *fetchFilterVc = [self.storyboard instantiateViewControllerWithIdentifier:@"FetchFilterViewController"];
-        
+        fetchFilterVc.categoryMainId = self.categoryMainId;
+        fetchFilterVc.sortDisplayModel = self.sortDisplayModel;
         fetchFilterVc.catModel = self.catModel;
+        NSLog(@"%@",fetchFilterVc.catModel);
+        fetchFilterVc.sortModel = self.sortModel;
+        fetchFilterVc.MainSortItemId = self.MainSortItemId;
+
         [self.navigationController pushViewController:fetchFilterVc animated:YES];
     }else if (indexPath.section==1){
         [NSUserDefaults.standardUserDefaults setValue:@"size" forKey:@"index"];
      FetchFilterViewController *fetchFilterVc = [self.storyboard instantiateViewControllerWithIdentifier:@"FetchFilterViewController"];
+        fetchFilterVc.categoryMainId = self.categoryMainId;
+        fetchFilterVc.sortDisplayModel = self.sortDisplayModel;
          fetchFilterVc.catModel = self.catModel;
         fetchFilterVc.sortModel = self.sortModel;
+        fetchFilterVc.MainSortItemId = self.MainSortItemId;
 
         [self.navigationController pushViewController:fetchFilterVc animated:YES];
 
     }else{
         [NSUserDefaults.standardUserDefaults setValue:@"price" forKey:@"index"];
         FetchFilterViewController *fetchFilterVc = [self.storyboard instantiateViewControllerWithIdentifier:@"FetchFilterViewController"];
+        fetchFilterVc.categoryMainId = self.categoryMainId;
          fetchFilterVc.catModel = self.catModel;
+        fetchFilterVc.sortDisplayModel = self.sortDisplayModel;
         fetchFilterVc.sortModel = self.sortModel;
+        fetchFilterVc.MainSortItemId = self.MainSortItemId;
+
 
         [self.navigationController pushViewController:fetchFilterVc animated:YES];
     }
-    }else{
+    }else {
         if (indexPath.section == 0) {
             [NSUserDefaults.standardUserDefaults setValue:@"color1" forKey:@"index"];
         FetchFilterViewController *fetchFilterVc = [self.storyboard instantiateViewControllerWithIdentifier:@"FetchFilterViewController"];
+            fetchFilterVc.MainSortItemId = self.MainSortItemId;
+            fetchFilterVc.sortDisplayModel = self.sortDisplayModel;
+            fetchFilterVc.categoryMainId = self.categoryMainId;
             fetchFilterVc.sortModel = self.sortModel;
+           fetchFilterVc.sort1MainId = self.sort1MainId;
             [self.navigationController pushViewController:fetchFilterVc animated:YES];
 
         }else if (indexPath.section==1){
             [NSUserDefaults.standardUserDefaults setValue:@"size" forKey:@"index"];
             FetchFilterViewController *fetchFilterVc = [self.storyboard instantiateViewControllerWithIdentifier:@"FetchFilterViewController"];
+            fetchFilterVc.MainSortItemId = self.MainSortItemId;
+            fetchFilterVc.sortDisplayModel = self.sortDisplayModel;
             fetchFilterVc.sortModel = self.sortModel;
-            
+            fetchFilterVc.categoryMainId = self.categoryMainId;
+            fetchFilterVc.sort1MainId = self.sort1MainId;
             [self.navigationController pushViewController:fetchFilterVc animated:YES];
             
         }else{
             [NSUserDefaults.standardUserDefaults setValue:@"price" forKey:@"index"];
             FetchFilterViewController *fetchFilterVc = [self.storyboard instantiateViewControllerWithIdentifier:@"FetchFilterViewController"];
+            fetchFilterVc.MainSortItemId = self.MainSortItemId;
             fetchFilterVc.sortModel = self.sortModel;
+            fetchFilterVc.sortDisplayModel = self.sortDisplayModel;
+            fetchFilterVc.categoryMainId = self.categoryMainId;
+           fetchFilterVc.sort1MainId = self.sort1MainId;
             
             [self.navigationController pushViewController:fetchFilterVc animated:YES];
         }

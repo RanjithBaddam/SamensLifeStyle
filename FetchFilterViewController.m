@@ -337,11 +337,13 @@ if ([[NSUserDefaults.standardUserDefaults valueForKey:@"Direct"]isEqualToString:
      if ([[NSUserDefaults.standardUserDefaults valueForKey:@"index"]isEqualToString:@"color"]) {
     self.filterModel = [filterDataArray objectAtIndex:indexPath.row];
     ItemsDisplayViewController *itemDisplayVc = [self.storyboard instantiateViewControllerWithIdentifier:@"ItemsDisplayViewController"];
-        
+         itemDisplayVc.MainSortItemId  = self.MainSortItemId;
+         itemDisplayVc.sortModel = self.sortModel;
     itemDisplayVc.colorCode= self.filterModel.color_code;
+         NSLog(@"%@",itemDisplayVc.colorCode);
     itemDisplayVc.CatModel = self.catModel;
-      
-    [NSUserDefaults.standardUserDefaults setValue:@"no" forKey:@"yes"];
+         NSLog(@"%@",itemDisplayVc.CatModel);
+         itemDisplayVc.categoryMainId = self.categoryMainId;
     [self.navigationController pushViewController:itemDisplayVc animated:YES];
          
      }else if ([[NSUserDefaults.standardUserDefaults valueForKey:@"index"]isEqualToString:@"size"]){
@@ -349,6 +351,9 @@ if ([[NSUserDefaults.standardUserDefaults valueForKey:@"Direct"]isEqualToString:
          NSArray *sizeIndexArray = [sizeArray objectAtIndex:indexPath.row ];
          NSLog(@"%@",sizeIndexArray);
          NSLog(@"%@",_catModel);
+         itemDisplayVc.MainSortItemId  = self.MainSortItemId;
+         itemDisplayVc.sortModel = self.sortModel;
+         itemDisplayVc.categoryMainId = self.categoryMainId;
          itemDisplayVc.CatModel = _catModel;
          NSLog(@"%@",itemDisplayVc.CatModel);
          itemDisplayVc.sortModel = self.sortModel;
@@ -359,7 +364,9 @@ if ([[NSUserDefaults.standardUserDefaults valueForKey:@"Direct"]isEqualToString:
      }else if ([[NSUserDefaults.standardUserDefaults valueForKey:@"index"]isEqualToString:@"price"]){
          ItemsDisplayViewController *itemDisplayVc = [self.storyboard instantiateViewControllerWithIdentifier:@"ItemsDisplayViewController"];
          NSString *priceIndex = [priceArray objectAtIndex:indexPath.row];
+         itemDisplayVc.MainSortItemId  = self.MainSortItemId;
          itemDisplayVc.CatModel = _catModel;
+         itemDisplayVc.categoryMainId = self.categoryMainId;
          itemDisplayVc.sortModel = self.sortModel;
          NSLog(@"%@",itemDisplayVc.sortModel);
          NSArray *separatedArray = [priceIndex componentsSeparatedByString:@"-"];
@@ -370,32 +377,50 @@ if ([[NSUserDefaults.standardUserDefaults valueForKey:@"Direct"]isEqualToString:
      }
     }else{
          if ([[NSUserDefaults.standardUserDefaults valueForKey:@"index"]isEqualToString:@"color1"]){
-         fetchSortColorModel = [fetchSortColorDataArray objectAtIndex:indexPath.row];
          SortItemDisplayViewController *sortItemVc = [self.storyboard instantiateViewControllerWithIdentifier:@"SortItemDisplayViewController"];
+             fetchSortColorModel = [fetchSortColorDataArray objectAtIndex:indexPath.row];
+             sortItemVc.categoryMainId = self.categoryMainId;
+             NSLog(@"%@",self.MainSortItemId);
+             sortItemVc.MainSortItemId = self.MainSortItemId;
+             NSLog(@"%@",sortItemVc.MainSortItemId);
+             sortItemVc.sort1MainId = self.sort1MainId;
+             sortItemVc.sortDisplayModel = self.sortDisplayModel;
          sortItemVc.ColorCode1 = fetchSortColorModel.color_code;
          sortItemVc.sortModel = self.sortModel;
+             sortItemVc.categoryMainId = self.categoryMainId;
          [self.navigationController pushViewController:sortItemVc animated:YES];
          }else if ([[NSUserDefaults.standardUserDefaults valueForKey:@"index"]isEqualToString:@"size"]){
              SortItemDisplayViewController *sortItemVc = [self.storyboard instantiateViewControllerWithIdentifier:@"SortItemDisplayViewController"];
+             sortItemVc.categoryMainId = self.categoryMainId;
              NSArray *sizeIndexArray = [sizeArray objectAtIndex:indexPath.row ];
              NSLog(@"%@",sizeIndexArray);
              NSLog(@"%@",_catModel);
+             sortItemVc.sortDisplayModel = self.sortDisplayModel;
              sortItemVc.catModel = _catModel;
              NSLog(@"%@",sortItemVc.catModel);
              sortItemVc.sortModel = self.sortModel;
              NSLog(@"%@",sortItemVc.sortModel);
              sortItemVc.sizeIndexArray = sizeIndexArray;
+             sortItemVc.MainSortItemId = self.MainSortItemId;
+            sortItemVc.sort1MainId = self.sort1MainId;
+             sortItemVc.categoryMainId = self.categoryMainId;
+
              [self.navigationController pushViewController:sortItemVc animated:YES];
          }else if ([[NSUserDefaults.standardUserDefaults valueForKey:@"index"]isEqualToString:@"price"]){
              SortItemDisplayViewController *sortItemVc = [self.storyboard instantiateViewControllerWithIdentifier:@"SortItemDisplayViewController"];
+             sortItemVc.categoryMainId = self.categoryMainId;
              NSString *priceIndex = [priceArray objectAtIndex:indexPath.row];
              sortItemVc.catModel = _catModel;
              sortItemVc.sortModel = self.sortModel;
+             sortItemVc.sortDisplayModel = self.sortDisplayModel;
              NSLog(@"%@",sortItemVc.sortModel);
              NSArray *separatedArray = [priceIndex componentsSeparatedByString:@"-"];
              NSArray * lastArray = [separatedArray lastObject];
              NSLog(@"%@",lastArray);
+             sortItemVc.MainSortItemId = self.MainSortItemId;
              sortItemVc.priceIndexArray = lastArray;
+            sortItemVc.sort1MainId = self.sort1MainId;
+             sortItemVc.categoryMainId = self.categoryMainId;
              [self.navigationController pushViewController:sortItemVc animated:YES];
          }
 }

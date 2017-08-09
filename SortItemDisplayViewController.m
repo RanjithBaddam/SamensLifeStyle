@@ -24,16 +24,13 @@
 #import "PriceItemModel.h"
 
 @interface SortItemDisplayViewController ()<UICollectionViewDelegate,UICollectionViewDataSource,UIAlertViewDelegate,UITableViewDelegate,UITableViewDataSource,UISearchBarDelegate>{
-    NSString *MainSortItemId;
     NSMutableArray *sortMainData;
     NSMutableArray *IndirectSortMainData;
     IndirectSortModel *indirectSortModel;
     
     NSString *mainSortItemName;
-    SortDisplayModel *sortModel;
     SortModel1 *sortModel1;
     NSMutableArray *sortMainData1;
-    NSString *sort1MainId;
     NSMutableArray *Color1DataArray;
     FetchSortColorModelDetails *fetchColor1DetailsModel;
     NSMutableArray *Size1DataArray;
@@ -53,7 +50,7 @@
     [super viewDidLoad];
     
     [self getSortData];
-    
+    self.SortpopupView.hidden = YES;
     UIImage *backButtonImage = [UIImage imageNamed:@"home"];
     UIButton *button = [UIButton buttonWithType:UIButtonTypeCustom];
     [button setImage:backButtonImage forState:UIControlStateNormal];
@@ -68,13 +65,13 @@
     self.searchBar.delegate = self;
 }
 -(void)getSortData{
-    if ([[NSUserDefaults.standardUserDefaults valueForKey:@"Direct"]isEqualToString:@"DirectSort"]) {
+    if ([[NSUserDefaults.standardUserDefaults valueForKey:@"Sort"]isEqualToString:@"DirectSort"]) {
         
     
     NSDictionary *headers = @{ @"content-type": @"multipart/form-data; boundary=----WebKitFormBoundary7MA4YWxkTrZu0gW",
                                @"cache-control": @"no-cache",
                                @"postman-token": @"156ca995-b970-29f4-fa48-64f8abf98e30" };
-    NSArray *parameters = @[ @{ @"name": @"subCatId", @"value": MainSortItemId } ];
+    NSArray *parameters = @[ @{ @"name": @"subCatId", @"value": _MainSortItemId } ];
     NSString *boundary = @"----WebKitFormBoundary7MA4YWxkTrZu0gW";
     
     NSError *error;
@@ -145,9 +142,9 @@
                                                         sortMainData = [[NSMutableArray alloc]init];
                                                         for (index=0; index<dammyArray.count; index++) {
                                                             NSDictionary *dict = dammyArray[index];
-                                                        sortModel = [[SortDisplayModel alloc]init];
-                                                            [sortModel getSortDisplay:dict];
-                                                            [sortMainData addObject:sortModel];
+                                                        _sortDisplayModel = [[SortDisplayModel alloc]init];
+                                                            [_sortDisplayModel getSortDisplay:dict];
+                                                            [sortMainData addObject:_sortDisplayModel];
                                                         }
                                                         NSLog(@"%@",sortMainData);
                                                         
@@ -165,7 +162,7 @@
     [dataTask resume];
     
     }
-    else if ([[NSUserDefaults.standardUserDefaults valueForKey:@"Direct"]isEqualToString:@"IndirectFilter"]){
+    else if ([[NSUserDefaults.standardUserDefaults valueForKey:@"Sort"]isEqualToString:@"IndirectFilter"]){
         if ([[NSUserDefaults.standardUserDefaults valueForKey:@"index"]isEqualToString:@"color1"]) {
             
             dispatch_async(dispatch_get_main_queue(), ^{
@@ -253,6 +250,8 @@
             NSURL *url=[NSURL URLWithString:urlInstring];
             NSMutableURLRequest *request=[NSMutableURLRequest requestWithURL:url];
             [request setHTTPMethod:@"POST"];
+            NSLog(@"%@",_sortModel.sub_catid);
+            NSLog(@"%@",_sizeIndexArray);
             NSString *params = [NSString stringWithFormat:@"subCatId=%@&s=%@",_sortModel.sub_catid,_sizeIndexArray];
             
             NSLog(@"%@",params);
@@ -402,7 +401,7 @@
         NSDictionary *headers = @{ @"content-type": @"multipart/form-data; boundary=----WebKitFormBoundary7MA4YWxkTrZu0gW",
                                    @"cache-control": @"no-cache",
                                    @"postman-token": @"156ca995-b970-29f4-fa48-64f8abf98e30" };
-        NSArray *parameters = @[ @{ @"name": @"subCatId", @"value": sort1MainId } ];
+        NSArray *parameters = @[ @{ @"name": @"subCatId", @"value": _sort1MainId } ];
         NSString *boundary = @"----WebKitFormBoundary7MA4YWxkTrZu0gW";
         
         NSError *error;
@@ -502,17 +501,17 @@
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
 }
--(void)getSortItemId:(NSString *)str{
-    NSLog(@"%@",str);
-    MainSortItemId = str;
-   // mainSortItemName = str;
-}
+//-(void)getSortItemId:(NSString *)str{
+//    NSLog(@"%@",str);
+//    _MainSortItemId = str;
+//   // mainSortItemName = str;
+//}
 -(NSInteger)collectionView:(UICollectionView *)collectionView numberOfItemsInSection:(NSInteger)section{
-    if ([[NSUserDefaults.standardUserDefaults valueForKey:@"Direct"]isEqualToString:@"DirectSort"]) {
+    if ([[NSUserDefaults.standardUserDefaults valueForKey:@"Sort"]isEqualToString:@"DirectSort"]) {
         
     NSLog(@"%lu",(unsigned long)sortMainData.count);
     return sortMainData.count;
-    }else if ([[NSUserDefaults.standardUserDefaults valueForKey:@"Direct"]isEqualToString:@"IndirectFilter"]){
+    }else if ([[NSUserDefaults.standardUserDefaults valueForKey:@"Sort"]isEqualToString:@"IndirectFilter"]){
         if ([[NSUserDefaults.standardUserDefaults valueForKey:@"index"]isEqualToString:@"color1"]) {
             return Color1DataArray.count;
         }else if ([[NSUserDefaults.standardUserDefaults valueForKey:@"index"]isEqualToString:@"size"]){
@@ -527,23 +526,24 @@
     }
 }
 - (__kindof UICollectionViewCell *)collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath{
-    if ([[NSUserDefaults.standardUserDefaults valueForKey:@"Direct"]isEqualToString:@"DirectSort"]) {
+    if ([[NSUserDefaults.standardUserDefaults valueForKey:@"Sort"]isEqualToString:@"DirectSort"]) {
         
     SortItemCollectionViewCell *cell = [_sortitemDisplayCollectionView dequeueReusableCellWithReuseIdentifier:@"SortItemCollectionViewCell" forIndexPath:indexPath];
-    SortDisplayModel *model = [sortMainData objectAtIndex:indexPath.item];
-    NSLog(@"%@",model);
-    NSLog(@"%@",model.image);
-    [cell.sortItemDisplayImageView setImageWithURL:[NSURL URLWithString:model.image] placeholderImage:nil];
-    cell.DisplayItemTextLabel.text = model.Name;
+     _sortDisplayModel = [sortMainData objectAtIndex:indexPath.item];
+    NSLog(@"%@",_sortDisplayModel);
+    NSLog(@"%@",_sortDisplayModel.image);
+    [cell.sortItemDisplayImageView setImageWithURL:[NSURL URLWithString:_sortDisplayModel.image] placeholderImage:nil];
+    cell.DisplayItemTextLabel.text = _sortDisplayModel.Name;
     cell.WishListButton.tag = indexPath.item;
     NSLog(@"%ld",(long)cell.WishListButton.tag);
     [cell.WishListButton addTarget:self action:@selector(ClickOnWishlist:) forControlEvents:UIControlEventTouchUpInside];
-    cell.StarRatingLabel.text = [NSString stringWithFormat:@"%@",model.rating];
-    if ([model.offer isEqualToString:@"yes"]) {
-        cell.priceLabel.text = model.off_price;
+    cell.StarRatingLabel.text = [NSString stringWithFormat:@"%@",_sortDisplayModel.rating];
+    if ([_sortDisplayModel.offer isEqualToString:@"yes"]) {
+        cell.priceLabel.text = _sortDisplayModel.off_price;
         
-        NSAttributedString *priceOffString = [[NSAttributedString alloc]initWithString:cell.priceOffLabel.text= model.price attributes:@{NSStrikethroughStyleAttributeName:
+        NSAttributedString *priceOffString = [[NSAttributedString alloc]initWithString:cell.priceOffLabel.text= _sortDisplayModel.price attributes:@{NSStrikethroughStyleAttributeName:
                                                                                                                                                  [NSNumber numberWithInteger:NSUnderlineStyleSingle]}];
+        
         [cell.priceOffLabel setAttributedText:priceOffString];
         NSString *string = cell.priceLabel.text;
         NSLog(@"%@",string);
@@ -567,14 +567,14 @@
 
     
     }else{
-        cell.priceLabel.text = model.price;
+        cell.priceLabel.text = _sortDisplayModel.price;
         cell.priceOffLabel.text = nil;
         cell.offerLabel.text = nil;
         return cell;
 
     }
     }
-    else if ([[NSUserDefaults.standardUserDefaults valueForKey:@"Direct"]isEqualToString:@"IndirectFilter"]){
+    else if ([[NSUserDefaults.standardUserDefaults valueForKey:@"Sort"]isEqualToString:@"IndirectFilter"]){
         if ([[NSUserDefaults.standardUserDefaults valueForKey:@"index"]isEqualToString:@"color1"]) {
             SortItemCollectionViewCell *cell = [_sortitemDisplayCollectionView dequeueReusableCellWithReuseIdentifier:@"SortItemCollectionViewCell" forIndexPath:indexPath ];
             fetchColor1DetailsModel = [Color1DataArray objectAtIndex:indexPath.item];
@@ -676,7 +676,7 @@
             cell.WishListButton.tag = indexPath.item;
             NSLog(@"%ld",(long)cell.WishListButton.tag);
             [cell.WishListButton addTarget:self action:@selector(ClickOnWishlist:) forControlEvents:UIControlEventTouchUpInside];
-            
+          
             cell.StarRatingLabel.text = [NSString stringWithFormat:@"%@",priceModel1.rating];
             if ([priceModel1.offer isEqualToString:@"yes"]) {
                 cell.priceLabel.text = priceModel1.off_price;
@@ -711,7 +711,8 @@
                 return cell;
             }
         }
-    }else{
+    }
+    else{
         SortItemCollectionViewCell *cell = [_sortitemDisplayCollectionView dequeueReusableCellWithReuseIdentifier:@"SortItemCollectionViewCell" forIndexPath:indexPath];
         indirectSortModel = [IndirectSortMainData objectAtIndex:indexPath.item];
         NSLog(@"%@",IndirectSortMainData);
@@ -761,19 +762,19 @@
     }
 }
 -(void)collectionView:(UICollectionView *)collectionView didSelectItemAtIndexPath:(NSIndexPath *)indexPath{
-    if ([[NSUserDefaults.standardUserDefaults valueForKey:@"Direct"]isEqualToString:@"DirectSort"]) {
+    if ([[NSUserDefaults.standardUserDefaults valueForKey:@"Sort"]isEqualToString:@"DirectSort"]) {
         SubSubViewController *subsubVc = [self.storyboard instantiateViewControllerWithIdentifier:@"SubSubViewController"];
-        SortDisplayModel *model = [sortMainData objectAtIndex:indexPath.item];
-        NSLog(@"%@",model.pid);
-        [subsubVc getId:model.pid];
-        [subsubVc getColor_code:model.color_code];
+        _sortDisplayModel = [sortMainData objectAtIndex:indexPath.item];
+        NSLog(@"%@",_sortDisplayModel.pid);
+        [subsubVc getId:_sortDisplayModel.pid];
+        [subsubVc getColor_code:_sortDisplayModel.color_code];
         
-        [subsubVc getItemName:model.Name];
-        NSLog(@"%@",model.Name);
-        [subsubVc getItemPrice:model.price];
+        [subsubVc getItemName:_sortDisplayModel.Name];
+        NSLog(@"%@",_sortDisplayModel.Name);
+        [subsubVc getItemPrice:_sortDisplayModel.price];
         [self.navigationController pushViewController:subsubVc animated:YES];
         
-    }else if ([[NSUserDefaults.standardUserDefaults valueForKey:@"Direct"]isEqualToString:@"IndirectFilter"]){
+    }else if ([[NSUserDefaults.standardUserDefaults valueForKey:@"Sort"]isEqualToString:@"IndirectFilter"]){
         if ([[NSUserDefaults.standardUserDefaults valueForKey:@"index"]isEqualToString:@"color1"]) {
             SubSubViewController *subsubVc = [self.storyboard instantiateViewControllerWithIdentifier:@"SubSubViewController"];
             fetchColor1DetailsModel = [Color1DataArray objectAtIndex:indexPath.item];
@@ -841,11 +842,11 @@
         NSArray *token = [[NSUserDefaults standardUserDefaults] objectForKey:@"WishListData"];
         NSLog(@"%@",[[NSUserDefaults standardUserDefaults] objectForKey:@"WishListData"]);
         
-        sortModel = [sortMainData objectAtIndex:sender.tag];
-        NSLog(@"%@",sortModel.pid);
+        _sortDisplayModel = [sortMainData objectAtIndex:sender.tag];
+        NSLog(@"%@",_sortDisplayModel.pid);
         NSArray *token1 = [token valueForKey:@"pid"];
         NSLog(@"%@",token1);
-        if ([token1 containsObject:sortModel.pid]) {
+        if ([token1 containsObject:_sortDisplayModel.pid]) {
             dispatch_async(dispatch_get_main_queue(), ^{
 
         MBProgressHUD * hud = [MBProgressHUD showHUDAddedTo:self.view animated:YES];
@@ -857,9 +858,9 @@
         NSMutableURLRequest *request=[NSMutableURLRequest requestWithURL:url];
         [request setHTTPMethod:@"POST"];
 
-        sortModel = [sortMainData objectAtIndex:sender.tag];
+        _sortDisplayModel = [sortMainData objectAtIndex:sender.tag];
         
-        NSString *params = [NSString stringWithFormat:@"cid=%@&api=%@&status=%@&pid=%@",[NSUserDefaults.standardUserDefaults valueForKey:@"custid"],[NSUserDefaults.standardUserDefaults valueForKey:@"api"],@"Y",sortModel.pid];
+        NSString *params = [NSString stringWithFormat:@"cid=%@&api=%@&status=%@&pid=%@",[NSUserDefaults.standardUserDefaults valueForKey:@"custid"],[NSUserDefaults.standardUserDefaults valueForKey:@"api"],@"Y",_sortDisplayModel.pid];
         NSLog(@"%@",params);
         
         NSData *requestData = [params dataUsingEncoding:NSUTF8StringEncoding];
@@ -937,9 +938,9 @@
             NSURL *url=[NSURL URLWithString:urlInstring];
             NSMutableURLRequest *request=[NSMutableURLRequest requestWithURL:url];
             [request setHTTPMethod:@"POST"];
-            sortModel = [sortMainData objectAtIndex:sender.tag];
+            _sortDisplayModel = [sortMainData objectAtIndex:sender.tag];
             
-            NSString *params = [NSString stringWithFormat:@"cid=%@&api=%@&status=%@&pid=%@",[NSUserDefaults.standardUserDefaults valueForKey:@"custid"],[NSUserDefaults.standardUserDefaults valueForKey:@"api"],@"Y",sortModel.pid];
+            NSString *params = [NSString stringWithFormat:@"cid=%@&api=%@&status=%@&pid=%@",[NSUserDefaults.standardUserDefaults valueForKey:@"custid"],[NSUserDefaults.standardUserDefaults valueForKey:@"api"],@"Y",_sortDisplayModel.pid];
             NSLog(@"%@",params);
             
             NSData *requestData = [params dataUsingEncoding:NSUTF8StringEncoding];
@@ -1017,13 +1018,13 @@
 }
 
 -(IBAction)clickOnSort:(id)sender{
-    [NSUserDefaults.standardUserDefaults setValue:@"Indirectsort" forKey:@"Direct"];
+    [NSUserDefaults.standardUserDefaults setValue:@"Indirectsort" forKey:@"Sort"];
     self.SortpopupView.hidden = NO;
     [self sortPopUPData];
-    NSLog(@"%@",_PopUpNameText);
-    self.sortNameLabel.text = _PopUpNameText;
+    self.popupTextLabel.text = _PopUpNameText;
 }
 -(void)sortPopUPData{
+    if ([[NSUserDefaults.standardUserDefaults valueForKey:@"Sort"]isEqualToString:@"Indirectsort"]) {
 
     
     NSDictionary *headers = @{ @"content-type": @"multipart/form-data; boundary=----WebKitFormBoundary7MA4YWxkTrZu0gW",
@@ -1031,6 +1032,7 @@
                                @"postman-token": @"554194aa-7dc1-9888-889c-d059e4257252" };
     NSArray *parameters = @[ @{ @"name": @"cid", @"value": _categoryMainId } ];
     NSString *boundary = @"----WebKitFormBoundary7MA4YWxkTrZu0gW";
+        NSLog(@"%@",parameters);
     
     NSError *error;
     NSMutableString *body = [NSMutableString string];
@@ -1063,6 +1065,7 @@
     NSURLSession *session = [NSURLSession sharedSession];
     NSURLSessionDataTask *dataTask = [session dataTaskWithRequest:request
                                                 completionHandler:^(NSData *data, NSURLResponse *response, NSError *error) {
+                                            id sortData = [NSJSONSerialization JSONObjectWithData:data options:kNilOptions error:&error];
                                                     dispatch_async(dispatch_get_main_queue(),^{
                                                         [MBProgressHUD hideHUDForView:self.view animated:YES];
                                                     });
@@ -1087,8 +1090,8 @@
                                                         NSHTTPURLResponse *httpResponse = (NSHTTPURLResponse *) response;
                                                         NSLog(@"%@", httpResponse);
                                                         
-                                                    }
-                                                    id sortData = [NSJSONSerialization JSONObjectWithData:data options:kNilOptions error:&error];
+                                                    
+
                                                     NSLog(@"%@",sortData);
                                                     if([[NSNumber numberWithBool:[[[NSJSONSerialization JSONObjectWithData:data options:kNilOptions error:&error] objectForKey:@"success"] boolValue]] isEqualToNumber:[NSNumber numberWithInt:0]]){
                                                         dispatch_async(dispatch_get_main_queue(), ^{
@@ -1105,10 +1108,9 @@
                                                         sortModel1 = [[SortModel1 alloc]init];
                                                         [sortModel1 getSort1ModelWithDictionary:dict];
                                                         [sortMainData1 addObject:sortModel1];
-                                                        NSLog(@"%@",sortMainData1);
-                                                        
                                                         
                                                     }
+                                                        NSLog(@"%@",sortMainData1);
                                                     dispatch_async(dispatch_get_main_queue(), ^{
                                                         self.sortTableView.hidden = NO;
                                                         [MBProgressHUD hideHUDForView:self.view animated:YES];
@@ -1117,9 +1119,12 @@
                                                         [self.sortTableView reloadData];
                                                     });
                                                     }
+                                                    }
                                                 }];
     [dataTask resume];
-    
+    }else{
+        
+    }
     
 }
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section{
@@ -1134,20 +1139,26 @@
 }
 -(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath{
     sortModel1 = [sortMainData1 objectAtIndex:indexPath.row];
-    [self getSort1ItemId:sortModel1.sub_catid];
+    _sort1MainId = sortModel1.sub_catid;
+    NSLog(@"%@",_sort1MainId);
     [self getSortData];
     self.SortpopupView.hidden = YES;
 }
--(void)getSort1ItemId:(NSString *)sort1id{
-    sort1MainId = sort1id;
-    
-}
+
 
 -(IBAction)clickOnFilter:(id)sender{
-    [NSUserDefaults.standardUserDefaults setValue:@"IndirectFilter" forKey:@"Direct"];
+    [NSUserDefaults.standardUserDefaults setValue:@"IndirectFilter" forKey:@"Sort"];
     FilterViewController *filterVc = [self.storyboard instantiateViewControllerWithIdentifier:@"FilterViewController"];
+    NSLog(@"%@",_sortDisplayModel);
+    filterVc.sortDisplayModel = self.sortDisplayModel;
+    NSLog(@"%@",filterVc.sortDisplayModel);
+    filterVc.sort1MainId = self.sort1MainId;
+    filterVc.categoryMainId = self.categoryMainId;
+    filterVc.MainSortItemId = self.MainSortItemId;
+    NSLog(@"%@",self.sortModel);
     filterVc.sortModel = self.sortModel;
     NSLog(@"%@",filterVc.sortModel);
+    
     [self.navigationController pushViewController:filterVc animated:YES];
 }
 
@@ -1156,8 +1167,6 @@
 }
 
 -(void)back{
-    [NSUserDefaults.standardUserDefaults setValue:@"DirectSort" forKey:@"Direct"];
-    self.SortpopupView.hidden = YES;
     [self.navigationController popViewControllerAnimated:YES];
     
 }

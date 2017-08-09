@@ -21,9 +21,10 @@
 #import "SubSubViewController.h"
 #import "SliderModel.h"
 #import "SearchViewController.h"
+#import "AccountViewController.h"
 
 
-@interface homeViewController ()<UICollectionViewDelegate,UICollectionViewDataSource,UITableViewDataSource,UITableViewDelegate,UIAlertViewDelegate,UISearchBarDelegate>{
+@interface homeViewController ()<UICollectionViewDelegate,UICollectionViewDataSource,UITableViewDataSource,UITableViewDelegate,UIAlertViewDelegate,UISearchBarDelegate,UITabBarControllerDelegate>{
     
     UIActivityIndicatorView *imageActivity;
     
@@ -68,6 +69,7 @@
     
     self.navigationItem.hidesBackButton = YES;
     self.searchBar.delegate = self;
+    self.tabBarController.delegate = self;
     
 
     
@@ -214,11 +216,22 @@
                                                          
                                                          NSArray *catagoryArr=[NSJSONSerialization JSONObjectWithData:data options:kNilOptions error:&error];
                                                          NSLog(@"%@",catagoryArr);
-                                                         
-                                                         NSArray *dammycatagoryArray=[catagoryArr valueForKey:@"categories"];
+
+                                                    NSArray *dammycatagoryArray=[catagoryArr valueForKey:@"categories"];
                                                          NSLog(@"%@",dammycatagoryArray);
+                                                         NSArray *categoryNameArray = [dammycatagoryArray valueForKey:@"category_name"];
+                                                         NSLog(@"%@",categoryNameArray);
+                                                         [NSUserDefaults.standardUserDefaults setObject:categoryNameArray forKey:@"CategoryNameKey"];
+                                                    [[NSUserDefaults standardUserDefaults]synchronize];
+                                                         NSArray *catID = [dammycatagoryArray valueForKey:@"category_id"];
+                                                         NSLog(@"%@",catID);
+                                                         [NSUserDefaults.standardUserDefaults setObject:catID forKey:@"catIdkey"];
+                                        
                                                         
-                                                
+                //[NSUserDefaults.standardUserDefaults setObject:dammycatagoryArray forKey:@"CategoryKey"];
+                                      //  [[NSUserDefaults standardUserDefaults] synchronize];
+
+                                                         
                                                          int catIndex;
                                                          for (catIndex = 0; catIndex < dammycatagoryArray.count; catIndex++) {
                                                              NSDictionary *dict = dammycatagoryArray[catIndex];
@@ -228,8 +241,6 @@
                                                              NSLog(@"%@",catModel);
                                                              [_mainArray addObject:catModel];
                                                              NSLog(@"%@",_mainArray);
-//                                                            
-                                                             
                                                          }
                                                          dispatch_async(dispatch_get_main_queue(), ^(void){
                                                              //Run UI Updates
@@ -358,6 +369,7 @@
 }
 -(void)viewWillAppear:(BOOL)animated{
     [super viewWillAppear:animated];
+//    [self refreshMethod];
     [_searchBar resignFirstResponder];
     [[self.tabBarController.tabBar.items objectAtIndex:0] setTitle:@"Home"];
     if ([[NSUserDefaults.standardUserDefaults valueForKey:@"LoggedIn"]isEqualToString:@"yes"])
@@ -452,16 +464,7 @@
     [[NSNotificationCenter defaultCenter]removeObserver:self];
     
 }
-//-(void) tabBarController:(UITabBarController *)tabBarController didSelectViewController:(UIViewController *)viewController{
-//    NSLog(@"%lu",(unsigned long)tabBarController.selectedIndex);
-//    if (tabBarController.selectedIndex==0) {
-//        
-////            [(UINavigationController *)viewController popToRootViewControllerAnimated:NO];
-//        }else{
-//            
-//        }
-//   
-//}
+
 -(void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex{
     if (buttonIndex == 001) {
         [self refreshMethod];
@@ -475,11 +478,14 @@
     return NO;
 }
 
-//-(void)searchBar:(UISearchBar *)searchBar textDidChange:(NSString *)searchText{
-//    SearchViewController *searchBarVc = [self.storyboard instantiateViewControllerWithIdentifier:@"SearchViewController"];
-//    [self.navigationController pushViewController:searchBarVc animated:YES];
-//    
+//-(void) tabBarController:(UITabBarController *)tabBarController didSelectViewController:(UIViewController *)viewController
+//{
+//    if ([[NSUserDefaults.standardUserDefaults valueForKey:@"LoggedIn"]isEqualToString:@"yes"]) {
+//        if (tabBarController.selectedIndex == 3) {
+//            
+//        }
+//    }
 //}
-\
+
 
 @end

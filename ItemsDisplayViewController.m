@@ -393,239 +393,241 @@
         [task resume];
     }
 
-    }else if ([[NSUserDefaults.standardUserDefaults valueForKey:@"Direct"]isEqualToString:@"IndirectFilter"]){
-        if ([[NSUserDefaults.standardUserDefaults valueForKey:@"index"]isEqualToString:@"color1"]) {
-            
-            dispatch_async(dispatch_get_main_queue(), ^{
-                [MBProgressHUD showHUDAddedTo:self.view animated:YES];
-                
-            });
-            NSString *urlInstring =[NSString stringWithFormat:@"http://samenslifestyle.com/samenslifestyle123.com/samens_mob/fetch_filterd_sub_category_item.php"];
-            NSURL *url=[NSURL URLWithString:urlInstring];
-            NSMutableURLRequest *request=[NSMutableURLRequest requestWithURL:url];
-            [request setHTTPMethod:@"POST"];
-            NSString *params = [NSString stringWithFormat:@"subCatId=%@&c=%@",_sortModel.sub_catid,_ColorCode1];
-            
-            NSLog(@"%@",params);
-            
-            NSData *requestData = [params dataUsingEncoding:NSUTF8StringEncoding];
-            NSLog(@"%@",requestData);
-            [request setHTTPBody:requestData];
-            
-            NSURLSessionConfiguration *config=[NSURLSessionConfiguration defaultSessionConfiguration];
-            [config setTimeoutIntervalForRequest:30.0];
-            NSURLSession *session=[NSURLSession sessionWithConfiguration:config];
-            NSURLSessionDataTask *task=[session dataTaskWithRequest:request completionHandler:^(NSData * _Nullable data, NSURLResponse * _Nullable response, NSError * _Nullable error) {
-                dispatch_async(dispatch_get_main_queue(),^{
-                    [MBProgressHUD hideHUDForView:self.view animated:YES];
-                });
-                NSError *err;
-                
-                if (error) {
-                    NSLog(@"%@",err);
-                    
-                    if ([error.localizedDescription isEqualToString:@"The request timed out."]){
-                        dispatch_async(dispatch_get_main_queue(), ^{
-                            UIAlertView *alertView = [[UIAlertView alloc]initWithTitle:@"The requste timed out. Please try again" message:@"" delegate:self cancelButtonTitle:@"Cancel" otherButtonTitles:@"Retry", nil];
-                            alertView.tag = 001;
-                            [alertView show];
-                        });
-                    }else if ([error.localizedDescription isEqualToString:@"The Internet connection appears to be offline."]){
-                        dispatch_async(dispatch_get_main_queue(),^{
-                            UIAlertView *alertView = [[UIAlertView alloc]initWithTitle:@"The Internet connection appears to be offline." message:@"" delegate:nil cancelButtonTitle:@"Ok" otherButtonTitles:@"Retry", nil];
-                            alertView.tag = 002;
-                            [alertView show];
-                        });
-                    }
-                    
-                }else{
-                    id jsonData = [NSJSONSerialization JSONObjectWithData:data options:kNilOptions error:&error];
-                    NSLog(@"%@",jsonData);
-                    if([[NSNumber numberWithBool:[[[NSJSONSerialization JSONObjectWithData:data options:kNilOptions error:&error] objectForKey:@"success"] boolValue]] isEqualToNumber:[NSNumber numberWithInt:0]]){
-                        dispatch_async(dispatch_get_main_queue(), ^{
-                            [MBProgressHUD hideHUDForView:self.view animated:YES];
-                            self.DisplayItemsCollectionView.hidden = YES;
-                        });
-                    }else{
-                    NSArray *dammyArray = [jsonData valueForKey:@"categories"];
-                    int index;
-                    Color1DataArray = [[NSMutableArray alloc]init];
-                    for (index=0; index < dammyArray.count ; index++) {
-                        NSDictionary *dict = dammyArray[index];
-            fetchColor1DetailsModel = [[FetchSortColorModelDetails alloc]init];
-                        [fetchColor1DetailsModel getColor1DetailsModelWithDictionary:dict];
-                        [Color1DataArray addObject:fetchColor1DetailsModel];
-                    }
-                    NSLog(@"%@",Color1DataArray);
-                  
-                    dispatch_async(dispatch_get_main_queue(), ^{
-                        self.DisplayItemsCollectionView.hidden = NO;
-
-                        [MBProgressHUD hideHUDForView:self.view animated:YES];
-                        self.DisplayItemsCollectionView.delegate = self;
-                        self.DisplayItemsCollectionView.dataSource = self;
-                        [self.DisplayItemsCollectionView reloadData];
-                    });
-
-                }
-                }
-            }];
-            [task resume];
-        }else if ([[NSUserDefaults.standardUserDefaults valueForKey:@"index"]isEqualToString:@"size"]){
-            
-            dispatch_async(dispatch_get_main_queue(), ^{
-                [MBProgressHUD showHUDAddedTo:self.view animated:YES];
-                
-            });
-            NSString *urlInstring =[NSString stringWithFormat:@"http://samenslifestyle.com/samenslifestyle123.com/samens_mob/fetch_filterd_sub_category_item.php"];
-            NSURL *url=[NSURL URLWithString:urlInstring];
-            NSMutableURLRequest *request=[NSMutableURLRequest requestWithURL:url];
-            [request setHTTPMethod:@"POST"];
-            NSString *params = [NSString stringWithFormat:@"subCatId=%@&s=%@",_sortModel.sub_catid,_sizeIndexArray];
-            
-            NSLog(@"%@",params);
-            
-            NSData *requestData = [params dataUsingEncoding:NSUTF8StringEncoding];
-            NSLog(@"%@",requestData);
-            [request setHTTPBody:requestData];
-            
-            NSURLSessionConfiguration *config=[NSURLSessionConfiguration defaultSessionConfiguration];
-            [config setTimeoutIntervalForRequest:30.0];
-            NSURLSession *session=[NSURLSession sessionWithConfiguration:config];
-            NSURLSessionDataTask *task=[session dataTaskWithRequest:request completionHandler:^(NSData * _Nullable data, NSURLResponse * _Nullable response, NSError * _Nullable error) {
-                dispatch_async(dispatch_get_main_queue(),^{
-                    [MBProgressHUD hideHUDForView:self.view animated:YES];
-                });
-                NSError *err;
-                
-                if (error) {
-                    NSLog(@"%@",err);
-                    
-                    if ([error.localizedDescription isEqualToString:@"The request timed out."]){
-                        dispatch_async(dispatch_get_main_queue(), ^{
-                            UIAlertView *alertView = [[UIAlertView alloc]initWithTitle:@"The requste timed out. Please try again" message:@"" delegate:self cancelButtonTitle:@"Cancel" otherButtonTitles:@"Retry", nil];
-                            alertView.tag = 001;
-                            [alertView show];
-                        });
-                    }else if ([error.localizedDescription isEqualToString:@"The Internet connection appears to be offline."]){
-                        dispatch_async(dispatch_get_main_queue(),^{
-                            UIAlertView *alertView = [[UIAlertView alloc]initWithTitle:@"The Internet connection appears to be offline." message:@"" delegate:nil cancelButtonTitle:@"Ok" otherButtonTitles:@"Retry", nil];
-                            alertView.tag = 002;
-                            [alertView show];
-                        });
-                    }
-                    
-                }else{
-                    id jsonData = [NSJSONSerialization JSONObjectWithData:data options:kNilOptions error:&error];
-                    NSLog(@"%@",jsonData);
-                    if([[NSNumber numberWithBool:[[[NSJSONSerialization JSONObjectWithData:data options:kNilOptions error:&error] objectForKey:@"success"] boolValue]] isEqualToNumber:[NSNumber numberWithInt:0]]){
-                        dispatch_async(dispatch_get_main_queue(), ^{
-                            [MBProgressHUD hideHUDForView:self.view animated:YES];
-                            self.DisplayItemsCollectionView.hidden = YES;
-                        });
-                    }else{
-                    NSArray *dammyArray = [jsonData valueForKey:@"categories"];
-                    int index;
-                    Size1DataArray = [[NSMutableArray alloc]init];
-                    for (index = 0; index < dammyArray.count; index++) {
-                        NSDictionary *dict = dammyArray[index];
-                        size1Model = [[FetchSortFilterSizeModel alloc]init];
-                        [size1Model getSortFilterSizeModelWithDictionary:dict];
-                        [Size1DataArray addObject:size1Model];
-                    }
-                    NSLog(@"%@",Size1DataArray);
-                  
-                    dispatch_async(dispatch_get_main_queue(), ^{
-                        self.DisplayItemsCollectionView.hidden = NO;
-
-                        [MBProgressHUD hideHUDForView:self.view animated:YES];
-                        self.DisplayItemsCollectionView.delegate = self;
-                        self.DisplayItemsCollectionView.dataSource = self;
-                        [self.DisplayItemsCollectionView reloadData];
-                    });
-                    }
-                }
-            }];
-            [task resume];
-        }else if ([[NSUserDefaults.standardUserDefaults valueForKey:@"index"]isEqualToString:@"price"]){
-            dispatch_async(dispatch_get_main_queue(), ^{
-                [MBProgressHUD showHUDAddedTo:self.view animated:YES];
-                
-            });
-            NSString *urlInstring =[NSString stringWithFormat:@"http://samenslifestyle.com/samenslifestyle123.com/samens_mob/fetch_filterd_sub_category_item.php"];
-            NSURL *url=[NSURL URLWithString:urlInstring];
-            NSMutableURLRequest *request=[NSMutableURLRequest requestWithURL:url];
-            [request setHTTPMethod:@"POST"];
-            NSString *params = [NSString stringWithFormat:@"subCatId=%@&p=%@",_sortModel.sub_catid,_priceIndexArray];
-            
-            NSLog(@"%@",params);
-            
-            NSData *requestData = [params dataUsingEncoding:NSUTF8StringEncoding];
-            NSLog(@"%@",requestData);
-            [request setHTTPBody:requestData];
-            
-            NSURLSessionConfiguration *config=[NSURLSessionConfiguration defaultSessionConfiguration];
-            [config setTimeoutIntervalForRequest:30.0];
-            NSURLSession *session=[NSURLSession sessionWithConfiguration:config];
-            NSURLSessionDataTask *task=[session dataTaskWithRequest:request completionHandler:^(NSData * _Nullable data, NSURLResponse * _Nullable response, NSError * _Nullable error) {
-                dispatch_async(dispatch_get_main_queue(),^{
-                    [MBProgressHUD hideHUDForView:self.view animated:YES];
-                });
-                NSError *err;
-                
-                if (error) {
-                    NSLog(@"%@",err);
-                    
-                    if ([error.localizedDescription isEqualToString:@"The request timed out."]){
-                        dispatch_async(dispatch_get_main_queue(), ^{
-                            UIAlertView *alertView = [[UIAlertView alloc]initWithTitle:@"The requste timed out. Please try again" message:@"" delegate:self cancelButtonTitle:@"Cancel" otherButtonTitles:@"Retry", nil];
-                            alertView.tag = 001;
-                            [alertView show];
-                        });
-                    }else if ([error.localizedDescription isEqualToString:@"The Internet connection appears to be offline."]){
-                        dispatch_async(dispatch_get_main_queue(),^{
-                            UIAlertView *alertView = [[UIAlertView alloc]initWithTitle:@"The Internet connection appears to be offline." message:@"" delegate:nil cancelButtonTitle:@"Ok" otherButtonTitles:@"Retry", nil];
-                            alertView.tag = 002;
-                            [alertView show];
-                        });
-                    }
-                    
-                }else{
-                    id jsonData = [NSJSONSerialization JSONObjectWithData:data options:kNilOptions error:&error];
-                    NSLog(@"%@",jsonData);
-                    if([[NSNumber numberWithBool:[[[NSJSONSerialization JSONObjectWithData:data options:kNilOptions error:&error] objectForKey:@"success"] boolValue]] isEqualToNumber:[NSNumber numberWithInt:0]]){
-                        dispatch_async(dispatch_get_main_queue(), ^{
-                            [MBProgressHUD hideHUDForView:self.view animated:YES];
-                            self.DisplayItemsCollectionView.hidden = YES;
-                        });
-                    }else{
-                        NSArray *dammyArray = [jsonData valueForKey:@"categories"];
-                        int index;
-                        priceDataArray1 = [[NSMutableArray alloc]init];
-                        for (index = 0; index < dammyArray.count; index++) {
-                            NSDictionary *dict = dammyArray[index];
-                            priceModel1 = [[PriceItemModel alloc]init];
-                            [priceModel1 getPriceDataModelWithDictionary:dict];
-                            [priceDataArray1 addObject:priceModel1];
-                        }
-                        NSLog(@"%@",priceDataArray1);
-                     
-                        dispatch_async(dispatch_get_main_queue(), ^{
-                        self.DisplayItemsCollectionView.hidden = NO;
-
-                            [MBProgressHUD hideHUDForView:self.view animated:YES];
-                            self.DisplayItemsCollectionView.delegate = self;
-                            self.DisplayItemsCollectionView.dataSource = self;
-                            [self.DisplayItemsCollectionView reloadData];
-                        });
- 
-                    }
-                    
-                }
-            }];
-            [task resume];
-        }
-}else if ([[NSUserDefaults.standardUserDefaults valueForKey:@"Direct"]isEqualToString:@"search"]){
+    }
+//    else if ([[NSUserDefaults.standardUserDefaults valueForKey:@"Direct"]isEqualToString:@"IndirectFilter"]){
+//        if ([[NSUserDefaults.standardUserDefaults valueForKey:@"index"]isEqualToString:@"color1"]) {
+//            
+//            dispatch_async(dispatch_get_main_queue(), ^{
+//                [MBProgressHUD showHUDAddedTo:self.view animated:YES];
+//                
+//            });
+//            NSString *urlInstring =[NSString stringWithFormat:@"http://samenslifestyle.com/samenslifestyle123.com/samens_mob/fetch_filterd_sub_category_item.php"];
+//            NSURL *url=[NSURL URLWithString:urlInstring];
+//            NSMutableURLRequest *request=[NSMutableURLRequest requestWithURL:url];
+//            [request setHTTPMethod:@"POST"];
+//            NSString *params = [NSString stringWithFormat:@"subCatId=%@&c=%@",_sortModel.sub_catid,_ColorCode1];
+//            
+//            NSLog(@"%@",params);
+//            
+//            NSData *requestData = [params dataUsingEncoding:NSUTF8StringEncoding];
+//            NSLog(@"%@",requestData);
+//            [request setHTTPBody:requestData];
+//            
+//            NSURLSessionConfiguration *config=[NSURLSessionConfiguration defaultSessionConfiguration];
+//            [config setTimeoutIntervalForRequest:30.0];
+//            NSURLSession *session=[NSURLSession sessionWithConfiguration:config];
+//            NSURLSessionDataTask *task=[session dataTaskWithRequest:request completionHandler:^(NSData * _Nullable data, NSURLResponse * _Nullable response, NSError * _Nullable error) {
+//                dispatch_async(dispatch_get_main_queue(),^{
+//                    [MBProgressHUD hideHUDForView:self.view animated:YES];
+//                });
+//                NSError *err;
+//                
+//                if (error) {
+//                    NSLog(@"%@",err);
+//                    
+//                    if ([error.localizedDescription isEqualToString:@"The request timed out."]){
+//                        dispatch_async(dispatch_get_main_queue(), ^{
+//                            UIAlertView *alertView = [[UIAlertView alloc]initWithTitle:@"The requste timed out. Please try again" message:@"" delegate:self cancelButtonTitle:@"Cancel" otherButtonTitles:@"Retry", nil];
+//                            alertView.tag = 001;
+//                            [alertView show];
+//                        });
+//                    }else if ([error.localizedDescription isEqualToString:@"The Internet connection appears to be offline."]){
+//                        dispatch_async(dispatch_get_main_queue(),^{
+//                            UIAlertView *alertView = [[UIAlertView alloc]initWithTitle:@"The Internet connection appears to be offline." message:@"" delegate:nil cancelButtonTitle:@"Ok" otherButtonTitles:@"Retry", nil];
+//                            alertView.tag = 002;
+//                            [alertView show];
+//                        });
+//                    }
+//                    
+//                }else{
+//                    id jsonData = [NSJSONSerialization JSONObjectWithData:data options:kNilOptions error:&error];
+//                    NSLog(@"%@",jsonData);
+//                    if([[NSNumber numberWithBool:[[[NSJSONSerialization JSONObjectWithData:data options:kNilOptions error:&error] objectForKey:@"success"] boolValue]] isEqualToNumber:[NSNumber numberWithInt:0]]){
+//                        dispatch_async(dispatch_get_main_queue(), ^{
+//                            [MBProgressHUD hideHUDForView:self.view animated:YES];
+//                            self.DisplayItemsCollectionView.hidden = YES;
+//                        });
+//                    }else{
+//                    NSArray *dammyArray = [jsonData valueForKey:@"categories"];
+//                    int index;
+//                    Color1DataArray = [[NSMutableArray alloc]init];
+//                    for (index=0; index < dammyArray.count ; index++) {
+//                        NSDictionary *dict = dammyArray[index];
+//            fetchColor1DetailsModel = [[FetchSortColorModelDetails alloc]init];
+//                        [fetchColor1DetailsModel getColor1DetailsModelWithDictionary:dict];
+//                        [Color1DataArray addObject:fetchColor1DetailsModel];
+//                    }
+//                    NSLog(@"%@",Color1DataArray);
+//                  
+//                    dispatch_async(dispatch_get_main_queue(), ^{
+//                        self.DisplayItemsCollectionView.hidden = NO;
+//
+//                        [MBProgressHUD hideHUDForView:self.view animated:YES];
+//                        self.DisplayItemsCollectionView.delegate = self;
+//                        self.DisplayItemsCollectionView.dataSource = self;
+//                        [self.DisplayItemsCollectionView reloadData];
+//                    });
+//
+//                }
+//                }
+//            }];
+//            [task resume];
+//        }else if ([[NSUserDefaults.standardUserDefaults valueForKey:@"index"]isEqualToString:@"size"]){
+//            
+//            dispatch_async(dispatch_get_main_queue(), ^{
+//                [MBProgressHUD showHUDAddedTo:self.view animated:YES];
+//                
+//            });
+//            NSString *urlInstring =[NSString stringWithFormat:@"http://samenslifestyle.com/samenslifestyle123.com/samens_mob/fetch_filterd_sub_category_item.php"];
+//            NSURL *url=[NSURL URLWithString:urlInstring];
+//            NSMutableURLRequest *request=[NSMutableURLRequest requestWithURL:url];
+//            [request setHTTPMethod:@"POST"];
+//            NSString *params = [NSString stringWithFormat:@"subCatId=%@&s=%@",_sortModel.sub_catid,_sizeIndexArray];
+//            
+//            NSLog(@"%@",params);
+//            
+//            NSData *requestData = [params dataUsingEncoding:NSUTF8StringEncoding];
+//            NSLog(@"%@",requestData);
+//            [request setHTTPBody:requestData];
+//            
+//            NSURLSessionConfiguration *config=[NSURLSessionConfiguration defaultSessionConfiguration];
+//            [config setTimeoutIntervalForRequest:30.0];
+//            NSURLSession *session=[NSURLSession sessionWithConfiguration:config];
+//            NSURLSessionDataTask *task=[session dataTaskWithRequest:request completionHandler:^(NSData * _Nullable data, NSURLResponse * _Nullable response, NSError * _Nullable error) {
+//                dispatch_async(dispatch_get_main_queue(),^{
+//                    [MBProgressHUD hideHUDForView:self.view animated:YES];
+//                });
+//                NSError *err;
+//                
+//                if (error) {
+//                    NSLog(@"%@",err);
+//                    
+//                    if ([error.localizedDescription isEqualToString:@"The request timed out."]){
+//                        dispatch_async(dispatch_get_main_queue(), ^{
+//                            UIAlertView *alertView = [[UIAlertView alloc]initWithTitle:@"The requste timed out. Please try again" message:@"" delegate:self cancelButtonTitle:@"Cancel" otherButtonTitles:@"Retry", nil];
+//                            alertView.tag = 001;
+//                            [alertView show];
+//                        });
+//                    }else if ([error.localizedDescription isEqualToString:@"The Internet connection appears to be offline."]){
+//                        dispatch_async(dispatch_get_main_queue(),^{
+//                            UIAlertView *alertView = [[UIAlertView alloc]initWithTitle:@"The Internet connection appears to be offline." message:@"" delegate:nil cancelButtonTitle:@"Ok" otherButtonTitles:@"Retry", nil];
+//                            alertView.tag = 002;
+//                            [alertView show];
+//                        });
+//                    }
+//                    
+//                }else{
+//                    id jsonData = [NSJSONSerialization JSONObjectWithData:data options:kNilOptions error:&error];
+//                    NSLog(@"%@",jsonData);
+//                    if([[NSNumber numberWithBool:[[[NSJSONSerialization JSONObjectWithData:data options:kNilOptions error:&error] objectForKey:@"success"] boolValue]] isEqualToNumber:[NSNumber numberWithInt:0]]){
+//                        dispatch_async(dispatch_get_main_queue(), ^{
+//                            [MBProgressHUD hideHUDForView:self.view animated:YES];
+//                            self.DisplayItemsCollectionView.hidden = YES;
+//                        });
+//                    }else{
+//                    NSArray *dammyArray = [jsonData valueForKey:@"categories"];
+//                    int index;
+//                    Size1DataArray = [[NSMutableArray alloc]init];
+//                    for (index = 0; index < dammyArray.count; index++) {
+//                        NSDictionary *dict = dammyArray[index];
+//                        size1Model = [[FetchSortFilterSizeModel alloc]init];
+//                        [size1Model getSortFilterSizeModelWithDictionary:dict];
+//                        [Size1DataArray addObject:size1Model];
+//                    }
+//                    NSLog(@"%@",Size1DataArray);
+//                  
+//                    dispatch_async(dispatch_get_main_queue(), ^{
+//                        self.DisplayItemsCollectionView.hidden = NO;
+//
+//                        [MBProgressHUD hideHUDForView:self.view animated:YES];
+//                        self.DisplayItemsCollectionView.delegate = self;
+//                        self.DisplayItemsCollectionView.dataSource = self;
+//                        [self.DisplayItemsCollectionView reloadData];
+//                    });
+//                    }
+//                }
+//            }];
+//            [task resume];
+//        }else if ([[NSUserDefaults.standardUserDefaults valueForKey:@"index"]isEqualToString:@"price"]){
+//            dispatch_async(dispatch_get_main_queue(), ^{
+//                [MBProgressHUD showHUDAddedTo:self.view animated:YES];
+//                
+//            });
+//            NSString *urlInstring =[NSString stringWithFormat:@"http://samenslifestyle.com/samenslifestyle123.com/samens_mob/fetch_filterd_sub_category_item.php"];
+//            NSURL *url=[NSURL URLWithString:urlInstring];
+//            NSMutableURLRequest *request=[NSMutableURLRequest requestWithURL:url];
+//            [request setHTTPMethod:@"POST"];
+//            NSString *params = [NSString stringWithFormat:@"subCatId=%@&p=%@",_sortModel.sub_catid,_priceIndexArray];
+//            
+//            NSLog(@"%@",params);
+//            
+//            NSData *requestData = [params dataUsingEncoding:NSUTF8StringEncoding];
+//            NSLog(@"%@",requestData);
+//            [request setHTTPBody:requestData];
+//            
+//            NSURLSessionConfiguration *config=[NSURLSessionConfiguration defaultSessionConfiguration];
+//            [config setTimeoutIntervalForRequest:30.0];
+//            NSURLSession *session=[NSURLSession sessionWithConfiguration:config];
+//            NSURLSessionDataTask *task=[session dataTaskWithRequest:request completionHandler:^(NSData * _Nullable data, NSURLResponse * _Nullable response, NSError * _Nullable error) {
+//                dispatch_async(dispatch_get_main_queue(),^{
+//                    [MBProgressHUD hideHUDForView:self.view animated:YES];
+//                });
+//                NSError *err;
+//                
+//                if (error) {
+//                    NSLog(@"%@",err);
+//                    
+//                    if ([error.localizedDescription isEqualToString:@"The request timed out."]){
+//                        dispatch_async(dispatch_get_main_queue(), ^{
+//                            UIAlertView *alertView = [[UIAlertView alloc]initWithTitle:@"The requste timed out. Please try again" message:@"" delegate:self cancelButtonTitle:@"Cancel" otherButtonTitles:@"Retry", nil];
+//                            alertView.tag = 001;
+//                            [alertView show];
+//                        });
+//                    }else if ([error.localizedDescription isEqualToString:@"The Internet connection appears to be offline."]){
+//                        dispatch_async(dispatch_get_main_queue(),^{
+//                            UIAlertView *alertView = [[UIAlertView alloc]initWithTitle:@"The Internet connection appears to be offline." message:@"" delegate:nil cancelButtonTitle:@"Ok" otherButtonTitles:@"Retry", nil];
+//                            alertView.tag = 002;
+//                            [alertView show];
+//                        });
+//                    }
+//                    
+//                }else{
+//                    id jsonData = [NSJSONSerialization JSONObjectWithData:data options:kNilOptions error:&error];
+//                    NSLog(@"%@",jsonData);
+//                    if([[NSNumber numberWithBool:[[[NSJSONSerialization JSONObjectWithData:data options:kNilOptions error:&error] objectForKey:@"success"] boolValue]] isEqualToNumber:[NSNumber numberWithInt:0]]){
+//                        dispatch_async(dispatch_get_main_queue(), ^{
+//                            [MBProgressHUD hideHUDForView:self.view animated:YES];
+//                            self.DisplayItemsCollectionView.hidden = YES;
+//                        });
+//                    }else{
+//                        NSArray *dammyArray = [jsonData valueForKey:@"categories"];
+//                        int index;
+//                        priceDataArray1 = [[NSMutableArray alloc]init];
+//                        for (index = 0; index < dammyArray.count; index++) {
+//                            NSDictionary *dict = dammyArray[index];
+//                            priceModel1 = [[PriceItemModel alloc]init];
+//                            [priceModel1 getPriceDataModelWithDictionary:dict];
+//                            [priceDataArray1 addObject:priceModel1];
+//                        }
+//                        NSLog(@"%@",priceDataArray1);
+//                     
+//                        dispatch_async(dispatch_get_main_queue(), ^{
+//                        self.DisplayItemsCollectionView.hidden = NO;
+//
+//                            [MBProgressHUD hideHUDForView:self.view animated:YES];
+//                            self.DisplayItemsCollectionView.delegate = self;
+//                            self.DisplayItemsCollectionView.dataSource = self;
+//                            [self.DisplayItemsCollectionView reloadData];
+//                        });
+// 
+//                    }
+//                    
+//                }
+//            }];
+//            [task resume];
+//        }
+//}
+    else if ([[NSUserDefaults.standardUserDefaults valueForKey:@"Direct"]isEqualToString:@"search"]){
         dispatch_async(dispatch_get_main_queue(), ^{
             [MBProgressHUD showHUDAddedTo:self.view animated:YES];
             
@@ -716,16 +718,18 @@
         }else{
             return priceDataArray.count;
         }
-    }else if ([[NSUserDefaults.standardUserDefaults valueForKey:@"Direct"]isEqualToString:@"IndirectFilter"]){
-        if ([[NSUserDefaults.standardUserDefaults valueForKey:@"index"]isEqualToString:@"color1"]) {
-            return Color1DataArray.count;
-        }else if ([[NSUserDefaults.standardUserDefaults valueForKey:@"index"]isEqualToString:@"size"]){
-            NSLog(@"%lu",(unsigned long)Size1DataArray.count);
-            return Size1DataArray.count;
-        }else{
-            return priceDataArray1.count;
-        }
-    }else{
+    }
+//    }else if ([[NSUserDefaults.standardUserDefaults valueForKey:@"Direct"]isEqualToString:@"IndirectFilter"]){
+//        if ([[NSUserDefaults.standardUserDefaults valueForKey:@"index"]isEqualToString:@"color1"]) {
+//            return Color1DataArray.count;
+//        }else if ([[NSUserDefaults.standardUserDefaults valueForKey:@"index"]isEqualToString:@"size"]){
+//            NSLog(@"%lu",(unsigned long)Size1DataArray.count);
+//            return Size1DataArray.count;
+//        }else{
+//            return priceDataArray1.count;
+//        }
+   // }
+else{
         NSLog(@"%lu",(unsigned long)searchDataArray.count);
         return searchDataArray.count;
     }
@@ -737,57 +741,60 @@
 
     DisplayItemsCollectionViewCell *cell = [_DisplayItemsCollectionView dequeueReusableCellWithReuseIdentifier:@"DisplayItemsCollectionViewCell" forIndexPath:indexPath];
     self.subModel = [_subCatMainData objectAtIndex:indexPath.item];
+        NSLog(@"%@",self.subModel);
+        NSLog(@"%@",_subCatMainData);
        
     [cell.displayItemImage setImageWithURL:[NSURL URLWithString:self.subModel.image] placeholderImage:nil];
     cell.displayItemTextLabel.text = self.subModel.Name;
-    cell.wishListButton.tag = indexPath.item;
+        cell.starRatingLabel.text = self.subModel.rating;
+        cell.wishListButton.tag =  indexPath.item;
     NSLog(@"%ld",(long)cell.wishListButton.tag);
     
     [cell.wishListButton addTarget:self action:@selector(ClickOnWishlist:) forControlEvents:UIControlEventTouchUpInside];
+        self.subModel  = [_subCatMainData objectAtIndex:indexPath.item];
         if ([self.subModel.like_v isKindOfClass:[NSNull class]]) {
-            cell.wishListButton.backgroundColor = [UIColor whiteColor];
-            NSLog(@"%@",self.subModel.like_v);
+            [cell.wishListButton setBackgroundColor:[UIColor whiteColor]];
         }else if ([self.subModel.like_v isEqualToString:@"N"]){
-            cell.wishListButton.backgroundColor = [UIColor whiteColor];
-            NSLog(@"%@",self.subModel.like_v);
-
+            [cell.wishListButton setBackgroundColor:[UIColor whiteColor]];
         }else{
-            cell.wishListButton.backgroundColor = [UIColor redColor];
-            NSLog(@"%@",self.subModel.like_v);
+            [cell.wishListButton setBackgroundColor:[UIColor redColor]];
         }
-    cell.starRatingLabel.text = self.subModel.rating;
-    if ([_subModel.offer isEqualToString:@"yes"]) {
-        cell.priceLabel.text = self.subModel.off_price;
+            if ([_subModel.offer isEqualToString:@"yes"]) {
+                cell.priceLabel.text = self.subModel.off_price;
+                
+                NSAttributedString *priceOffString = [[NSAttributedString alloc]initWithString:cell.priceOffLabel.text= _subModel.price attributes:@{NSStrikethroughStyleAttributeName:
+                                                                                                                                                         [NSNumber numberWithInteger:NSUnderlineStyleSingle]}];
+                [cell.priceOffLabel setAttributedText:priceOffString];
+                NSString *string = cell.priceLabel.text;
+                NSLog(@"%@",string);
+                float value = [string floatValue];
+                NSString *string1 = cell.priceOffLabel.text;
+                NSLog(@"%@",string1);
+                float value1 = [string1 floatValue];
+                float pers = 100;
+                float percentage = (value * pers)/value1;
+                NSLog(@"%f",percentage);
+                int totalValue = pers - percentage;
+                NSLog(@"%d",totalValue);
+                NSString *persentage = [NSString stringWithFormat:@"%d%@",totalValue,@"%"];
+                NSLog(@"%@",persentage);
+                cell.offerLabel.text = persentage;
+                NSLog(@"%@",cell.offerLabel.text);
+                cell.offerLabel.hidden = NO;
+                cell.offerLabel.layer.cornerRadius = 13;
+                cell.offerLabel.clipsToBounds = YES;
+                return cell;
+                
+            }else{
+                cell.offerLabel.hidden = YES;
 
-        NSAttributedString *priceOffString = [[NSAttributedString alloc]initWithString:cell.priceOffLabel.text= _subModel.price attributes:@{NSStrikethroughStyleAttributeName:
-                                                                                                                    [NSNumber numberWithInteger:NSUnderlineStyleSingle]}];
-        [cell.priceOffLabel setAttributedText:priceOffString];
-        NSString *string = cell.priceLabel.text;
-        NSLog(@"%@",string);
-        float value = [string floatValue];
-        NSString *string1 = cell.priceOffLabel.text;
-        NSLog(@"%@",string1);
-        float value1 = [string1 floatValue];
-        float pers = 100;
-        float percentage = (value * pers)/value1;
-        NSLog(@"%f",percentage);
-        int totalValue = pers - percentage;
-        NSLog(@"%d",totalValue);
-        NSString *persentage = [NSString stringWithFormat:@"%d%@",totalValue,@"%"];
-        NSLog(@"%@",persentage);
-        cell.offerLabel.text = persentage;
-        NSLog(@"%@",cell.offerLabel.text);
-        cell.offerLabel.backgroundColor = [UIColor redColor];
-        cell.offerLabel.layer.cornerRadius = 13;
-        cell.offerLabel.clipsToBounds = YES;
-        return cell;
+                cell.priceLabel.text = _subModel.price;
+                cell.priceOffLabel.text = nil;
+                cell.offerLabel.text = nil;
+                return cell;
+            }
+            
         
-    }else{
-        cell.priceLabel.text = _subModel.price;
-        cell.priceOffLabel.text = nil;
-        cell.offerLabel.text = nil;
-        return cell;
-    }
     
     }else if ([[NSUserDefaults.standardUserDefaults valueForKey:@"Direct"]isEqualToString:@"DirectFilter"]){
         if ([[NSUserDefaults.standardUserDefaults valueForKey:@"index"]isEqualToString:@"color"]) {
@@ -837,6 +844,7 @@
             return cell;
 
         }else{
+            cell.offerLabel.backgroundColor = [UIColor whiteColor];
             cell.priceLabel.text = [[self.dammyArray objectAtIndex:indexPath.item]valueForKey:@"price"];
             cell.priceOffLabel.text = nil;
             cell.offerLabel.text = nil;
@@ -882,6 +890,7 @@
             return cell;
             
         }else{
+            cell.offerLabel.backgroundColor = [UIColor whiteColor];
             cell.priceLabel.text = self.fetchFilterSizeModel.price;
             cell.priceOffLabel.text = nil;
             cell.offerLabel.text = nil;
@@ -928,6 +937,7 @@
             return cell;
             
         }else{
+            cell.offerLabel.backgroundColor = [UIColor whiteColor];
             cell.priceLabel.text = PriceModel.price;
             cell.priceOffLabel.text = nil;
             cell.offerLabel.text = nil;
@@ -935,143 +945,145 @@
         }
 
     }
-    }else if ([[NSUserDefaults.standardUserDefaults valueForKey:@"Direct"]isEqualToString:@"IndirectFilter"]){
-        if ([[NSUserDefaults.standardUserDefaults valueForKey:@"index"]isEqualToString:@"color1"]) {
-            DisplayItemsCollectionViewCell *cell = [_DisplayItemsCollectionView dequeueReusableCellWithReuseIdentifier:@"DisplayItemsCollectionViewCell" forIndexPath:indexPath ];
-           fetchColor1DetailsModel = [Color1DataArray objectAtIndex:indexPath.item];
-            NSLog(@"%@",fetchColor1DetailsModel.image);
-            NSLog(@"%@",fetchColor1DetailsModel.Name);
-            [cell.displayItemImage setImageWithURL:[NSURL URLWithString:fetchColor1DetailsModel.image] placeholderImage:nil];
-            cell.displayItemTextLabel.text = fetchColor1DetailsModel.Name;
-            cell.wishListButton.tag = indexPath.item;
-            NSLog(@"%ld",(long)cell.wishListButton.tag);
-            [cell.wishListButton addTarget:self action:@selector(ClickOnWishlist:) forControlEvents:UIControlEventTouchUpInside];
-            
-            cell.starRatingLabel.text = [NSString stringWithFormat:@"%@",fetchColor1DetailsModel.rating];
-            if ([fetchColor1DetailsModel.offer isEqualToString:@"yes"]) {
-                cell.priceLabel.text = fetchColor1DetailsModel.off_price;
-                
-                NSAttributedString *priceOffString = [[NSAttributedString alloc]initWithString:cell.priceOffLabel.text= fetchColor1DetailsModel.price attributes:@{NSStrikethroughStyleAttributeName:
-                                                                                                                                                                      [NSNumber numberWithInteger:NSUnderlineStyleSingle]}];
-                [cell.priceOffLabel setAttributedText:priceOffString];
-                NSString *string = cell.priceLabel.text;
-                NSLog(@"%@",string);
-                float value = [string floatValue];
-                NSString *string1 = cell.priceOffLabel.text;
-                NSLog(@"%@",string1);
-                float value1 = [string1 floatValue];
-                float pers = 100;
-                float percentage = (value * pers)/value1;
-                NSLog(@"%f",percentage);
-                int totalValue = pers - percentage;
-                NSLog(@"%d",totalValue);
-                NSString *persentage = [NSString stringWithFormat:@"%d%@",totalValue,@"%"];
-                NSLog(@"%@",persentage);
-                cell.offerLabel.text = persentage;
-                NSLog(@"%@",cell.offerLabel.text);
-                cell.offerLabel.backgroundColor = [UIColor redColor];
-                cell.offerLabel.layer.cornerRadius = 13;
-                cell.offerLabel.clipsToBounds = YES;
-                return cell;
-                
-            }else{
-                cell.priceLabel.text = fetchColor1DetailsModel.price;
-                cell.priceOffLabel.text = nil;
-                cell.offerLabel.text = nil;
-                return cell;
-            }
-
-        }else if ([[NSUserDefaults.standardUserDefaults valueForKey:@"index"]isEqualToString:@"size"]){
-            DisplayItemsCollectionViewCell *cell = [_DisplayItemsCollectionView dequeueReusableCellWithReuseIdentifier:@"DisplayItemsCollectionViewCell" forIndexPath:indexPath ];
-            size1Model = [Size1DataArray objectAtIndex:indexPath.item];
-            NSLog(@"%@",size1Model.image);
-            NSLog(@"%@",size1Model.Name);
-            [cell.displayItemImage setImageWithURL:[NSURL URLWithString:size1Model.image] placeholderImage:nil];
-            cell.displayItemTextLabel.text = size1Model.Name;
-            cell.wishListButton.tag = indexPath.item;
-            NSLog(@"%ld",(long)cell.wishListButton.tag);
-            [cell.wishListButton addTarget:self action:@selector(ClickOnWishlist:) forControlEvents:UIControlEventTouchUpInside];
-            
-            cell.starRatingLabel.text = [NSString stringWithFormat:@"%@",size1Model.rating];
-            if ([size1Model.offer isEqualToString:@"yes"]) {
-                cell.priceLabel.text = size1Model.off_price;
-                
-                NSAttributedString *priceOffString = [[NSAttributedString alloc]initWithString:cell.priceOffLabel.text= size1Model.price attributes:@{NSStrikethroughStyleAttributeName:
-                                                                                                                                                                       [NSNumber numberWithInteger:NSUnderlineStyleSingle]}];
-                [cell.priceOffLabel setAttributedText:priceOffString];
-                NSString *string = cell.priceLabel.text;
-                NSLog(@"%@",string);
-                float value = [string floatValue];
-                NSString *string1 = cell.priceOffLabel.text;
-                NSLog(@"%@",string1);
-                float value1 = [string1 floatValue];
-                float pers = 100;
-                float percentage = (value * pers)/value1;
-                NSLog(@"%f",percentage);
-                int totalValue = pers - percentage;
-                NSLog(@"%d",totalValue);
-                NSString *persentage = [NSString stringWithFormat:@"%d%@",totalValue,@"%"];
-                NSLog(@"%@",persentage);
-                cell.offerLabel.text = persentage;
-                NSLog(@"%@",cell.offerLabel.text);
-                cell.offerLabel.backgroundColor = [UIColor redColor];
-                cell.offerLabel.layer.cornerRadius = 13;
-                cell.offerLabel.clipsToBounds = YES;
-                return cell;
-                
-            }else{
-                cell.priceLabel.text = size1Model.price;
-                cell.priceOffLabel.text = nil;
-                cell.offerLabel.text = nil;
-                return cell;
-            }
- 
-        }else{
-             DisplayItemsCollectionViewCell *cell = [_DisplayItemsCollectionView dequeueReusableCellWithReuseIdentifier:@"DisplayItemsCollectionViewCell" forIndexPath:indexPath ];
-            priceModel1 = [priceDataArray1 objectAtIndex:indexPath.item];
-            NSLog(@"%@",priceModel1.image);
-            NSLog(@"%@",priceModel1.Name);
-            [cell.displayItemImage setImageWithURL:[NSURL URLWithString:priceModel1.image] placeholderImage:nil];
-            cell.displayItemTextLabel.text = priceModel1.Name;
-            cell.wishListButton.tag = indexPath.item;
-            NSLog(@"%ld",(long)cell.wishListButton.tag);
-            [cell.wishListButton addTarget:self action:@selector(ClickOnWishlist:) forControlEvents:UIControlEventTouchUpInside];
-            
-            cell.starRatingLabel.text = [NSString stringWithFormat:@"%@",priceModel1.rating];
-            if ([priceModel1.offer isEqualToString:@"yes"]) {
-                cell.priceLabel.text = priceModel1.off_price;
-                
-                NSAttributedString *priceOffString = [[NSAttributedString alloc]initWithString:cell.priceOffLabel.text= priceModel1.price attributes:@{NSStrikethroughStyleAttributeName:
-                                                                                                                                                          [NSNumber numberWithInteger:NSUnderlineStyleSingle]}];
-                [cell.priceOffLabel setAttributedText:priceOffString];
-                NSString *string = cell.priceLabel.text;
-                NSLog(@"%@",string);
-                float value = [string floatValue];
-                NSString *string1 = cell.priceOffLabel.text;
-                NSLog(@"%@",string1);
-                float value1 = [string1 floatValue];
-                float pers = 100;
-                float percentage = (value * pers)/value1;
-                NSLog(@"%f",percentage);
-                int totalValue = pers - percentage;
-                NSLog(@"%d",totalValue);
-                NSString *persentage = [NSString stringWithFormat:@"%d%@",totalValue,@"%"];
-                NSLog(@"%@",persentage);
-                cell.offerLabel.text = persentage;
-                NSLog(@"%@",cell.offerLabel.text);
-                cell.offerLabel.backgroundColor = [UIColor redColor];
-                cell.offerLabel.layer.cornerRadius = 13;
-                cell.offerLabel.clipsToBounds = YES;
-                return cell;
-                
-            }else{
-                cell.priceLabel.text = priceModel1.price;
-                cell.priceOffLabel.text = nil;
-                cell.offerLabel.text = nil;
-                return cell;
-            }
-        }
-    }else{
+    }
+//    else if ([[NSUserDefaults.standardUserDefaults valueForKey:@"Direct"]isEqualToString:@"IndirectFilter"]){
+//        if ([[NSUserDefaults.standardUserDefaults valueForKey:@"index"]isEqualToString:@"color1"]) {
+//            DisplayItemsCollectionViewCell *cell = [_DisplayItemsCollectionView dequeueReusableCellWithReuseIdentifier:@"DisplayItemsCollectionViewCell" forIndexPath:indexPath ];
+//           fetchColor1DetailsModel = [Color1DataArray objectAtIndex:indexPath.item];
+//            NSLog(@"%@",fetchColor1DetailsModel.image);
+//            NSLog(@"%@",fetchColor1DetailsModel.Name);
+//            [cell.displayItemImage setImageWithURL:[NSURL URLWithString:fetchColor1DetailsModel.image] placeholderImage:nil];
+//            cell.displayItemTextLabel.text = fetchColor1DetailsModel.Name;
+//            cell.wishListButton.tag = indexPath.item;
+//            NSLog(@"%ld",(long)cell.wishListButton.tag);
+//            [cell.wishListButton addTarget:self action:@selector(ClickOnWishlist:) forControlEvents:UIControlEventTouchUpInside];
+//            
+//            cell.starRatingLabel.text = [NSString stringWithFormat:@"%@",fetchColor1DetailsModel.rating];
+//            if ([fetchColor1DetailsModel.offer isEqualToString:@"yes"]) {
+//                cell.priceLabel.text = fetchColor1DetailsModel.off_price;
+//                
+//                NSAttributedString *priceOffString = [[NSAttributedString alloc]initWithString:cell.priceOffLabel.text= fetchColor1DetailsModel.price attributes:@{NSStrikethroughStyleAttributeName:
+//                                                                                                                                                                      [NSNumber numberWithInteger:NSUnderlineStyleSingle]}];
+//                [cell.priceOffLabel setAttributedText:priceOffString];
+//                NSString *string = cell.priceLabel.text;
+//                NSLog(@"%@",string);
+//                float value = [string floatValue];
+//                NSString *string1 = cell.priceOffLabel.text;
+//                NSLog(@"%@",string1);
+//                float value1 = [string1 floatValue];
+//                float pers = 100;
+//                float percentage = (value * pers)/value1;
+//                NSLog(@"%f",percentage);
+//                int totalValue = pers - percentage;
+//                NSLog(@"%d",totalValue);
+//                NSString *persentage = [NSString stringWithFormat:@"%d%@",totalValue,@"%"];
+//                NSLog(@"%@",persentage);
+//                cell.offerLabel.text = persentage;
+//                NSLog(@"%@",cell.offerLabel.text);
+//                cell.offerLabel.backgroundColor = [UIColor redColor];
+//                cell.offerLabel.layer.cornerRadius = 13;
+//                cell.offerLabel.clipsToBounds = YES;
+//                return cell;
+//                
+//            }else{
+//                cell.priceLabel.text = fetchColor1DetailsModel.price;
+//                cell.priceOffLabel.text = nil;
+//                cell.offerLabel.text = nil;
+//                return cell;
+//            }
+//
+//        }else if ([[NSUserDefaults.standardUserDefaults valueForKey:@"index"]isEqualToString:@"size"]){
+//            DisplayItemsCollectionViewCell *cell = [_DisplayItemsCollectionView dequeueReusableCellWithReuseIdentifier:@"DisplayItemsCollectionViewCell" forIndexPath:indexPath ];
+//            size1Model = [Size1DataArray objectAtIndex:indexPath.item];
+//            NSLog(@"%@",size1Model.image);
+//            NSLog(@"%@",size1Model.Name);
+//            [cell.displayItemImage setImageWithURL:[NSURL URLWithString:size1Model.image] placeholderImage:nil];
+//            cell.displayItemTextLabel.text = size1Model.Name;
+//            cell.wishListButton.tag = indexPath.item;
+//            NSLog(@"%ld",(long)cell.wishListButton.tag);
+//            [cell.wishListButton addTarget:self action:@selector(ClickOnWishlist:) forControlEvents:UIControlEventTouchUpInside];
+//            
+//            cell.starRatingLabel.text = [NSString stringWithFormat:@"%@",size1Model.rating];
+//            if ([size1Model.offer isEqualToString:@"yes"]) {
+//                cell.priceLabel.text = size1Model.off_price;
+//                
+//                NSAttributedString *priceOffString = [[NSAttributedString alloc]initWithString:cell.priceOffLabel.text= size1Model.price attributes:@{NSStrikethroughStyleAttributeName:
+//                                                                                                                                                                       [NSNumber numberWithInteger:NSUnderlineStyleSingle]}];
+//                [cell.priceOffLabel setAttributedText:priceOffString];
+//                NSString *string = cell.priceLabel.text;
+//                NSLog(@"%@",string);
+//                float value = [string floatValue];
+//                NSString *string1 = cell.priceOffLabel.text;
+//                NSLog(@"%@",string1);
+//                float value1 = [string1 floatValue];
+//                float pers = 100;
+//                float percentage = (value * pers)/value1;
+//                NSLog(@"%f",percentage);
+//                int totalValue = pers - percentage;
+//                NSLog(@"%d",totalValue);
+//                NSString *persentage = [NSString stringWithFormat:@"%d%@",totalValue,@"%"];
+//                NSLog(@"%@",persentage);
+//                cell.offerLabel.text = persentage;
+//                NSLog(@"%@",cell.offerLabel.text);
+//                cell.offerLabel.backgroundColor = [UIColor redColor];
+//                cell.offerLabel.layer.cornerRadius = 13;
+//                cell.offerLabel.clipsToBounds = YES;
+//                return cell;
+//                
+//            }else{
+//                cell.priceLabel.text = size1Model.price;
+//                cell.priceOffLabel.text = nil;
+//                cell.offerLabel.text = nil;
+//                return cell;
+//            }
+// 
+//        }else{
+//             DisplayItemsCollectionViewCell *cell = [_DisplayItemsCollectionView dequeueReusableCellWithReuseIdentifier:@"DisplayItemsCollectionViewCell" forIndexPath:indexPath ];
+//            priceModel1 = [priceDataArray1 objectAtIndex:indexPath.item];
+//            NSLog(@"%@",priceModel1.image);
+//            NSLog(@"%@",priceModel1.Name);
+//            [cell.displayItemImage setImageWithURL:[NSURL URLWithString:priceModel1.image] placeholderImage:nil];
+//            cell.displayItemTextLabel.text = priceModel1.Name;
+//            cell.wishListButton.tag = indexPath.item;
+//            NSLog(@"%ld",(long)cell.wishListButton.tag);
+//            [cell.wishListButton addTarget:self action:@selector(ClickOnWishlist:) forControlEvents:UIControlEventTouchUpInside];
+//            
+//            cell.starRatingLabel.text = [NSString stringWithFormat:@"%@",priceModel1.rating];
+//            if ([priceModel1.offer isEqualToString:@"yes"]) {
+//                cell.priceLabel.text = priceModel1.off_price;
+//                
+//                NSAttributedString *priceOffString = [[NSAttributedString alloc]initWithString:cell.priceOffLabel.text= priceModel1.price attributes:@{NSStrikethroughStyleAttributeName:
+//                                                                                                                                                          [NSNumber numberWithInteger:NSUnderlineStyleSingle]}];
+//                [cell.priceOffLabel setAttributedText:priceOffString];
+//                NSString *string = cell.priceLabel.text;
+//                NSLog(@"%@",string);
+//                float value = [string floatValue];
+//                NSString *string1 = cell.priceOffLabel.text;
+//                NSLog(@"%@",string1);
+//                float value1 = [string1 floatValue];
+//                float pers = 100;
+//                float percentage = (value * pers)/value1;
+//                NSLog(@"%f",percentage);
+//                int totalValue = pers - percentage;
+//                NSLog(@"%d",totalValue);
+//                NSString *persentage = [NSString stringWithFormat:@"%d%@",totalValue,@"%"];
+//                NSLog(@"%@",persentage);
+//                cell.offerLabel.text = persentage;
+//                NSLog(@"%@",cell.offerLabel.text);
+//                cell.offerLabel.backgroundColor = [UIColor redColor];
+//                cell.offerLabel.layer.cornerRadius = 13;
+//                cell.offerLabel.clipsToBounds = YES;
+//                return cell;
+//                
+//            }else{
+//                cell.priceLabel.text = priceModel1.price;
+//                cell.priceOffLabel.text = nil;
+//                cell.offerLabel.text = nil;
+//                return cell;
+//            }
+//        }
+//    }
+    else{
         DisplayItemsCollectionViewCell *cell = [_DisplayItemsCollectionView dequeueReusableCellWithReuseIdentifier:@"DisplayItemsCollectionViewCell" forIndexPath:indexPath];
         searchDataModel = [searchDataArray objectAtIndex:indexPath.item];
         
@@ -1120,6 +1132,7 @@
             return cell;
             
         }else{
+            cell.offerLabel.backgroundColor = [UIColor whiteColor];
             cell.priceLabel.text = searchDataModel.price;
             cell.priceOffLabel.text = nil;
             cell.offerLabel.text = nil;
@@ -1178,43 +1191,43 @@
             [subsubVc getItemPrice:PriceModel.price];
             [self.navigationController pushViewController:subsubVc animated:YES];
         }
-    }else if ([[NSUserDefaults.standardUserDefaults valueForKey:@"Direct"]isEqualToString:@"IndirectFilter"]){
-        if ([[NSUserDefaults.standardUserDefaults valueForKey:@"index"]isEqualToString:@"color1"]) {
-            SubSubViewController *subsubVc = [self.storyboard instantiateViewControllerWithIdentifier:@"SubSubViewController"];
-            fetchColor1DetailsModel = [Color1DataArray objectAtIndex:indexPath.item];
-            
-            [subsubVc getId:fetchColor1DetailsModel.pid];
-            [subsubVc getColor_code:fetchColor1DetailsModel.color_code];
-            
-            [subsubVc getItemName:fetchColor1DetailsModel.Name];
-            NSLog(@"%@",fetchColor1DetailsModel.Name);
-            [subsubVc getItemPrice:fetchColor1DetailsModel.price];
-            [self.navigationController pushViewController:subsubVc animated:YES];
-        }else if ([[NSUserDefaults.standardUserDefaults valueForKey:@"index"]isEqualToString:@"size"]){
-            SubSubViewController *subsubVc = [self.storyboard instantiateViewControllerWithIdentifier:@"SubSubViewController"];
-            size1Model = [Size1DataArray objectAtIndex:indexPath.item];
-            
-            [subsubVc getId:size1Model.pid];
-            [subsubVc getColor_code:size1Model.color_code];
-            
-            [subsubVc getItemName:size1Model.Name];
-            NSLog(@"%@",size1Model.Name);
-            [subsubVc getItemPrice:size1Model.price];
-            [self.navigationController pushViewController:subsubVc animated:YES];
-        }else if ([[NSUserDefaults.standardUserDefaults valueForKey:@"index"]isEqualToString:@"price"]){
-            SubSubViewController *subsubVc = [self.storyboard instantiateViewControllerWithIdentifier:@"SubSubViewController"];
-            priceModel1 = [priceDataArray1 objectAtIndex:indexPath.item];
-            
-            [subsubVc getId:priceModel1.pid];
-            [subsubVc getColor_code:priceModel1.color_code];
-            
-            [subsubVc getItemName:priceModel1.Name];
-            NSLog(@"%@",priceModel1.Name);
-            [subsubVc getItemPrice:priceModel1.price];
-            [self.navigationController pushViewController:subsubVc animated:YES];
-        }
-
-    }else{
+//    }else if ([[NSUserDefaults.standardUserDefaults valueForKey:@"Direct"]isEqualToString:@"IndirectFilter"]){
+//        if ([[NSUserDefaults.standardUserDefaults valueForKey:@"index"]isEqualToString:@"color1"]) {
+//            SubSubViewController *subsubVc = [self.storyboard instantiateViewControllerWithIdentifier:@"SubSubViewController"];
+//            fetchColor1DetailsModel = [Color1DataArray objectAtIndex:indexPath.item];
+//            
+//            [subsubVc getId:fetchColor1DetailsModel.pid];
+//            [subsubVc getColor_code:fetchColor1DetailsModel.color_code];
+//            
+//            [subsubVc getItemName:fetchColor1DetailsModel.Name];
+//            NSLog(@"%@",fetchColor1DetailsModel.Name);
+//            [subsubVc getItemPrice:fetchColor1DetailsModel.price];
+//            [self.navigationController pushViewController:subsubVc animated:YES];
+//        }else if ([[NSUserDefaults.standardUserDefaults valueForKey:@"index"]isEqualToString:@"size"]){
+//            SubSubViewController *subsubVc = [self.storyboard instantiateViewControllerWithIdentifier:@"SubSubViewController"];
+//            size1Model = [Size1DataArray objectAtIndex:indexPath.item];
+//            
+//            [subsubVc getId:size1Model.pid];
+//            [subsubVc getColor_code:size1Model.color_code];
+//            
+//            [subsubVc getItemName:size1Model.Name];
+//            NSLog(@"%@",size1Model.Name);
+//            [subsubVc getItemPrice:size1Model.price];
+//            [self.navigationController pushViewController:subsubVc animated:YES];
+//        }else if ([[NSUserDefaults.standardUserDefaults valueForKey:@"index"]isEqualToString:@"price"]){
+//            SubSubViewController *subsubVc = [self.storyboard instantiateViewControllerWithIdentifier:@"SubSubViewController"];
+//            priceModel1 = [priceDataArray1 objectAtIndex:indexPath.item];
+//            
+//            [subsubVc getId:priceModel1.pid];
+//            [subsubVc getColor_code:priceModel1.color_code];
+//            
+//            [subsubVc getItemName:priceModel1.Name];
+//            NSLog(@"%@",priceModel1.Name);
+//            [subsubVc getItemPrice:priceModel1.price];
+//            [self.navigationController pushViewController:subsubVc animated:YES];
+//        }
+//
+//    }else{
         SubSubViewController *subsubVc = [self.storyboard instantiateViewControllerWithIdentifier:@"SubSubViewController"];
         searchDataModel = [searchDataArray objectAtIndex:indexPath.item];
         [subsubVc getId:searchDataModel.pid];
@@ -1245,101 +1258,26 @@
    
     if ([[NSUserDefaults.standardUserDefaults valueForKey:@"LoggedIn"]isEqualToString:@"yes"] || [[NSUserDefaults.standardUserDefaults valueForKey:@"login"]isEqualToString:@"google"] || [[NSUserDefaults.standardUserDefaults valueForKey:@"login"]isEqualToString:@"facebook"])
  {
-
-     NSArray *token = [[NSUserDefaults standardUserDefaults] objectForKey:@"WishListData"];
-     NSLog(@"%@",[[NSUserDefaults standardUserDefaults] objectForKey:@"WishListData"]);
-     
+//     NSUserDefaults *currentDefaults = [NSUserDefaults standardUserDefaults];
+//     NSData *data1 = [currentDefaults objectForKey:@"WishListData"];
+//     NSMutableArray *token = [[NSMutableArray alloc]init];
+//     token = [NSKeyedUnarchiver unarchiveObjectWithData:data1];
+//     NSLog(@"%@",token);
+//     
+//     self.subModel = [_subCatMainData objectAtIndex:sender.tag];
+//     NSLog(@"%@",self.subModel.pid);
+//     NSArray *token1 = [token valueForKey:@"pid"];
+//     NSLog(@"%@",token1);
      self.subModel = [_subCatMainData objectAtIndex:sender.tag];
-     NSLog(@"%@",self.subModel.pid);
-     NSArray *token1 = [token valueForKey:@"pid"];
-     NSLog(@"%@",token1);
-         if ([token1 containsObject:_subModel.pid]) {
+     NSLog(@"%@",self.subModel.Name);
+     NSLog(@"%@",self.subModel.like_v);
+         if ([self.subModel.like_v isKindOfClass:[NSNull class]] || [self.subModel.like_v isEqualToString:@"N"]) {
              dispatch_async(dispatch_get_main_queue(), ^{
     
          MBProgressHUD * hud = [MBProgressHUD showHUDAddedTo:self.view animated:YES];
          NSString *strloadingText = [NSString stringWithFormat:@"Loading Data."];
          hud.label.text = strloadingText;
              });
-         NSString *urlInstring =[NSString stringWithFormat:@"http://samenslifestyle.com/samenslifestyle123.com/samens_mob/send_indivi_like.php"];
-         NSURL *url=[NSURL URLWithString:urlInstring];
-         NSMutableURLRequest *request=[NSMutableURLRequest requestWithURL:url];
-         [request setHTTPMethod:@"POST"];
-         _subModel = [_subCatMainData objectAtIndex:sender.tag];
-         
-         NSString *params = [NSString stringWithFormat:@"cid=%@&api=%@&status=%@&pid=%@",[NSUserDefaults.standardUserDefaults valueForKey:@"custid"],[NSUserDefaults.standardUserDefaults valueForKey:@"api"],@"N",_subModel.pid];
-         NSLog(@"%@",params);
-         
-         NSData *requestData = [params dataUsingEncoding:NSUTF8StringEncoding];
-         NSLog(@"%@",requestData);
-         [request setHTTPBody:requestData];
-         
-         NSURLSessionConfiguration *config=[NSURLSessionConfiguration defaultSessionConfiguration];
-         [config setTimeoutIntervalForRequest:30.0];
-         NSURLSession *session=[NSURLSession sessionWithConfiguration:config];
-         NSURLSessionDataTask *task=[session dataTaskWithRequest:request completionHandler:^(NSData * _Nullable data, NSURLResponse * _Nullable response, NSError * _Nullable error) {
-             dispatch_async(dispatch_get_main_queue(),^{
-                 [MBProgressHUD hideHUDForView:self.view animated:YES];
-             });
-             NSError *err;
-             dispatch_async(dispatch_get_main_queue(), ^{
-                 [MBProgressHUD hideHUDForView:self.view animated:YES];
-             });
-             if (error) {
-                 NSLog(@"%@",err);
-                 if ([error.localizedDescription isEqualToString:@"The request timed out."]){
-                     dispatch_async(dispatch_get_main_queue(), ^{
-                         UIAlertView *alertView = [[UIAlertView alloc]initWithTitle:@"The requste timed out. Please try again" message:@"" delegate:self cancelButtonTitle:@"Cancel" otherButtonTitles:@"Retry", nil];
-                         alertView.tag = 001;
-                         [alertView show];
-                     });
-                 }else if ([error.localizedDescription isEqualToString:@"The Internet connection appears to be offline."]){
-                     dispatch_async(dispatch_get_main_queue(),^{
-                         UIAlertView *alertView = [[UIAlertView alloc]initWithTitle:@"The Internet connection appears to be offline." message:@"" delegate:nil cancelButtonTitle:@"Ok" otherButtonTitles:nil, nil];
-                         alertView.tag = 002;
-                         [alertView show];
-                     });
-                 }
-                 
-             }else{
-                 id jsonData = [NSJSONSerialization JSONObjectWithData:data options:kNilOptions error:&error];
-                 NSLog(@"%@",response);
-                 NSLog(@"%@",jsonData);
-                 
-                 if([[NSNumber numberWithBool:[[[NSJSONSerialization JSONObjectWithData:data options:kNilOptions error:&error] objectForKey:@"success"] boolValue]] isEqualToNumber:[NSNumber numberWithInt:0]]){
-                     dispatch_async(dispatch_get_main_queue(), ^{
-                         NSIndexPath *selectedIndexPath = [NSIndexPath indexPathForRow:sender.tag inSection:0];
-                         DisplayItemsCollectionViewCell *cell = [_DisplayItemsCollectionView cellForItemAtIndexPath:selectedIndexPath];
-                         cell.wishListButton.backgroundColor = [UIColor whiteColor];
-                         [MBProgressHUD hideHUDForView:self.view animated:YES];
-                         
-                     });
-                     
-                 }else{
-                     dispatch_async(dispatch_get_main_queue(), ^{
-                         [MBProgressHUD hideHUDForView:self.view animated:YES];
-                         NSIndexPath *selectedIndexPath = [NSIndexPath indexPathForRow:sender.tag inSection:0];
-                         DisplayItemsCollectionViewCell *cell = [_DisplayItemsCollectionView cellForItemAtIndexPath:selectedIndexPath];
-                         cell.wishListButton.backgroundColor = [UIColor redColor];
-                         UIAlertView *alert = [[UIAlertView alloc]initWithTitle:@"User Wishlist" message:@"Successfully Added" delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil, nil];
-                         [alert show];
-                         
-                     });
-                 }
-                 
-                 
-             }
-             
-             
-         }];
-         [task resume];
- 
-     }else{
-         dispatch_async(dispatch_get_main_queue(), ^{
-
-         MBProgressHUD * hud = [MBProgressHUD showHUDAddedTo:self.view animated:YES];
-         NSString *strloadingText = [NSString stringWithFormat:@"Loading Data."];
-         hud.label.text = strloadingText;
-         });
          NSString *urlInstring =[NSString stringWithFormat:@"http://samenslifestyle.com/samenslifestyle123.com/samens_mob/send_indivi_like.php"];
          NSURL *url=[NSURL URLWithString:urlInstring];
          NSMutableURLRequest *request=[NSMutableURLRequest requestWithURL:url];
@@ -1384,7 +1322,8 @@
                  id jsonData = [NSJSONSerialization JSONObjectWithData:data options:kNilOptions error:&error];
                  NSLog(@"%@",response);
                  NSLog(@"%@",jsonData);
-                 
+                 [self getItemImages];
+
                  if([[NSNumber numberWithBool:[[[NSJSONSerialization JSONObjectWithData:data options:kNilOptions error:&error] objectForKey:@"success"] boolValue]] isEqualToNumber:[NSNumber numberWithInt:0]]){
                      dispatch_async(dispatch_get_main_queue(), ^{
                          NSIndexPath *selectedIndexPath = [NSIndexPath indexPathForRow:sender.tag inSection:0];
@@ -1399,7 +1338,88 @@
                          [MBProgressHUD hideHUDForView:self.view animated:YES];
                          NSIndexPath *selectedIndexPath = [NSIndexPath indexPathForRow:sender.tag inSection:0];
                          DisplayItemsCollectionViewCell *cell = [_DisplayItemsCollectionView cellForItemAtIndexPath:selectedIndexPath];
+                         cell.wishListButton.backgroundColor = [UIColor redColor];
+                         UIAlertView *alert = [[UIAlertView alloc]initWithTitle:@"User Wishlist" message:@"Successfully Added" delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil, nil];
+                         [alert show];
+                         
+                     });
+                 }
+                 
+                 
+             }
+             
+             
+         }];
+         [task resume];
+ 
+     }else{
+         dispatch_async(dispatch_get_main_queue(), ^{
+
+         MBProgressHUD * hud = [MBProgressHUD showHUDAddedTo:self.view animated:YES];
+         NSString *strloadingText = [NSString stringWithFormat:@"Loading Data."];
+         hud.label.text = strloadingText;
+         });
+         NSString *urlInstring =[NSString stringWithFormat:@"http://samenslifestyle.com/samenslifestyle123.com/samens_mob/send_indivi_like.php"];
+         NSURL *url=[NSURL URLWithString:urlInstring];
+         NSMutableURLRequest *request=[NSMutableURLRequest requestWithURL:url];
+         [request setHTTPMethod:@"POST"];
+         _subModel = [_subCatMainData objectAtIndex:sender.tag];
+         
+         NSString *params = [NSString stringWithFormat:@"cid=%@&api=%@&status=%@&pid=%@",[NSUserDefaults.standardUserDefaults valueForKey:@"custid"],[NSUserDefaults.standardUserDefaults valueForKey:@"api"],@"N",_subModel.pid];
+         NSLog(@"%@",params);
+         
+         NSData *requestData = [params dataUsingEncoding:NSUTF8StringEncoding];
+         NSLog(@"%@",requestData);
+         [request setHTTPBody:requestData];
+         
+         NSURLSessionConfiguration *config=[NSURLSessionConfiguration defaultSessionConfiguration];
+         [config setTimeoutIntervalForRequest:30.0];
+         NSURLSession *session=[NSURLSession sessionWithConfiguration:config];
+         NSURLSessionDataTask *task=[session dataTaskWithRequest:request completionHandler:^(NSData * _Nullable data, NSURLResponse * _Nullable response, NSError * _Nullable error) {
+             dispatch_async(dispatch_get_main_queue(),^{
+                 [MBProgressHUD hideHUDForView:self.view animated:YES];
+             });
+             NSError *err;
+             dispatch_async(dispatch_get_main_queue(), ^{
+                 [MBProgressHUD hideHUDForView:self.view animated:YES];
+             });
+             if (error) {
+                 NSLog(@"%@",err);
+                 if ([error.localizedDescription isEqualToString:@"The request timed out."]){
+                     dispatch_async(dispatch_get_main_queue(), ^{
+                         UIAlertView *alertView = [[UIAlertView alloc]initWithTitle:@"The requste timed out. Please try again" message:@"" delegate:self cancelButtonTitle:@"Cancel" otherButtonTitles:@"Retry", nil];
+                         alertView.tag = 001;
+                         [alertView show];
+                     });
+                 }else if ([error.localizedDescription isEqualToString:@"The Internet connection appears to be offline."]){
+                     dispatch_async(dispatch_get_main_queue(),^{
+                         UIAlertView *alertView = [[UIAlertView alloc]initWithTitle:@"The Internet connection appears to be offline." message:@"" delegate:nil cancelButtonTitle:@"Ok" otherButtonTitles:nil, nil];
+                         alertView.tag = 002;
+                         [alertView show];
+                     });
+                 }
+                 
+             }else{
+                 id jsonData = [NSJSONSerialization JSONObjectWithData:data options:kNilOptions error:&error];
+                 NSLog(@"%@",response);
+                 NSLog(@"%@",jsonData);
+                 [self getItemImages];
+
+                 if([[NSNumber numberWithBool:[[[NSJSONSerialization JSONObjectWithData:data options:kNilOptions error:&error] objectForKey:@"success"] boolValue]] isEqualToNumber:[NSNumber numberWithInt:0]]){
+                     dispatch_async(dispatch_get_main_queue(), ^{
+                         NSIndexPath *selectedIndexPath = [NSIndexPath indexPathForRow:sender.tag inSection:0];
+                         DisplayItemsCollectionViewCell *cell = [_DisplayItemsCollectionView cellForItemAtIndexPath:selectedIndexPath];
                          cell.wishListButton.backgroundColor = [UIColor whiteColor];
+                         [MBProgressHUD hideHUDForView:self.view animated:YES];
+                         
+                     });
+                     
+                 }else{
+                     dispatch_async(dispatch_get_main_queue(), ^{
+                         [MBProgressHUD hideHUDForView:self.view animated:YES];
+                         NSIndexPath *selectedIndexPath = [NSIndexPath indexPathForRow:sender.tag inSection:0];
+                         DisplayItemsCollectionViewCell *cell = [_DisplayItemsCollectionView cellForItemAtIndexPath:selectedIndexPath];
+                         cell.wishListButton.backgroundColor = [UIColor redColor];
                          UIAlertView *alert = [[UIAlertView alloc]initWithTitle:@"User Wishlist" message:@"Successfully Added" delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil, nil];
                          [alert show];
                          
@@ -1419,6 +1439,7 @@
      UIAlertView *alert = [[UIAlertView alloc]initWithTitle:@"Login" message:@"Please logIn " delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil, nil];
      [alert show];
      ViewController *vc= [self.storyboard instantiateViewControllerWithIdentifier:@"ViewController"];
+         self.tabBarController.tabBar.hidden = YES;
      [self.navigationController pushViewController:vc animated:YES];
  }
 }
@@ -1437,7 +1458,8 @@
 
 -(void)GetSortData{
    
-    
+    if ([[NSUserDefaults.standardUserDefaults valueForKey:@"Sort"]isEqualToString:@"DirectSort"]) {
+        
     NSDictionary *headers = @{ @"content-type": @"multipart/form-data; boundary=----WebKitFormBoundary7MA4YWxkTrZu0gW",
                                @"cache-control": @"no-cache",
                                @"postman-token": @"554194aa-7dc1-9888-889c-d059e4257252" };
@@ -1475,6 +1497,7 @@
     NSURLSession *session = [NSURLSession sharedSession];
     NSURLSessionDataTask *dataTask = [session dataTaskWithRequest:request
                                                 completionHandler:^(NSData *data, NSURLResponse *response, NSError *error) {
+                                            id sortData = [NSJSONSerialization JSONObjectWithData:data options:kNilOptions error:&error];
                                                     dispatch_async(dispatch_get_main_queue(),^{
                                                         [MBProgressHUD hideHUDForView:self.view animated:YES];
                                                     });
@@ -1498,8 +1521,8 @@
                                                     } else {
                                                         NSHTTPURLResponse *httpResponse = (NSHTTPURLResponse *) response;
                                                         NSLog(@"%@", httpResponse);
-                                                    }
-                                                    id sortData = [NSJSONSerialization JSONObjectWithData:data options:kNilOptions error:&error];
+                                                    
+                                                   
                                                     NSLog(@"%@",sortData);
                                                     if([[NSNumber numberWithBool:[[[NSJSONSerialization JSONObjectWithData:data options:kNilOptions error:&error] objectForKey:@"success"] boolValue]] isEqualToNumber:[NSNumber numberWithInt:0]]){
                                                         dispatch_async(dispatch_get_main_queue(), ^{
@@ -1527,14 +1550,17 @@
                                                         [self.sortTableView reloadData];
                                                     });
                                                     }
+                                                    }
                                                 }];
     [dataTask resume];
     
-    
+    }else{
+        
+    }
 }
 
 -(IBAction)clickOnSort:(UIButton *)sender{
-    [NSUserDefaults.standardUserDefaults setValue:@"DirectSort" forKey:@"Direct"];
+    [NSUserDefaults.standardUserDefaults setValue:@"DirectSort" forKey:@"Sort"];
     [self getPopUpName:_PopUpNameText];
     self.popUpTextLabel.text = _PopUpNameText;
     self.sortPopUpView.hidden = NO;
@@ -1561,29 +1587,24 @@
     return cell;
 }
 -(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath{
-    if ([[NSUserDefaults.standardUserDefaults valueForKey:@"Direct"]isEqualToString:@"DirectSort"]) {
+    if ([[NSUserDefaults.standardUserDefaults valueForKey:@"Sort"]isEqualToString:@"DirectSort"]) {
         
     SortItemDisplayViewController *sortItemVc = [self.storyboard instantiateViewControllerWithIdentifier:@"SortItemDisplayViewController"];
     [self.navigationController pushViewController:sortItemVc animated:YES];
     sortmodel = [sortMainData objectAtIndex:indexPath.row];
-    NSLog(@"%@",sortmodel.sub_catid);
     sortItemVc.categoryMainId = self.categoryMainId;
-    [sortItemVc getSortItemId:sortmodel.sub_catid];
+        NSLog(@"%@",sortItemVc.categoryMainId);
+        NSLog(@"%@",sortmodel.sub_catid);
+        sortItemVc.MainSortItemId = sortmodel.sub_catid;
+        NSLog(@"%@",sortItemVc.MainSortItemId);
+    //[sortItemVc getSortItemId:self.MainSortItemId];
     NSLog(@"%@",sortmodel.name);
     [sortItemVc getSortItemName:sortmodel.name];
     sortItemVc.sortModel = sortmodel;
+        NSLog(@"%@",self.PopUpNameText);
     sortItemVc.PopUpNameText = self.PopUpNameText;
-    }else{
-        SortItemDisplayViewController *sortItemVc = [self.storyboard instantiateViewControllerWithIdentifier:@"SortItemDisplayViewController"];
-        [self.navigationController pushViewController:sortItemVc animated:YES];
-        sortmodel = [sortMainData objectAtIndex:indexPath.row];
-        NSLog(@"%@",sortmodel.sub_catid);
-        sortItemVc.categoryMainId = self.categoryMainId;
-        [sortItemVc getSortItemId:sortmodel.sub_catid];
-        NSLog(@"%@",sortmodel.name);
-        [sortItemVc getSortItemName:sortmodel.name];
-        sortItemVc.sortModel = sortmodel;
-        sortItemVc.PopUpNameText = self.PopUpNameText;
+        NSLog(@"%@",sortItemVc.PopUpNameText);
+        
     }
     
 }
@@ -1615,11 +1636,16 @@
     pidMainId = Pid;
 }
 
--(IBAction)ClickOnFilter1:(id)sender{
+-(IBAction)ClickOnFilter1:(UIButton *)sender{
+    
     [NSUserDefaults.standardUserDefaults setValue:@"DirectFilter" forKey:@"Direct"];
     FilterViewController *filterVc = [self.storyboard instantiateViewControllerWithIdentifier:@"FilterViewController"];
     filterVc.catModel = self.CatModel;
     NSLog(@"%@",filterVc.catModel);
+    filterVc.MainSortItemId = sortmodel.sub_catid;
+    filterVc.sortModel = self.sortModel;
+    NSLog(@"%@",filterVc.catModel);
+    filterVc.categoryMainId = self.categoryMainId;
     [self.navigationController pushViewController:filterVc animated:YES];
     
 }

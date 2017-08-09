@@ -15,27 +15,28 @@
 #import "ViewController.h"
 #import "AccountViewController.h"
 
+
 @interface WishlistViewController ()<UITableViewDelegate,UITableViewDataSource,UIAlertViewDelegate,UITabBarControllerDelegate>{
     WishlistModel *wishlistModel;
     IBOutlet UIImageView *emptyWishlistImage;
-    NSMutableArray *dammyArray1;
 }
 
 @end
 
 @implementation WishlistViewController
 -(void)viewWillAppear:(BOOL)animated{
-[self FetchWishlistData];
 //    if (wishListDataArray.count==0) {
 //        _wishlistTableView.hidden = YES;
 //        emptyWishlistImage.hidden = NO;
 //    }
+    [self FetchWishlistData];
 
 }
 - (void)viewDidLoad {
     [super viewDidLoad];
     // Do any additional setup after loading the view.
     self.tabBarController.delegate = self;
+
 }
 
 - (void)didReceiveMemoryWarning {
@@ -86,33 +87,47 @@
 //            [_wishlistTableView reloadData];
             id jsonData = [NSJSONSerialization JSONObjectWithData:data options:kNilOptions error:&error];
             NSLog(@"%@",jsonData);
-            dammyArray1 = [[NSMutableArray alloc]init];
-           dammyArray1= [jsonData valueForKey:@"categories"];
-            
+            if([[NSNumber numberWithBool:[[[NSJSONSerialization JSONObjectWithData:data options:kNilOptions error:&error] objectForKey:@"success"] boolValue]] isEqualToNumber:[NSNumber numberWithInt:0]]){
+                dispatch_async(dispatch_get_main_queue(), ^{
+                    _wishlistTableView.hidden = YES;
+                    emptyWishlistImage.hidden = NO;
+                });
+            }else{
+            _dammyArray1 = [[NSMutableArray alloc]init];
+            _dammyArray1  = [jsonData valueForKey:@"categories"];
+            NSLog(@"%@",_dammyArray1);
+//            NSUserDefaults *currentDefaults = [NSUserDefaults standardUserDefaults];
+//            NSData *data = [NSKeyedArchiver archivedDataWithRootObject:_dammyArray1];
+//            [currentDefaults setObject:data forKey:@"WishListData"];
+//        
+//            NSData *data1 = [currentDefaults objectForKey:@"WishListData"];
+//            NSMutableArray *token = [[NSMutableArray alloc]init];
+//             token = [NSKeyedUnarchiver unarchiveObjectWithData:data1];
+//            NSLog(@"%@",token);
             int index;
             _wishListDataArray = [[NSMutableArray alloc]init];
-            for (index=0; index<dammyArray1.count; index++) {
-                NSDictionary *dict = dammyArray1[index];
+            for (index=0; index<_dammyArray1.count; index++) {
+                NSDictionary *dict = _dammyArray1[index];
                 wishlistModel = [[WishlistModel alloc]init];
                 [wishlistModel getWishListModelWithDictionary:dict];
                 [_wishListDataArray addObject:wishlistModel];
             }
-            
             NSLog(@"%@",_wishListDataArray);
-            [[NSUserDefaults standardUserDefaults] setObject:dammyArray1 forKey:@"WishListData"];
-            [[NSUserDefaults standardUserDefaults] synchronize];
             
                 if (_wishListDataArray.count==0) {
                     _wishlistTableView.hidden = YES;
                     emptyWishlistImage.hidden = NO;
                 }
             dispatch_async(dispatch_get_main_queue(), ^{
+                _wishlistTableView.hidden = NO;
+                emptyWishlistImage.hidden = YES;
                 [MBProgressHUD hideHUDForView:self.view animated:YES];
                 self.wishlistTableView.delegate = self;
                 self.wishlistTableView.dataSource = self;
                 [self.wishlistTableView reloadData];
                 
             });
+            }
         }
     }];
     [task resume];
@@ -126,28 +141,7 @@
 }
 
 -(NSInteger)numberOfSectionsInTableView:(UITableView *)tableView{
-//    NSInteger sections = [self.wishlistTableView numberOfSections];
-//    BOOL hasRows = NO;
-//    for (int i = 0; i < sections; i++) {
-//        BOOL sectionHasRows = ([self.wishlistTableView numberOfRowsInSection:i] > 0) ? YES : NO;
-//        if (sectionHasRows) {
-//            hasRows = YES;
-//            break;
-//        }
-//    }
-//    
-//    if (sections == 0 || hasRows == NO)
-//    {
-//        UIImage *image = [UIImage imageNamed:@"emptywishlist"];
-//        UIImageView *imageView = [[UIImageView alloc] initWithImage:image];
-//        
-//        // Add image view on top of table view
-//        [self.wishlistTableView addSubview:imageView];
-//        
-//        // Set the background view of the table view
-//        self.wishlistTableView.backgroundView = imageView;
-//    }
-//    return sections;
+
     return 1;
 
 }
@@ -159,22 +153,43 @@
 -(UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath{
     WishlistTableViewCell *cell = [_wishlistTableView dequeueReusableCellWithIdentifier:@"WishlistTableViewCell"];
     wishlistModel = [_wishListDataArray objectAtIndex:indexPath.row];
+    if ([wishlistModel.image isKindOfClass:[NSNull class]]) {
+        cell.imageView.image = [UIImage imageNamed:@"bell"];
+    }else{
     [cell.productImage setImageWithURL:[NSURL URLWithString:wishlistModel.image] placeholderImage:nil];
+    }
+    if ([wishlistModel.Name isKindOfClass:[NSNull class]]) {
+        cell.NameLabel.text =@"null";
+    }else{
+        NSLog(@"%@",wishlistModel.Name);
     cell.NameLabel.text = wishlistModel.Name;
-    NSLog(@"%@",wishlistModel.Name);
-    cell.rateLabel.text = wishlistModel.price;
-    NSLog(@"%@",wishlistModel.price);
+    }
+    if ([wishlistModel.price isKindOfClass:[NSNull class]]) {
+        cell.rateLabel.text = @"null";
+    }else{
+        cell.rateLabel.text = wishlistModel.price;
+    }
+    if ([wishlistModel.quantity isKindOfClass:[NSNull class]]) {
+        cell.quantityLabel.text = @"null";
+    }else{
+   
     cell.quantityLabel.text = wishlistModel.quantity;
-    NSLog(@"%@",cell.quantityLabel.text);
+    }
+    if ([wishlistModel.rate isKindOfClass:[NSNull class]]) {
+        cell.rateLabel.text = @"Null";
+    }else{
     NSLog(@"%@",wishlistModel.rate);
     cell.ratingLabel.text = [NSString stringWithFormat:@"%@",wishlistModel.rate];
+    }
     [cell.RemoveButton addTarget:self action:@selector(clickOnRemoveFromWishlist:) forControlEvents:UIControlEventTouchUpInside];
     cell.RemoveButton.tag = indexPath.row;
     
     
     
     return cell;
+    
 }
+
 -(IBAction)clickOnRemoveFromWishlist:(UIButton *)sender{
     
     [MBProgressHUD showHUDAddedTo:self.view animated:YES];
@@ -251,4 +266,7 @@
        
     }
 }
+
+
+
 @end

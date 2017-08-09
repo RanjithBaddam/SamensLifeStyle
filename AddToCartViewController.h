@@ -23,4 +23,6 @@
 @property(nonatomic,strong)NSString *pid;
 
 -(void)getCatId;
+-(IBAction)clickOnContinue:(UIButton *)sender;
+
 @end

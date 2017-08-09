@@ -14,6 +14,7 @@
 #import <MBProgressHUD.h>
 #import "DetailsTableViewCell.h"
 #import "ViewController.h"
+#import "PaymentAddressViewController.h"
 
 @interface AddToCartViewController ()<UITableViewDelegate,UITableViewDataSource,UIAlertViewDelegate>{
     AddToCartModel *addToCartModel;
@@ -58,7 +59,10 @@
 }
 -(void)FetchAddToCart{
         if ([[NSUserDefaults.standardUserDefaults valueForKey:@"LoggedIn"]isEqualToString:@"yes"] || [[NSUserDefaults.standardUserDefaults valueForKey:@"login"]isEqualToString:@"google"] || [[NSUserDefaults.standardUserDefaults valueForKey:@"login"]isEqualToString:@"facebook"]){
+            dispatch_async(dispatch_get_main_queue(), ^{
+
     [MBProgressHUD showHUDAddedTo:self.view animated:YES];
+            });
     quantityArray = [[NSMutableArray alloc]init];
     priceArray = [[NSMutableArray alloc]init];
     
@@ -117,8 +121,11 @@
             for (index=0; index<dammyArray.count; index++) {
                 NSDictionary *dict = dammyArray[index];
                 [quantityArray addObject:dict[@"quantity"]];
+                NSLog(@"%@",quantityArray);
                 [priceArray addObject:dict[@"price"]];
+                NSLog(@"%@",priceArray);
                 eachPrice += [[dict valueForKey:@"price"] intValue] * [[dict valueForKey:@"quantity"] intValue];
+                NSLog(@"%f",eachPrice);
                 addToCartModel = [[AddToCartModel alloc]init];
                 [addToCartModel AddToCartModelWithDictionary:dict];
                 [AddToCartData addObject:addToCartModel];
@@ -129,8 +136,8 @@
                 [idsArray addObject:dict[@"cid"]];
 
             }
+            NSLog(@"%@",AddToCartData);
             [NSUserDefaults.standardUserDefaults setObject:dammyArray forKey:@"AddToCart"];
-            NSLog(@"%@",quantityArray);
             NSLog(@"%@",jsonData);
             finalSum = [NSString stringWithFormat:@"%.0f",eachPrice];
             NSLog(@"%@",finalSum);
@@ -186,8 +193,11 @@
         cell.ProductNameLabel.text = addToCartModel.name;
         NSLog(@"%@",cell.ProductNameLabel.text);
         cell.colorLabel.text = addToCartModel.color;
+        NSLog(@"%@",cell.colorLabel.text);
         cell.SizeLabel.text = addToCartModel.size;
-        
+        NSLog(@"%@",cell.SizeLabel.text);
+        NSLog(@"%@",cell.PriceLabel.text);
+
         cell.PriceLabel.text = [NSString stringWithFormat:@"%.0d",([[priceArray objectAtIndex:indexPath.row] intValue]*[[quantityArray objectAtIndex:indexPath.row] intValue])];
         
         [cell.removeButton addTarget:self action:@selector(clickOnRemoveAddtoCart:) forControlEvents:UIControlEventTouchUpInside];
@@ -197,7 +207,6 @@
         [cell.quantityStepper addTarget:self action:@selector(ClickOnStepper:) forControlEvents:UIControlEventTouchUpInside];
         cell.stepperQuantityLabel.text = [quantityArray objectAtIndex:indexPath.row];
         cell.removeButton.tag = indexPath.row;
-        NSLog(@"%ld",(long)cell.removeButton.tag);
         
         [cell.moveToWishListButton addTarget:self action:@selector(clickOnMoveTowishList:) forControlEvents:UIControlEventTouchUpInside];
         cell.moveToWishListButton.tag = indexPath.row;
@@ -280,7 +289,6 @@
                   
                     [MBProgressHUD hideHUDForView:self.view animated:YES];
                     [AddToCartData removeObjectAtIndex:sender.tag];
-                    [_AddToCartTableView reloadData];
                 UIAlertView *alert = [[UIAlertView alloc]initWithTitle:nil message:@"User successfully removed from cart" delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil, nil];
                     
                     alert.tag = 100;
@@ -399,13 +407,16 @@
         sum += [eachLableText intValue];
     }
     
-    NSIndexPath *selectedIndexPath2 = [NSIndexPath indexPathForRow:1 inSection:1];
+    NSIndexPath *selectedIndexPath2 = [NSIndexPath indexPathForRow:0 inSection:1];
     DetailsTableViewCell *cell2 = [_AddToCartTableView cellForRowAtIndexPath:selectedIndexPath2];
     dispatch_async(dispatch_get_main_queue(), ^{
+        NSLog(@"%@",cell2.AmountPayableLabel.text);
+        NSLog(@"%@",cell2.PriceAmountLabel.text);
+        NSLog(@"%@",_totalPriceLabel.text);
     cell2.AmountPayableLabel.text = [NSString stringWithFormat:@"%i",sum];
     cell2.PriceAmountLabel.text = [NSString stringWithFormat:@"%i",sum];
-    
     _totalPriceLabel.text = [NSString stringWithFormat:@"%i",sum];
+        
     });
 //    [self updateCart:sender.tag withQuantity:stepper];
 }
@@ -466,6 +477,7 @@
                 NSLog(@"%@",jsonData);
                     dispatch_async(dispatch_get_main_queue(), ^{
                         [MBProgressHUD hideHUDForView:self.view animated:YES];
+                        
                         [self FetchAddToCart];
                         });
             }
@@ -477,4 +489,11 @@
     });
 
 }
+-(IBAction)clickOnContinue:(UIButton *)sender{
+    PaymentAddressViewController *paymentAddressVc = [self.storyboard instantiateViewControllerWithIdentifier:@"PaymentAddressViewController"];
+    [self.navigationController pushViewController:paymentAddressVc animated:YES];
+    
+    
+}
+
 @end

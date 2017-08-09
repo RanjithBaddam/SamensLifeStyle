@@ -9,12 +9,12 @@
 #import <UIKit/UIKit.h>
 #import "SortModel.h"
 #import "CategoryModel.h"
+#import "SortDisplayModel.h"
 
 @interface SortItemDisplayViewController : UIViewController
--(void)getSortItemId:(NSString *)str;
+//-(void)getSortItemId:(NSString *)str;
 -(void)getSortItemName:(NSString *)nameStr;
 @property(nonatomic,weak)IBOutlet UICollectionView *sortitemDisplayCollectionView;
-@property(nonatomic,weak)IBOutlet UILabel *sortNameLabel;
 -(IBAction)clickOnSort:(id)sender;
 -(IBAction)clickOnFilter:(id)sender;
 @property(nonatomic,strong)SortModel *sortModel;
@@ -30,4 +30,8 @@
 @property(nonatomic,strong)NSArray *sizeIndexArray;
 @property(nonatomic,strong)NSArray *priceIndexArray;
 @property(nonatomic,strong)CategoryModel *catModel;
+@property(nonatomic,strong)NSString *MainSortItemId;
+@property(nonatomic,strong)NSString *sort1MainId;
+@property(nonatomic,strong)SortDisplayModel *sortDisplayModel;
+
 @end

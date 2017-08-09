@@ -15,5 +15,6 @@
 @property(nonatomic,weak)IBOutlet UITableView *wishlistTableView;
 @property(nonatomic,strong)SubCategoryModel *subModel;
 @property(nonatomic,strong)NSMutableArray *wishListDataArray;
+@property(nonatomic,strong)NSMutableArray *dammyArray1 ;
 
 @end

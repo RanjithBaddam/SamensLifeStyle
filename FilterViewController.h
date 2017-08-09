@@ -12,6 +12,7 @@
 #import "CategoryModel.h"
 #import "filterItemModel.h"
 #import "SortModel.h"
+#import "SortDisplayModel.h"
 
 @interface FilterViewController : UIViewController
 @property(nonatomic,strong)IBOutlet UISlider *slider;
@@ -20,4 +21,10 @@
 @property(nonatomic,weak)IBOutlet UITableView *FilterListTableView;
 @property(nonatomic,strong)CategoryModel *catModel;
 @property(nonatomic,strong)SortModel *sortModel;
+@property(nonatomic,strong)NSString *categoryMainId;
+@property(nonatomic,strong) NSString *MainSortItemId;
+@property(nonatomic,strong) NSString *sort1MainId;
+@property(nonatomic,strong)SortDisplayModel *sortDisplayModel;
+
+
 @end

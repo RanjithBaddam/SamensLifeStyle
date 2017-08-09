@@ -194,6 +194,8 @@
 
                         [MBProgressHUD hideHUDForView:self.view animated:YES];
                         AccountViewController *accountVc = [self.storyboard instantiateViewControllerWithIdentifier:@"AccountViewController"];
+                        self.tabBarController.tabBar.hidden = NO;
+                        [self.tabBarController setSelectedIndex:3];
                         accountVc.loginModel = loginModel;
                         [self.navigationController pushViewController:accountVc animated:YES];
                        

@@ -12,27 +12,27 @@
 #import <Google/SignIn.h>
 #import <MBProgressHUD.h>
 #import "homeViewController.h"
-@import Firebase;
-@import FirebaseInstanceID;
+//@import Firebase;
+//@import FirebaseInstanceID;
 
 
 
-#if defined(__IPHONE_10_0) && __IPHONE_OS_VERSION_MAX_ALLOWED >= __IPHONE_10_0
-@import UserNotifications;
-#endif
-#define SYSTEM_VERSION_GREATER_THAN_OR_EQUAL_TO(v)  ([[[UIDevice currentDevice] systemVersion] compare:v options:NSNumericSearch] != NSOrderedAscending)
+//#if defined(__IPHONE_10_0) && __IPHONE_OS_VERSION_MAX_ALLOWED >= __IPHONE_10_0
+//@import UserNotifications;
+//#endif
+//#define SYSTEM_VERSION_GREATER_THAN_OR_EQUAL_TO(v)  ([[[UIDevice currentDevice] systemVersion] compare:v options:NSNumericSearch] != NSOrderedAscending)
+//
+//#if defined(__IPHONE_10_0) && __IPHONE_OS_VERSION_MAX_ALLOWED >= __IPHONE_10_0
+//@interface AppDelegate () <UNUserNotificationCenterDelegate>
+//@end
+//#endif
+//
+//#ifndef NSFoundationVersionNumber_iOS_9_x_Max
+//#define NSFoundationVersionNumber_iOS_9_x_Max 1299
+//#endif
 
-#if defined(__IPHONE_10_0) && __IPHONE_OS_VERSION_MAX_ALLOWED >= __IPHONE_10_0
-@interface AppDelegate () <UNUserNotificationCenterDelegate>
-@end
-#endif
 
-#ifndef NSFoundationVersionNumber_iOS_9_x_Max
-#define NSFoundationVersionNumber_iOS_9_x_Max 1299
-#endif
-
-
-@interface AppDelegate ()<UNUserNotificationCenterDelegate>{
+@interface AppDelegate ()/*<UNUserNotificationCenterDelegate>*/{
     NSURL *imageURL;
     NSString *imgUrlString;
 }
@@ -59,76 +59,76 @@
         [[FBSDKApplicationDelegate sharedInstance] application:application
                                  didFinishLaunchingWithOptions:launchOptions];
     
-    [FIRApp configure];
-    if (floor(NSFoundationVersionNumber) <= NSFoundationVersionNumber_iOS_9_x_Max) {
-        UIUserNotificationType allNotificationTypes =
-        (UIUserNotificationTypeSound | UIUserNotificationTypeAlert | UIUserNotificationTypeBadge);
-        UIUserNotificationSettings *settings =
-        [UIUserNotificationSettings settingsForTypes:allNotificationTypes categories:nil];
-        [[UIApplication sharedApplication] registerUserNotificationSettings:settings];
-    } else {
-        // iOS 10 or later
-#if defined(__IPHONE_10_0) && __IPHONE_OS_VERSION_MAX_ALLOWED >= __IPHONE_10_0
-        // For iOS 10 display notification (sent via APNS)
-        [UNUserNotificationCenter currentNotificationCenter].delegate = self;
-        UNAuthorizationOptions authOptions =
-        UNAuthorizationOptionAlert
-        | UNAuthorizationOptionSound
-        | UNAuthorizationOptionBadge;
-        [[UNUserNotificationCenter currentNotificationCenter] requestAuthorizationWithOptions:authOptions completionHandler:^(BOOL granted, NSError * _Nullable error) {
-        }];
-#endif
-    }
-    
-    [[UIApplication sharedApplication] registerForRemoteNotifications];
-    
-    if (floor(NSFoundationVersionNumber) <= NSFoundationVersionNumber_iOS_7_1) {
-        // iOS 7.1 or earlier. Disable the deprecation warnings.
-#pragma clang diagnostic push
-#pragma clang diagnostic ignored "-Wdeprecated-declarations"
-        UIRemoteNotificationType allNotificationTypes =
-        (UIRemoteNotificationTypeSound |
-         UIRemoteNotificationTypeAlert |
-         UIRemoteNotificationTypeBadge);
-        [application registerForRemoteNotificationTypes:allNotificationTypes];
-        [[UIApplication sharedApplication] registerForRemoteNotifications];
-        
-#pragma clang diagnostic pop
-    } else {
-        // iOS 8 or later
-        // [START register_for_notifications]
-        if (floor(NSFoundationVersionNumber) <= NSFoundationVersionNumber_iOS_9_x_Max) {
-            UIUserNotificationType allNotificationTypes =
-            (UIUserNotificationTypeSound | UIUserNotificationTypeAlert | UIUserNotificationTypeBadge);
-            UIUserNotificationSettings *settings =
-            [UIUserNotificationSettings settingsForTypes:allNotificationTypes categories:nil];
-            [[UIApplication sharedApplication] registerUserNotificationSettings:settings];
-            [[UIApplication sharedApplication] registerForRemoteNotifications];
-            [application registerForRemoteNotifications];
-            
-        } else {
-            // iOS 10 or later
-#if defined(__IPHONE_10_0) && __IPHONE_OS_VERSION_MAX_ALLOWED >= __IPHONE_10_0
-            UNAuthorizationOptions authOptions =
-            UNAuthorizationOptionAlert
-            | UNAuthorizationOptionSound
-            | UNAuthorizationOptionBadge;
-            [[UNUserNotificationCenter currentNotificationCenter]
-             requestAuthorizationWithOptions:authOptions
-             completionHandler:^(BOOL granted, NSError * _Nullable error) {
-             }
-             ];
-            // For iOS 10 display notification (sent via APNS)
-            [[UNUserNotificationCenter currentNotificationCenter] setDelegate:self];
-            // For iOS 10 data message (sent via FCM)
-            [[UIApplication sharedApplication] registerForRemoteNotifications];
-#endif
-        }
-    }
-
-    NSString *filePath = [[NSBundle mainBundle] pathForResource:@"GoogleService-InfoFirebase" ofType:@"plist"];
-    FIROptions *options = [[FIROptions alloc] initWithContentsOfFile:filePath];
-    [FIRApp configureWithOptions:options];
+//    [FIRApp configure];
+//    if (floor(NSFoundationVersionNumber) <= NSFoundationVersionNumber_iOS_9_x_Max) {
+//        UIUserNotificationType allNotificationTypes =
+//        (UIUserNotificationTypeSound | UIUserNotificationTypeAlert | UIUserNotificationTypeBadge);
+//        UIUserNotificationSettings *settings =
+//        [UIUserNotificationSettings settingsForTypes:allNotificationTypes categories:nil];
+//        [[UIApplication sharedApplication] registerUserNotificationSettings:settings];
+//    } else {
+//        // iOS 10 or later
+//#if defined(__IPHONE_10_0) && __IPHONE_OS_VERSION_MAX_ALLOWED >= __IPHONE_10_0
+//        // For iOS 10 display notification (sent via APNS)
+//        [UNUserNotificationCenter currentNotificationCenter].delegate = self;
+//        UNAuthorizationOptions authOptions =
+//        UNAuthorizationOptionAlert
+//        | UNAuthorizationOptionSound
+//        | UNAuthorizationOptionBadge;
+//        [[UNUserNotificationCenter currentNotificationCenter] requestAuthorizationWithOptions:authOptions completionHandler:^(BOOL granted, NSError * _Nullable error) {
+//        }];
+//#endif
+//    }
+//    
+//    [[UIApplication sharedApplication] registerForRemoteNotifications];
+//    
+//    if (floor(NSFoundationVersionNumber) <= NSFoundationVersionNumber_iOS_7_1) {
+//        // iOS 7.1 or earlier. Disable the deprecation warnings.
+//#pragma clang diagnostic push
+//#pragma clang diagnostic ignored "-Wdeprecated-declarations"
+//        UIRemoteNotificationType allNotificationTypes =
+//        (UIRemoteNotificationTypeSound |
+//         UIRemoteNotificationTypeAlert |
+//         UIRemoteNotificationTypeBadge);
+//        [application registerForRemoteNotificationTypes:allNotificationTypes];
+//        [[UIApplication sharedApplication] registerForRemoteNotifications];
+//        
+//#pragma clang diagnostic pop
+//    } else {
+//        // iOS 8 or later
+//        // [START register_for_notifications]
+//        if (floor(NSFoundationVersionNumber) <= NSFoundationVersionNumber_iOS_9_x_Max) {
+//            UIUserNotificationType allNotificationTypes =
+//            (UIUserNotificationTypeSound | UIUserNotificationTypeAlert | UIUserNotificationTypeBadge);
+//            UIUserNotificationSettings *settings =
+//            [UIUserNotificationSettings settingsForTypes:allNotificationTypes categories:nil];
+//            [[UIApplication sharedApplication] registerUserNotificationSettings:settings];
+//            [[UIApplication sharedApplication] registerForRemoteNotifications];
+//            [application registerForRemoteNotifications];
+//            
+//        } else {
+//            // iOS 10 or later
+//#if defined(__IPHONE_10_0) && __IPHONE_OS_VERSION_MAX_ALLOWED >= __IPHONE_10_0
+//            UNAuthorizationOptions authOptions =
+//            UNAuthorizationOptionAlert
+//            | UNAuthorizationOptionSound
+//            | UNAuthorizationOptionBadge;
+//            [[UNUserNotificationCenter currentNotificationCenter]
+//             requestAuthorizationWithOptions:authOptions
+//             completionHandler:^(BOOL granted, NSError * _Nullable error) {
+//             }
+//             ];
+//            // For iOS 10 display notification (sent via APNS)
+//            [[UNUserNotificationCenter currentNotificationCenter] setDelegate:self];
+//            // For iOS 10 data message (sent via FCM)
+//            [[UIApplication sharedApplication] registerForRemoteNotifications];
+//#endif
+//        }
+//    }
+//
+//    NSString *filePath = [[NSBundle mainBundle] pathForResource:@"GoogleService-InfoFirebase" ofType:@"plist"];
+//    FIROptions *options = [[FIROptions alloc] initWithContentsOfFile:filePath];
+//    [FIRApp configureWithOptions:options];
     return YES;
 }
 - (BOOL)application:(UIApplication *)application
@@ -246,99 +246,100 @@ didDisconnectWithUser:(GIDGoogleUser *)user
     // Perform any operations when the user disconnects from app here.
     // ...
 }
--(void)application:(UIApplication *)application performFetchWithCompletionHandler:(nonnull void (^)(UIBackgroundFetchResult))completionHandler{
-    completionHandler(UIBackgroundFetchResultNewData);
-}
--(void)application:(UIApplication *)application didRegisterUserNotificationSettings:(nonnull UIUserNotificationSettings *)notificationSettings{
-    [application registerForRemoteNotifications];
-}
--(void)application:(UIApplication *)application handleActionWithIdentifier:(nullable NSString *)identifier forRemoteNotification:(nonnull NSDictionary *)userInfo completionHandler:(nonnull void (^)())completionHandler{
-    if ([identifier isEqualToString:@"declineAction"]) {
-        
-    }else if ([identifier isEqualToString:@"answerAction"]){
-        
-    }
-}
--(void)application:(UIApplication *)application didRegisterForRemoteNotificationsWithDeviceToken:(nonnull NSData *)deviceToken{
-    NSString *deviceTokenStr = [[[[deviceToken description]stringByReplacingOccurrencesOfString:@"<" withString:@""]stringByReplacingOccurrencesOfString:@">" withString:@""]
-                                stringByReplacingOccurrencesOfString:@" " withString:@""];
-    NSLog(@"Device_Token  ------> %@\n",deviceTokenStr);
-    [[FIRInstanceID instanceID]setAPNSToken:deviceToken type:FIRInstanceIDAPNSTokenTypeProd];
-    
-}
--(void)application:(UIApplication *)application didReceiveRemoteNotification:(nonnull NSDictionary *)userInfo{
-    NSLog(@"Notification received: %@",userInfo);
-    if (application.applicationState == UIApplicationStateInactive || application.applicationState == UIApplicationStateBackground ) {
-        //opened from a push notification when the app was on background
-    }
-}
-- (void)application:(UIApplication *)application
-didReceiveRemoteNotification:(NSDictionary *)userInfo
-fetchCompletionHandler:(void (^)(UIBackgroundFetchResult))handler {
-    NSLog(@"Notification received: %@", userInfo);
-    if ([userInfo valueForKey:@"syncdata"]){
-        if ([[userInfo valueForKey:@"syncdata"] isEqualToString:@"true"]){
-            NSLog(@"have to sync");
-            [[NSNotificationCenter defaultCenter] postNotificationName:@"SyncTrips" object:userInfo];
-        }else{
-            NSLog(@"No need of syn");
-        }
-    }
-    if( SYSTEM_VERSION_GREATER_THAN_OR_EQUAL_TO( @"10.0" ) )
-    {
-        return;
-    }
-    if( [UIApplication sharedApplication].applicationState == UIApplicationStateInactive )
-    {
-        handler( UIBackgroundFetchResultNewData );
-    }
-    else if( [UIApplication sharedApplication].applicationState == UIApplicationStateBackground )
-    {
-        handler( UIBackgroundFetchResultNewData );
-    }
-    else
-    {
-        handler( UIBackgroundFetchResultNewData );
-    }
-}
-#if defined(__IPHONE_10_0) && __IPHONE_OS_VERSION_MAX_ALLOWED >= __IPHONE_10_0
-- (void)userNotificationCenter:(UNUserNotificationCenter *)center
-       willPresentNotification:(UNNotification *)notification
-         withCompletionHandler:(void (^)(UNNotificationPresentationOptions))completionHandler {
-    NSLog(@"Message received : %@",notification.request.content.userInfo);
-    
-    NSDictionary *userInfo = notification.request.content.userInfo;
-    if ([[userInfo valueForKey:@"isSync"] isEqualToString:@"true"]){
-        NSLog(@"HAVE TO SYNC");
-    }else{
-        NSLog(@"NO NEED TO SYNC");
-    }
-    NSLog(@"%@", userInfo);
-    
-    if( [UIApplication sharedApplication].applicationState == UIApplicationStateInactive )
-    {
-        completionHandler( UNNotificationPresentationOptionAlert );
-    }
-    else if( [UIApplication sharedApplication].applicationState == UIApplicationStateBackground )
-    {
-        completionHandler( UNNotificationPresentationOptionAlert );
-    }
-    else
-    {
-        completionHandler( UNNotificationPresentationOptionAlert );
-    }
-}
-
--(void)userNotificationCenter:(UNUserNotificationCenter *)center didReceiveNotificationResponse:(UNNotificationResponse *)response withCompletionHandler:(void(^)())completionHandler{
-    
-    
-    //    completionHandler(UNNotificationPresentationOptionAlert);
-}
-#endif
-- (void)application:(UIApplication *)application didFailToRegisterForRemoteNotificationsWithError:(NSError *)error NS_AVAILABLE_IOS(3_0);
-{
-    NSLog(@"%@",error.localizedDescription);
-}
+//-(void)application:(UIApplication *)application performFetchWithCompletionHandler:(nonnull void (^)(UIBackgroundFetchResult))completionHandler{
+//    completionHandler(UIBackgroundFetchResultNewData);
+//}
+//-(void)application:(UIApplication *)application didRegisterUserNotificationSettings:(nonnull UIUserNotificationSettings *)notificationSettings{
+//    [application registerForRemoteNotifications];
+//}
+//-(void)application:(UIApplication *)application handleActionWithIdentifier:(nullable NSString *)identifier forRemoteNotification:(nonnull NSDictionary *)userInfo completionHandler:(nonnull void (^)())completionHandler{
+//    if ([identifier isEqualToString:@"declineAction"]) {
+//        
+//    }else if ([identifier isEqualToString:@"answerAction"]){
+//        
+//    }
+//}
+//-(void)application:(UIApplication *)application didRegisterForRemoteNotificationsWithDeviceToken:(nonnull NSData *)deviceToken{
+//    NSString *deviceTokenStr = [[[[deviceToken description]stringByReplacingOccurrencesOfString:@"<" withString:@""]stringByReplacingOccurrencesOfString:@">" withString:@""]
+//                                stringByReplacingOccurrencesOfString:@" " withString:@""];
+//    NSLog(@"Device_Token  ------> %@\n",deviceTokenStr);
+//    [[FIRInstanceID instanceID]setAPNSToken:deviceToken type:FIRInstanceIDAPNSTokenTypeProd];
+//    
+//}
+//-(void)application:(UIApplication *)application didReceiveRemoteNotification:(nonnull NSDictionary *)userInfo{
+//    NSLog(@"Notification received: %@",userInfo);
+//    if (application.applicationState == UIApplicationStateInactive || application.applicationState == UIApplicationStateBackground ) {
+//        
+//        //opened from a push notification when the app was on background
+//    }
+//}
+//- (void)application:(UIApplication *)application
+//didReceiveRemoteNotification:(NSDictionary *)userInfo
+//fetchCompletionHandler:(void (^)(UIBackgroundFetchResult))handler {
+//    NSLog(@"Notification received: %@", userInfo);
+//    if ([userInfo valueForKey:@"syncdata"]){
+//        if ([[userInfo valueForKey:@"syncdata"] isEqualToString:@"true"]){
+//            NSLog(@"have to sync");
+//            [[NSNotificationCenter defaultCenter] postNotificationName:@"SyncTrips" object:userInfo];
+//        }else{
+//            NSLog(@"No need of syn");
+//        }
+//    }
+//    if( SYSTEM_VERSION_GREATER_THAN_OR_EQUAL_TO( @"10.0" ) )
+//    {
+//        return;
+//    }
+//    if( [UIApplication sharedApplication].applicationState == UIApplicationStateInactive )
+//    {
+//        handler( UIBackgroundFetchResultNewData );
+//    }
+//    else if( [UIApplication sharedApplication].applicationState == UIApplicationStateBackground )
+//    {
+//        handler( UIBackgroundFetchResultNewData );
+//    }
+//    else
+//    {
+//        handler( UIBackgroundFetchResultNewData );
+//    }
+//}
+//#if defined(__IPHONE_10_0) && __IPHONE_OS_VERSION_MAX_ALLOWED >= __IPHONE_10_0
+//- (void)userNotificationCenter:(UNUserNotificationCenter *)center
+//       willPresentNotification:(UNNotification *)notification
+//         withCompletionHandler:(void (^)(UNNotificationPresentationOptions))completionHandler {
+//    NSLog(@"Message received : %@",notification.request.content.userInfo);
+//    
+//    NSDictionary *userInfo = notification.request.content.userInfo;
+//    if ([[userInfo valueForKey:@"isSync"] isEqualToString:@"true"]){
+//        NSLog(@"HAVE TO SYNC");
+//    }else{
+//        NSLog(@"NO NEED TO SYNC");
+//    }
+//    NSLog(@"%@", userInfo);
+//    
+//    if( [UIApplication sharedApplication].applicationState == UIApplicationStateInactive )
+//    {
+//        completionHandler( UNNotificationPresentationOptionAlert );
+//    }
+//    else if( [UIApplication sharedApplication].applicationState == UIApplicationStateBackground )
+//    {
+//        completionHandler( UNNotificationPresentationOptionAlert );
+//    }
+//    else
+//    {
+//        completionHandler( UNNotificationPresentationOptionAlert );
+//    }
+//}
+//
+//-(void)userNotificationCenter:(UNUserNotificationCenter *)center didReceiveNotificationResponse:(UNNotificationResponse *)response withCompletionHandler:(void(^)())completionHandler{
+//    
+//    
+//    //    completionHandler(UNNotificationPresentationOptionAlert);
+//}
+//#endif
+//- (void)application:(UIApplication *)application didFailToRegisterForRemoteNotificationsWithError:(NSError *)error NS_AVAILABLE_IOS(3_0);
+//{
+//    NSLog(@"%@",error.localizedDescription);
+//}
 
 
 - (void)applicationWillResignActive:(UIApplication *)application {

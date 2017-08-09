@@ -55,5 +55,8 @@
 @property(nonatomic,strong)NSArray *dammyArray;
 @property(nonatomic,strong)    NSString *PopUpNameText;
 @property(nonatomic,weak)IBOutlet UISearchBar *searchBar;
+@property(nonatomic,strong) NSString *MainSortItemId;
+
+
 
 @end

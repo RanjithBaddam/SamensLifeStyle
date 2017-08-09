@@ -66,6 +66,13 @@
 		3445263C1F2F220100051C57 /* IndirectSortModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 3445263B1F2F220100051C57 /* IndirectSortModel.m */; };
 		3445263E1F30528900051C57 /* AdSupport.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3445263D1F30528900051C57 /* AdSupport.framework */; };
 		344526401F3115E700051C57 /* GoogleService-InfoFirebase.plist in Resources */ = {isa = PBXBuildFile; fileRef = 3445263F1F3115E600051C57 /* GoogleService-InfoFirebase.plist */; };
+		344526451F319E6A00051C57 /* OffersViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 344526441F319E6A00051C57 /* OffersViewController.m */; };
+		344526481F319F1200051C57 /* OffersCollectionViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 344526471F319F1200051C57 /* OffersCollectionViewCell.m */; };
+		3445264C1F31D36E00051C57 /* OfferSliderImagesModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 3445264B1F31D36E00051C57 /* OfferSliderImagesModel.m */; };
+		3445264F1F31E48200051C57 /* OfferItemNameCollectionViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 3445264E1F31E48200051C57 /* OfferItemNameCollectionViewCell.m */; };
+		344526521F31E8D800051C57 /* ItemDisplayCollectionViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 344526511F31E8D800051C57 /* ItemDisplayCollectionViewCell.m */; };
+		344526551F31FA2C00051C57 /* FetchOfferDataModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 344526541F31FA2C00051C57 /* FetchOfferDataModel.m */; };
+		344526DD1F3B1BC000051C57 /* AddressDetailsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 344526DC1F3B1BC000051C57 /* AddressDetailsViewController.m */; };
 		345B0E3B1EF787B800B68B63 /* SortItemDisplayViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 345B0E3A1EF787B800B68B63 /* SortItemDisplayViewController.m */; };
 		345B0E3F1EF7D01000B68B63 /* SortItemCollectionViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 345B0E3E1EF7D01000B68B63 /* SortItemCollectionViewCell.m */; };
 		345B0E431EF7F6CF00B68B63 /* SortDisplayModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 345B0E421EF7F6CF00B68B63 /* SortDisplayModel.m */; };
@@ -238,6 +245,20 @@
 		3445263B1F2F220100051C57 /* IndirectSortModel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = IndirectSortModel.m; sourceTree = "<group>"; };
 		3445263D1F30528900051C57 /* AdSupport.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AdSupport.framework; path = System/Library/Frameworks/AdSupport.framework; sourceTree = SDKROOT; };
 		3445263F1F3115E600051C57 /* GoogleService-InfoFirebase.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-InfoFirebase.plist"; sourceTree = "<group>"; };
+		344526431F319E6A00051C57 /* OffersViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OffersViewController.h; sourceTree = "<group>"; };
+		344526441F319E6A00051C57 /* OffersViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = OffersViewController.m; sourceTree = "<group>"; };
+		344526461F319F1200051C57 /* OffersCollectionViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OffersCollectionViewCell.h; sourceTree = "<group>"; };
+		344526471F319F1200051C57 /* OffersCollectionViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = OffersCollectionViewCell.m; sourceTree = "<group>"; };
+		3445264A1F31D36E00051C57 /* OfferSliderImagesModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OfferSliderImagesModel.h; sourceTree = "<group>"; };
+		3445264B1F31D36E00051C57 /* OfferSliderImagesModel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = OfferSliderImagesModel.m; sourceTree = "<group>"; };
+		3445264D1F31E48200051C57 /* OfferItemNameCollectionViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OfferItemNameCollectionViewCell.h; sourceTree = "<group>"; };
+		3445264E1F31E48200051C57 /* OfferItemNameCollectionViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = OfferItemNameCollectionViewCell.m; sourceTree = "<group>"; };
+		344526501F31E8D800051C57 /* ItemDisplayCollectionViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ItemDisplayCollectionViewCell.h; sourceTree = "<group>"; };
+		344526511F31E8D800051C57 /* ItemDisplayCollectionViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ItemDisplayCollectionViewCell.m; sourceTree = "<group>"; };
+		344526531F31FA2C00051C57 /* FetchOfferDataModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FetchOfferDataModel.h; sourceTree = "<group>"; };
+		344526541F31FA2C00051C57 /* FetchOfferDataModel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FetchOfferDataModel.m; sourceTree = "<group>"; };
+		344526DB1F3B1BC000051C57 /* AddressDetailsViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AddressDetailsViewController.h; sourceTree = "<group>"; };
+		344526DC1F3B1BC000051C57 /* AddressDetailsViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AddressDetailsViewController.m; sourceTree = "<group>"; };
 		345B0E391EF787B800B68B63 /* SortItemDisplayViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SortItemDisplayViewController.h; sourceTree = "<group>"; };
 		345B0E3A1EF787B800B68B63 /* SortItemDisplayViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SortItemDisplayViewController.m; sourceTree = "<group>"; };
 		345B0E3D1EF7D01000B68B63 /* SortItemCollectionViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SortItemCollectionViewCell.h; sourceTree = "<group>"; };
@@ -481,6 +502,9 @@
 		341A778D1EDD719D001968E1 = {
 			isa = PBXGroup;
 			children = (
+				344526DB1F3B1BC000051C57 /* AddressDetailsViewController.h */,
+				344526DC1F3B1BC000051C57 /* AddressDetailsViewController.m */,
+				344526421F319E4500051C57 /* OffersShowingViewController */,
 				3445263F1F3115E600051C57 /* GoogleService-InfoFirebase.plist */,
 				3445262F1F2E462A00051C57 /* GoogleService-Info.plist */,
 				341186EC1F2B1DE700B693A2 /* Search */,
@@ -856,6 +880,33 @@
 				3445263B1F2F220100051C57 /* IndirectSortModel.m */,
 			);
 			name = IndirectSortModel;
+			sourceTree = "<group>";
+		};
+		344526421F319E4500051C57 /* OffersShowingViewController */ = {
+			isa = PBXGroup;
+			children = (
+				344526491F31D34000051C57 /* OfferModel */,
+				344526431F319E6A00051C57 /* OffersViewController.h */,
+				344526441F319E6A00051C57 /* OffersViewController.m */,
+				344526461F319F1200051C57 /* OffersCollectionViewCell.h */,
+				344526471F319F1200051C57 /* OffersCollectionViewCell.m */,
+				3445264D1F31E48200051C57 /* OfferItemNameCollectionViewCell.h */,
+				3445264E1F31E48200051C57 /* OfferItemNameCollectionViewCell.m */,
+				344526501F31E8D800051C57 /* ItemDisplayCollectionViewCell.h */,
+				344526511F31E8D800051C57 /* ItemDisplayCollectionViewCell.m */,
+			);
+			name = OffersShowingViewController;
+			sourceTree = "<group>";
+		};
+		344526491F31D34000051C57 /* OfferModel */ = {
+			isa = PBXGroup;
+			children = (
+				3445264A1F31D36E00051C57 /* OfferSliderImagesModel.h */,
+				3445264B1F31D36E00051C57 /* OfferSliderImagesModel.m */,
+				344526531F31FA2C00051C57 /* FetchOfferDataModel.h */,
+				344526541F31FA2C00051C57 /* FetchOfferDataModel.m */,
+			);
+			name = OfferModel;
 			sourceTree = "<group>";
 		};
 		345B0E381EF7876F00B68B63 /* SortItemDisplayViewController */ = {
@@ -1264,7 +1315,13 @@
 				TargetAttributes = {
 					341A77951EDD719D001968E1 = {
 						CreatedOnToolsVersion = 8.3.2;
+						DevelopmentTeam = P847CQ3QXJ;
 						ProvisioningStyle = Automatic;
+						SystemCapabilities = {
+							com.apple.BackgroundModes = {
+								enabled = 1;
+							};
+						};
 					};
 					341A77AE1EDD719D001968E1 = {
 						CreatedOnToolsVersion = 8.3.2;
@@ -1472,6 +1529,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				341CFADD1F04BBEC00064B16 /* ColorDataImagesModel.m in Sources */,
+				344526481F319F1200051C57 /* OffersCollectionViewCell.m in Sources */,
 				342B89821EFA53B6000DCC7D /* descriptionTableViewCell.m in Sources */,
 				34D64CFC1EEDA7ED00DA174A /* adsScrollCollectionViewCell.m in Sources */,
 				342B89861EFA6320000DCC7D /* RelatedImagesCollectionViewCell.m in Sources */,
@@ -1491,15 +1549,18 @@
 				34D64D171EEEAF7900DA174A /* IndivisualProductDetailsViewController.m in Sources */,
 				345B0E5C1EF91B7F00B68B63 /* SizeModel.m in Sources */,
 				3421032C1EEBDB1B00A97D4F /* pageSlideCollectionViewCell.m in Sources */,
+				344526521F31E8D800051C57 /* ItemDisplayCollectionViewCell.m in Sources */,
 				345E84241F29B2F200E78407 /* FetchSortFilterSizeModel.m in Sources */,
 				345B0E581EF90CD500B68B63 /* ItemSizeViewController.m in Sources */,
 				345B0E5F1EF938BC00B68B63 /* itemSizeCollectionViewCell.m in Sources */,
+				344526DD1F3B1BC000051C57 /* AddressDetailsViewController.m in Sources */,
 				343E8F401F25F7C100547EEB /* filterItemModel.m in Sources */,
 				341A779E1EDD719D001968E1 /* AppDelegate.m in Sources */,
 				34D64D0C1EEE7DBB00DA174A /* SortModel.m in Sources */,
 				341CFAEF1F06644300064B16 /* AddToCartViewController.m in Sources */,
 				3412ADEB1EE822A60055AD93 /* GlobalProgrees.m in Sources */,
 				341A77FD1EDFEA75001968E1 /* signupViewController.m in Sources */,
+				3445264C1F31D36E00051C57 /* OfferSliderImagesModel.m in Sources */,
 				345B0E481EF9039900B68B63 /* ItemRatingViewController.m in Sources */,
 				341A779B1EDD719D001968E1 /* main.m in Sources */,
 				34D64CF21EEC7BB300DA174A /* DisplayItemsCollectionViewCell.m in Sources */,
@@ -1512,8 +1573,10 @@
 				345B0E541EF909BB00B68B63 /* ItemVariantViewController.m in Sources */,
 				345E841E1F28BE1800E78407 /* FetchSortColorModel.m in Sources */,
 				341CFAF31F06659C00064B16 /* AddToCartTableViewCell.m in Sources */,
+				3445264F1F31E48200051C57 /* OfferItemNameCollectionViewCell.m in Sources */,
 				341186EF1F2B1DFB00B693A2 /* SearchViewController.m in Sources */,
 				341CFAD91F04062A00064B16 /* SliderModel.m in Sources */,
+				344526551F31FA2C00051C57 /* FetchOfferDataModel.m in Sources */,
 				342B898E1EFA9289000DCC7D /* SizeChatViewController.m in Sources */,
 				345B0E431EF7F6CF00B68B63 /* SortDisplayModel.m in Sources */,
 				344526341F2EF51A00051C57 /* SearchDataModel.m in Sources */,
@@ -1530,6 +1593,7 @@
 				342B897E1EFA4677000DCC7D /* DescriptionModel.m in Sources */,
 				340C603C1F0BC1B0003C1AA8 /* WishlistViewController.m in Sources */,
 				34D64D001EEDAEBB00DA174A /* AdsBannerModel.m in Sources */,
+				344526451F319E6A00051C57 /* OffersViewController.m in Sources */,
 				342B898A1EFA7433000DCC7D /* RelatedImageModel.m in Sources */,
 				341CFB561F0A072000064B16 /* AllReviewsTableViewCell.m in Sources */,
 				340C60441F0BC937003C1AA8 /* WishlistTableViewCell.m in Sources */,
@@ -1705,7 +1769,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
-				DEVELOPMENT_TEAM = "";
+				DEVELOPMENT_TEAM = P847CQ3QXJ;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(PROJECT_DIR)",
@@ -1727,7 +1791,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
-				DEVELOPMENT_TEAM = "";
+				DEVELOPMENT_TEAM = P847CQ3QXJ;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(PROJECT_DIR)",
