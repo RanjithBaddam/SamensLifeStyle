@@ -9,15 +9,13 @@
 #import <UIKit/UIKit.h>
 
 @interface AddressDetailsViewController : UIViewController
-@property(nonatomic,weak)IBOutlet UILabel *CustName;
-@property(nonatomic,weak)IBOutlet UILabel *cityName;
-@property(nonatomic,weak)IBOutlet UILabel *stateName;
-@property(nonatomic,weak)IBOutlet UILabel *address;
-@property(nonatomic,weak)IBOutlet UILabel *pincode;
-@property(nonatomic,weak)IBOutlet UILabel *custMobile;
-@property(nonatomic,weak)IBOutlet UILabel *alternateMobileNumber;
+
 -(IBAction)clickOnRemove:(UIButton *)sender;
-@property(nonatomic,weak)IBOutlet UILabel *homePopUpLabel;
-@property(nonatomic,weak)IBOutlet UILabel *officePopUpLabel;
+
 @property(nonatomic,weak)IBOutlet UIButton *editButton;
+@property(nonatomic,weak)IBOutlet UIButton *removeButton;
+@property(nonatomic,strong)UIButton *homeBtn;
+@property(nonatomic,strong)UIButton *workBtn;
+
+@property(nonatomic,weak)IBOutlet UITableView *AddressTableview;
 @end

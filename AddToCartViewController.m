@@ -15,6 +15,7 @@
 #import "DetailsTableViewCell.h"
 #import "ViewController.h"
 #import "PaymentAddressViewController.h"
+#import "AddressDetailsViewController.h"
 
 @interface AddToCartViewController ()<UITableViewDelegate,UITableViewDataSource,UIAlertViewDelegate>{
     AddToCartModel *addToCartModel;
@@ -58,7 +59,7 @@
     // Dispose of any resources that can be recreated.
 }
 -(void)FetchAddToCart{
-        if ([[NSUserDefaults.standardUserDefaults valueForKey:@"LoggedIn"]isEqualToString:@"yes"] || [[NSUserDefaults.standardUserDefaults valueForKey:@"login"]isEqualToString:@"google"] || [[NSUserDefaults.standardUserDefaults valueForKey:@"login"]isEqualToString:@"facebook"]){
+        if ([[NSUserDefaults.standardUserDefaults valueForKey:@"LoggedIn"]isEqualToString:@"yes"] ){
             dispatch_async(dispatch_get_main_queue(), ^{
 
     [MBProgressHUD showHUDAddedTo:self.view animated:YES];
@@ -389,6 +390,7 @@
 }
 -(IBAction)ClickOnStepper:(UIStepper *)sender{
     
+    
     double value = [[priceArray objectAtIndex:sender.tag] intValue];
     NSIndexPath *selectedIndexPath = [NSIndexPath indexPathForRow:sender.tag inSection:0];
     AddToCartTableViewCell *cell = [_AddToCartTableView cellForRowAtIndexPath:selectedIndexPath];
@@ -490,9 +492,69 @@
 
 }
 -(IBAction)clickOnContinue:(UIButton *)sender{
-    PaymentAddressViewController *paymentAddressVc = [self.storyboard instantiateViewControllerWithIdentifier:@"PaymentAddressViewController"];
-    [self.navigationController pushViewController:paymentAddressVc animated:YES];
+    dispatch_async(dispatch_get_main_queue(),^{
+        
+        [MBProgressHUD showHUDAddedTo:self.view animated:YES];
+    });
+    NSString *urlInstring =[NSString stringWithFormat:@"http://samenslifestyle.com/samenslifestyle123.com/samens_mob/FetchAdressDetails.php"];
+    NSURL *url=[NSURL URLWithString:urlInstring];
+    NSMutableURLRequest *request=[NSMutableURLRequest requestWithURL:url];
+    [request setHTTPMethod:@"POST"];
     
+    
+    NSString *params = [NSString stringWithFormat:@"cid=%@&api=%@",[NSUserDefaults.standardUserDefaults valueForKey:@"custid"],[NSUserDefaults.standardUserDefaults valueForKey:@"api"]];
+    NSLog(@"%@",params);
+    
+    NSData *requestData = [params dataUsingEncoding:NSUTF8StringEncoding];
+    NSLog(@"%@",requestData);
+    [request setHTTPBody:requestData];
+    
+    NSURLSessionConfiguration *config=[NSURLSessionConfiguration defaultSessionConfiguration];
+    [config setTimeoutIntervalForRequest:30.0];
+    NSURLSession *session=[NSURLSession sessionWithConfiguration:config];
+    NSURLSessionDataTask *task= [session dataTaskWithRequest:request completionHandler:^(NSData * _Nullable data, NSURLResponse * _Nullable response, NSError * _Nullable error) {
+        NSError *err;
+        dispatch_async(dispatch_get_main_queue(), ^{
+            [MBProgressHUD hideHUDForView:self.view animated:YES];
+        });
+        if (error) {
+            NSLog(@"%@",err);
+            if ([error.localizedDescription isEqualToString:@"The request timed out."]){
+                dispatch_async(dispatch_get_main_queue(), ^{
+                    UIAlertView *alertView = [[UIAlertView alloc]initWithTitle:@"The requste timed out. Please try again" message:@"" delegate:self cancelButtonTitle:@"Cancel" otherButtonTitles:@"Retry", nil];
+                    alertView.tag = 001;
+                    [alertView show];
+                });
+            }else if ([error.localizedDescription isEqualToString:@"The Internet connection appears to be offline."]){
+                dispatch_async(dispatch_get_main_queue(),^{
+                    UIAlertView *alertView = [[UIAlertView alloc]initWithTitle:@"The Internet connection appears to be offline." message:@"" delegate:nil cancelButtonTitle:@"Ok" otherButtonTitles:nil, nil];
+                    alertView.tag = 002;
+                    [alertView show];
+                });
+            }
+            
+        }else{
+            id jsonData = [NSJSONSerialization JSONObjectWithData:data options:kNilOptions error:&error];
+            NSLog(@"%@",jsonData);
+         if([[NSNumber numberWithBool:[[[NSJSONSerialization JSONObjectWithData:data options:kNilOptions error:&error] objectForKey:@"success"] boolValue]] isEqualToNumber:[NSNumber numberWithInt:0]]){
+             dispatch_async(dispatch_get_main_queue(),^{
+
+             PaymentAddressViewController *paymentAddressVc = [self.storyboard instantiateViewControllerWithIdentifier:@"PaymentAddressViewController"];
+             [self.navigationController pushViewController:paymentAddressVc animated:YES];
+             });
+         }else{
+             dispatch_async(dispatch_get_main_queue(),^{
+
+             AddressDetailsViewController *addressDetailsVc =  [self.storyboard instantiateViewControllerWithIdentifier:@"AddressDetailsViewController"];
+             [self.navigationController pushViewController:addressDetailsVc animated:YES];
+             });
+         }
+        }
+        
+    }];
+    [task resume];
+
+   
     
 }
 

@@ -44,7 +44,7 @@
     // Dispose of any resources that can be recreated.
 }
 -(void)FetchWishlistData{
-    if ([[NSUserDefaults.standardUserDefaults valueForKey:@"LoggedIn"]isEqualToString:@"yes"] || [[NSUserDefaults.standardUserDefaults valueForKey:@"login"]isEqualToString:@"google"] || [[NSUserDefaults.standardUserDefaults valueForKey:@"login"]isEqualToString:@"facebook"]){
+    if ([[NSUserDefaults.standardUserDefaults valueForKey:@"LoggedIn"]isEqualToString:@"yes"]){
     [MBProgressHUD showHUDAddedTo:self.view animated:YES];
     NSString *urlInstring =[NSString stringWithFormat:@"http://samenslifestyle.com/samenslifestyle123.com/samens_mob/wishlist.php"];
     NSURL *url=[NSURL URLWithString:urlInstring];
@@ -96,14 +96,7 @@
             _dammyArray1 = [[NSMutableArray alloc]init];
             _dammyArray1  = [jsonData valueForKey:@"categories"];
             NSLog(@"%@",_dammyArray1);
-//            NSUserDefaults *currentDefaults = [NSUserDefaults standardUserDefaults];
-//            NSData *data = [NSKeyedArchiver archivedDataWithRootObject:_dammyArray1];
-//            [currentDefaults setObject:data forKey:@"WishListData"];
-//        
-//            NSData *data1 = [currentDefaults objectForKey:@"WishListData"];
-//            NSMutableArray *token = [[NSMutableArray alloc]init];
-//             token = [NSKeyedUnarchiver unarchiveObjectWithData:data1];
-//            NSLog(@"%@",token);
+
             int index;
             _wishListDataArray = [[NSMutableArray alloc]init];
             for (index=0; index<_dammyArray1.count; index++) {

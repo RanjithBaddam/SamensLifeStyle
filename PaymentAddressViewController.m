@@ -9,8 +9,10 @@
 #import "PaymentAddressViewController.h"
 #import <QuartzCore/QuartzCore.h>
 #import "AddressDetailsViewController.h"
+#import <MBProgressHUD.h>
+#import "AddressDetailsModel.h"
 
-@interface PaymentAddressViewController (){
+@interface PaymentAddressViewController ()<UITextFieldDelegate,UIAlertViewDelegate>{
    IBOutlet UITextField *CityTextField;
    IBOutlet UITextField *PincodeTextField;
    IBOutlet UITextField *StateTextField;
@@ -23,17 +25,41 @@
    IBOutlet UILabel *WorkDeliveryLabel;
    IBOutlet UIButton *HomeDeliveryButton;
    IBOutlet UIButton *WorkDeliveryButton;
-    
-    
+    IBOutlet UIButton *defaultSavingBtn;
+    IBOutlet UILabel *cityPopUp;
+    IBOutlet UILabel *pincodePopUp;
+    IBOutlet UILabel *statePopUp;
+    IBOutlet UILabel *localityPopUp;
+    IBOutlet UILabel *landMarkPopUp;
+    IBOutlet UILabel *namePopUp;
+    IBOutlet UILabel *phoneNumPopUp;
+    IBOutlet UILabel *altPhnNumPopUp;
+    NSTimer *timer;
+    UIAlertView *alert;
+    AddressDetailsModel *addressModel;
+    NSMutableArray *addressData;
 }
 
 @end
 
 @implementation PaymentAddressViewController
-
+-(void)viewWillAppear:(BOOL)animated{
+    [self getUserAddressDetails];
+    
+}
 - (void)viewDidLoad {
     [super viewDidLoad];
     // Do any additional setup after loading the view.
+    CityTextField.delegate = self;
+    PincodeTextField.delegate = self;
+    StateTextField.delegate = self;
+    LocalityTextField.delegate = self;
+    LandMarktextField.delegate = self;
+    NameTextField.delegate = self;
+    PhnoneNumberTextField.delegate = self;
+    AlternatePhoneNumberTextField.delegate = self;
+
+
     
         UIImage *img = [UIImage imageNamed:@"NavigationImage"];
         UIImageView *imgView = [[UIImageView alloc] initWithFrame:CGRectMake(0, 0, 100, 44)];
@@ -122,6 +148,10 @@
         WorkDeliveryButton.layer.cornerRadius = 16;
         WorkDeliveryButton.layer.borderWidth = 1;
         WorkDeliveryButton.layer.borderColor = [UIColor blackColor].CGColor;
+    
+    defaultSavingBtn.layer.borderWidth = 1;
+    defaultSavingBtn.layer.borderColor = [UIColor blackColor].CGColor;
+    
 
     }
 - (void)didReceiveMemoryWarning {
@@ -130,52 +160,345 @@
     
 }
 -(IBAction)clickOnCancel:(UIButton *)sender{
-    
+    [self.navigationController popViewControllerAnimated:YES];
 }
 
 -(IBAction)clickOnSave:(UIButton *)sender{
-    if ([NameTextField.text isEqualToString:@""]||[CityTextField.text isEqualToString:@""]||[PincodeTextField.text isEqualToString:@""]||[StateTextField.text isEqualToString:@""]||[LocalityTextField.text isEqualToString:@""]||[LandMarktextField.text isEqualToString:@""]||[PhnoneNumberTextField.text isEqualToString:@""]||[AlternatePhoneNumberTextField.text isEqualToString:@""]) {
+    if ([HomeDeliveryButton isSelected]) {
         
-        UIAlertView *alert = [[UIAlertView alloc]initWithTitle:@"Error" message:@"Please check and fill all details" delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil, nil];
+    if ([CityTextField.text isEqualToString:@""]|| [PincodeTextField.text isEqualToString:@""]||[StateTextField.text isEqualToString:@""]||[LocalityTextField.text isEqualToString:@""]||[LandMarktextField.text isEqualToString:@""]||[NameTextField.text isEqualToString:@""]||[PhnoneNumberTextField.text isEqualToString:@""]||[AlternatePhoneNumberTextField.text isEqualToString:@""]) {
+        alert = [[UIAlertView alloc]initWithTitle:@"Error" message:@"Please fill all the details correctly" delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil, nil];
         [alert show];
-        
     }else{
-        [NSUserDefaults.standardUserDefaults setObject:NameTextField.text forKey:@"Name"];
-        NSLog(@"%@",[NSUserDefaults.standardUserDefaults valueForKey:@"Name"]);
-        [NSUserDefaults.standardUserDefaults setObject:CityTextField.text forKey:@"City"];
-        [NSUserDefaults.standardUserDefaults setObject:PincodeTextField.text forKey:@"Pincode"];
-        [NSUserDefaults.standardUserDefaults setObject:StateTextField.text forKey:@"State"];
-        [NSUserDefaults.standardUserDefaults setObject:PhnoneNumberTextField.text forKey:@"Number"];
-        [NSUserDefaults.standardUserDefaults setObject:AlternatePhoneNumberTextField.text forKey:@"AltNumber"];
-        [NSUserDefaults.standardUserDefaults setObject:LocalityTextField.text forKey:@"Address"];
-        [NSUserDefaults.standardUserDefaults setObject:LandMarktextField.text forKey:@"Landmark"];
-       
-        NameTextField.text = [NSUserDefaults.standardUserDefaults valueForKey:@"Name"];
-        CityTextField.text = [NSUserDefaults.standardUserDefaults valueForKey:@"City"];
-        PincodeTextField.text = [NSUserDefaults.standardUserDefaults valueForKey:@"Pincode"];
-        StateTextField.text = [NSUserDefaults.standardUserDefaults valueForKey:@"State"];
-        PhnoneNumberTextField.text = [NSUserDefaults.standardUserDefaults valueForKey:@"Number"];
-        AlternatePhoneNumberTextField.text = [NSUserDefaults.standardUserDefaults valueForKey:@"AltNumber"];
-        LocalityTextField.text = [NSUserDefaults.standardUserDefaults valueForKey:@"Address"];
-        LandMarktextField.text = [NSUserDefaults.standardUserDefaults valueForKey:@"Landmark"];
-        
-        AddressDetailsViewController *addressDetailsVc = [self.storyboard instantiateViewControllerWithIdentifier:@"AddressDetailsViewController"];
-        [self.navigationController pushViewController:addressDetailsVc animated:YES];
+    dispatch_async(dispatch_get_main_queue(),^{
+
+    [MBProgressHUD showHUDAddedTo:self.view animated:YES];
+    });
+    NSString *urlInstring =[NSString stringWithFormat:@"http://samenslifestyle.com/samenslifestyle123.com/samens_mob/send_address.php"];
+    NSURL *url=[NSURL URLWithString:urlInstring];
+    NSMutableURLRequest *request=[NSMutableURLRequest requestWithURL:url];
+    [request setHTTPMethod:@"POST"];
+    
+    NSString *params = [NSString stringWithFormat:@"cid=%@&api=%@&city=%@&state=%@&type=%@&mobile_sec=%@&pin=%@&name=%@&land=%@&mobile=%@&add_full=%@&id=%@&d_add=%@",[NSUserDefaults.standardUserDefaults valueForKey:@"custid"],[NSUserDefaults.standardUserDefaults valueForKey:@"api"],CityTextField.text,StateTextField.text,@"H",AlternatePhoneNumberTextField.text,PincodeTextField.text,NameTextField.text,LandMarktextField.text,PhnoneNumberTextField.text,LocalityTextField.text,@"N",@"Y"];
+    NSLog(@"%@",params);
+    
+    NSData *requestData = [params dataUsingEncoding:NSUTF8StringEncoding];
+    NSLog(@"%@",requestData);
+    [request setHTTPBody:requestData];
+    
+    NSURLSessionConfiguration *config=[NSURLSessionConfiguration defaultSessionConfiguration];
+    [config setTimeoutIntervalForRequest:30.0];
+    NSURLSession *session=[NSURLSession sessionWithConfiguration:config];
+    NSURLSessionDataTask *task= [session dataTaskWithRequest:request completionHandler:^(NSData * _Nullable data, NSURLResponse * _Nullable response, NSError * _Nullable error) {
+        NSError *err;
+        dispatch_async(dispatch_get_main_queue(), ^{
+            [MBProgressHUD hideHUDForView:self.view animated:YES];
+        });
+        if (error) {
+            NSLog(@"%@",err);
+            if ([error.localizedDescription isEqualToString:@"The request timed out."]){
+                dispatch_async(dispatch_get_main_queue(), ^{
+                    UIAlertView *alertView = [[UIAlertView alloc]initWithTitle:@"The requste timed out. Please try again" message:@"" delegate:self cancelButtonTitle:@"Cancel" otherButtonTitles:@"Retry", nil];
+                    alertView.tag = 001;
+                    [alertView show];
+                });
+            }else if ([error.localizedDescription isEqualToString:@"The Internet connection appears to be offline."]){
+                dispatch_async(dispatch_get_main_queue(),^{
+                    UIAlertView *alertView = [[UIAlertView alloc]initWithTitle:@"The Internet connection appears to be offline." message:@"" delegate:nil cancelButtonTitle:@"Ok" otherButtonTitles:nil, nil];
+                    alertView.tag = 002;
+                    [alertView show];
+                });
+            }
+            
+        }else{
+            id jsonData = [NSJSONSerialization JSONObjectWithData:data options:kNilOptions error:&error];
+            NSLog(@"%@",jsonData);
+            if([[NSNumber numberWithBool:[[[NSJSONSerialization JSONObjectWithData:data options:kNilOptions error:&error] objectForKey:@"success"] boolValue]] isEqualToNumber:[NSNumber numberWithInt:0]]){
+                alert = [[UIAlertView alloc]initWithTitle:@"Wrong Details" message:@"Please fill all the details correctly" delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil, nil];
+                [alert show];
+                
+            }else{
+                dispatch_async(dispatch_get_main_queue(),^{
+
+                AddressDetailsViewController *addressDetailsVc = [self.storyboard instantiateViewControllerWithIdentifier:@"AddressDetailsViewController"];
+                [self.navigationController pushViewController:addressDetailsVc animated:YES];
+                });
+            }
+            
+        }
+    }];
+    [task resume];
+
     }
- 
+    }else{
+        if ([CityTextField.text isEqualToString:@""]|| [PincodeTextField.text isEqualToString:@""]||[StateTextField.text isEqualToString:@""]||[LocalityTextField.text isEqualToString:@""]||[LandMarktextField.text isEqualToString:@""]||[NameTextField.text isEqualToString:@""]||[PhnoneNumberTextField.text isEqualToString:@""]||[AlternatePhoneNumberTextField.text isEqualToString:@""]) {
+            alert = [[UIAlertView alloc]initWithTitle:@"Error" message:@"Please fill all the details correctly" delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil, nil];
+            [alert show];
+        }else{
+            dispatch_async(dispatch_get_main_queue(),^{
+                
+                [MBProgressHUD showHUDAddedTo:self.view animated:YES];
+            });
+            NSString *urlInstring =[NSString stringWithFormat:@"http://samenslifestyle.com/samenslifestyle123.com/samens_mob/send_address.php"];
+            NSURL *url=[NSURL URLWithString:urlInstring];
+            NSMutableURLRequest *request=[NSMutableURLRequest requestWithURL:url];
+            [request setHTTPMethod:@"POST"];
+            
+            NSString *params = [NSString stringWithFormat:@"cid=%@&api=%@&city=%@&state=%@&type=%@&mobile_sec=%@&pin=%@&name=%@&land=%@&mobile=%@&add_full=%@&id=%@&d_add=%@",[NSUserDefaults.standardUserDefaults valueForKey:@"custid"],[NSUserDefaults.standardUserDefaults valueForKey:@"api"],CityTextField.text,StateTextField.text,@"W",AlternatePhoneNumberTextField.text,PincodeTextField.text,NameTextField.text,LandMarktextField.text,PhnoneNumberTextField.text,LocalityTextField.text,@"N",@"Y"];
+            NSLog(@"%@",params);
+            
+            NSData *requestData = [params dataUsingEncoding:NSUTF8StringEncoding];
+            NSLog(@"%@",requestData);
+            [request setHTTPBody:requestData];
+            
+            NSURLSessionConfiguration *config=[NSURLSessionConfiguration defaultSessionConfiguration];
+            [config setTimeoutIntervalForRequest:30.0];
+            NSURLSession *session=[NSURLSession sessionWithConfiguration:config];
+            NSURLSessionDataTask *task= [session dataTaskWithRequest:request completionHandler:^(NSData * _Nullable data, NSURLResponse * _Nullable response, NSError * _Nullable error) {
+                NSError *err;
+                dispatch_async(dispatch_get_main_queue(), ^{
+                    [MBProgressHUD hideHUDForView:self.view animated:YES];
+                });
+                if (error) {
+                    NSLog(@"%@",err);
+                    if ([error.localizedDescription isEqualToString:@"The request timed out."]){
+                        dispatch_async(dispatch_get_main_queue(), ^{
+                            UIAlertView *alertView = [[UIAlertView alloc]initWithTitle:@"The requste timed out. Please try again" message:@"" delegate:self cancelButtonTitle:@"Cancel" otherButtonTitles:@"Retry", nil];
+                            alertView.tag = 001;
+                            [alertView show];
+                        });
+                    }else if ([error.localizedDescription isEqualToString:@"The Internet connection appears to be offline."]){
+                        dispatch_async(dispatch_get_main_queue(),^{
+                            UIAlertView *alertView = [[UIAlertView alloc]initWithTitle:@"The Internet connection appears to be offline." message:@"" delegate:nil cancelButtonTitle:@"Ok" otherButtonTitles:nil, nil];
+                            alertView.tag = 002;
+                            [alertView show];
+                        });
+                    }
+                    
+                }else{
+                    id jsonData = [NSJSONSerialization JSONObjectWithData:data options:kNilOptions error:&error];
+                    NSLog(@"%@",jsonData);
+                    if([[NSNumber numberWithBool:[[[NSJSONSerialization JSONObjectWithData:data options:kNilOptions error:&error] objectForKey:@"success"] boolValue]] isEqualToNumber:[NSNumber numberWithInt:0]]){
+                        alert = [[UIAlertView alloc]initWithTitle:@"Wrong Details" message:@"Please fill all the details correctly" delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil, nil];
+                        [alert show];
+                        
+                    }else{
+                        dispatch_async(dispatch_get_main_queue(),^{
+                            
+                            AddressDetailsViewController *addressDetailsVc = [self.storyboard instantiateViewControllerWithIdentifier:@"AddressDetailsViewController"];
+                            [self.navigationController pushViewController:addressDetailsVc animated:YES];
+                        });
+                    }
+                    
+                }
+            }];
+            [task resume];
+            
+        }
 
+    }
+}
 
+-(IBAction)clickOnDefaultSave:(UIButton *)sender{
+    if ([sender isSelected]) {
+        [sender setSelected: NO];
+        [defaultSavingBtn setBackgroundImage:[UIImage imageNamed:@"untick"] forState:UIControlStateNormal];
+        
+    } else {
+        [sender setSelected: YES];
+        [defaultSavingBtn setBackgroundImage:[UIImage imageNamed:@"tick"] forState:UIControlStateNormal];
+        [HomeDeliveryButton setSelected:NO];
+        [HomeDeliveryButton setBackgroundImage:[UIImage imageNamed:@"untick"] forState:UIControlStateNormal];
+        [WorkDeliveryButton setSelected:NO];
+        [WorkDeliveryButton setBackgroundImage:[UIImage imageNamed:@"untick"] forState:UIControlStateNormal];
+    }
     
 }
--(void)viewWillAppear:(BOOL)animated{
-    NameTextField.text = [NSUserDefaults.standardUserDefaults valueForKey:@"Name"];
-    CityTextField.text = [NSUserDefaults.standardUserDefaults valueForKey:@"City"];
-    PincodeTextField.text = [NSUserDefaults.standardUserDefaults valueForKey:@"Pincode"];
-    StateTextField.text = [NSUserDefaults.standardUserDefaults valueForKey:@"State"];
-    PhnoneNumberTextField.text = [NSUserDefaults.standardUserDefaults valueForKey:@"Number"];
-    AlternatePhoneNumberTextField.text = [NSUserDefaults.standardUserDefaults valueForKey:@"AltNumber"];
-    LocalityTextField.text = [NSUserDefaults.standardUserDefaults valueForKey:@"Address"];
-    LandMarktextField.text = [NSUserDefaults.standardUserDefaults valueForKey:@"Landmark"];
+-(IBAction)clickOnHomeDelivery:(UIButton *)sender{
+    if ([sender isSelected]) {
+        [sender setSelected: NO];
+        [HomeDeliveryButton setBackgroundImage:[UIImage imageNamed:@"untick"] forState:UIControlStateNormal];
+        
+    } else {
+        [sender setSelected: YES];
+        [HomeDeliveryButton setBackgroundImage:[UIImage imageNamed:@"tick"] forState:UIControlStateNormal];
+        [WorkDeliveryButton setSelected:NO];
+        [WorkDeliveryButton setBackgroundImage:[UIImage imageNamed:@"untick"] forState:UIControlStateNormal];
+        [defaultSavingBtn setSelected:NO];
+        [defaultSavingBtn setBackgroundImage:[UIImage imageNamed:@"untick"] forState:UIControlStateNormal];
+    }
+    
+  
+    
+}
+-(IBAction)clickOnWorkDelivery:(UIButton *)sender{
+    if ([sender isSelected]) {
+        [sender setSelected: NO];
+        [WorkDeliveryButton setBackgroundImage:[UIImage imageNamed:@"untick"] forState:UIControlStateNormal];
+       
+        
+    } else {
+        [sender setSelected: YES];
+        [WorkDeliveryButton setBackgroundImage:[UIImage imageNamed:@"tick"] forState:UIControlStateNormal];
+        [HomeDeliveryButton setSelected:NO];
+        [HomeDeliveryButton setBackgroundImage:[UIImage imageNamed:@"untick"] forState:UIControlStateNormal];
+        [defaultSavingBtn setSelected:NO];
+        [defaultSavingBtn setBackgroundImage:[UIImage imageNamed:@"untick"] forState:UIControlStateNormal];
+    }
+  
+ 
 }
 
+- (BOOL)textFieldShouldBeginEditing:(UITextField *)textField {
+    return YES;
+}
+- (void)textFieldDidBeginEditing:(UITextField *)textField{
+    if (textField == CityTextField) {
+        cityPopUp.hidden = NO;
+        CityTextField.placeholder = nil;
+
+    }else if (textField == PincodeTextField){
+        pincodePopUp.hidden = NO;
+        PincodeTextField.placeholder = nil;
+        
+    }else if (textField == StateTextField){
+        statePopUp.hidden = NO;
+        StateTextField.placeholder = nil;
+
+    }else if (textField == LocalityTextField){
+        localityPopUp.hidden = NO;
+        LocalityTextField.placeholder = nil;
+
+    }else if (textField == LandMarktextField){
+        landMarkPopUp.hidden = NO;
+        LandMarktextField.placeholder = nil;
+
+    }else if (textField == NameTextField){
+        namePopUp.hidden = NO;
+        NameTextField.placeholder = nil;
+
+    }else if (textField == PhnoneNumberTextField){
+        phoneNumPopUp.hidden = NO;
+        PhnoneNumberTextField.placeholder = nil;
+
+    }else{
+        altPhnNumPopUp.hidden = NO;
+        AlternatePhoneNumberTextField.placeholder = nil;
+
+    }
+
+}
+- (void)textFieldDidEndEditing:(UITextField *)textField {
+    if (textField == CityTextField) {
+
+         cityPopUp.hidden = YES;
+        CityTextField.placeholder = @"City*";
+
+    }else if (textField == PincodeTextField){
+    pincodePopUp.hidden = YES;
+        PincodeTextField.placeholder = @"Pincode *";
+
+    }else if (textField == StateTextField){
+    statePopUp.hidden = YES;
+        StateTextField.placeholder = @"State *";
+
+    }else if (textField == LocalityTextField){
+    localityPopUp.hidden = YES;
+        LocalityTextField.placeholder = @"Locality,area or street *";
+
+    }else if (textField == LandMarktextField){
+    landMarkPopUp.hidden = YES;
+        LandMarktextField.placeholder = @"Landmark (Optional)";
+
+    }else if (textField == NameTextField){
+    namePopUp.hidden = YES;
+        NameTextField.placeholder = @"Name";
+
+    }else if (textField == PhnoneNumberTextField){
+    phoneNumPopUp.hidden = YES;
+        PhnoneNumberTextField.placeholder = @"Phone Number";
+
+    }else{
+    altPhnNumPopUp.hidden = YES;
+    
+    AlternatePhoneNumberTextField.placeholder = @"Alternate Phone Number";
+}
+}
+-(void)getUserAddressDetails{
+    dispatch_async(dispatch_get_main_queue(),^{
+        
+        [MBProgressHUD showHUDAddedTo:self.view animated:YES];
+    });
+    NSString *urlInstring =[NSString stringWithFormat:@"http://samenslifestyle.com/samenslifestyle123.com/samens_mob/FetchAdressDetails.php"];
+    NSURL *url=[NSURL URLWithString:urlInstring];
+    NSMutableURLRequest *request=[NSMutableURLRequest requestWithURL:url];
+    [request setHTTPMethod:@"POST"];
+    
+    
+    NSString *params = [NSString stringWithFormat:@"cid=%@&api=%@",[NSUserDefaults.standardUserDefaults valueForKey:@"custid"],[NSUserDefaults.standardUserDefaults valueForKey:@"api"]];
+    NSLog(@"%@",params);
+    
+    NSData *requestData = [params dataUsingEncoding:NSUTF8StringEncoding];
+    NSLog(@"%@",requestData);
+    [request setHTTPBody:requestData];
+    
+    NSURLSessionConfiguration *config=[NSURLSessionConfiguration defaultSessionConfiguration];
+    [config setTimeoutIntervalForRequest:30.0];
+    NSURLSession *session=[NSURLSession sessionWithConfiguration:config];
+    NSURLSessionDataTask *task= [session dataTaskWithRequest:request completionHandler:^(NSData * _Nullable data, NSURLResponse * _Nullable response, NSError * _Nullable error) {
+        NSError *err;
+        dispatch_async(dispatch_get_main_queue(), ^{
+            [MBProgressHUD hideHUDForView:self.view animated:YES];
+        });
+        if (error) {
+            NSLog(@"%@",err);
+            if ([error.localizedDescription isEqualToString:@"The request timed out."]){
+                dispatch_async(dispatch_get_main_queue(), ^{
+                    UIAlertView *alertView = [[UIAlertView alloc]initWithTitle:@"The requste timed out. Please try again" message:@"" delegate:self cancelButtonTitle:@"Cancel" otherButtonTitles:@"Retry", nil];
+                    alertView.tag = 001;
+                    [alertView show];
+                });
+            }else if ([error.localizedDescription isEqualToString:@"The Internet connection appears to be offline."]){
+                dispatch_async(dispatch_get_main_queue(),^{
+                    UIAlertView *alertView = [[UIAlertView alloc]initWithTitle:@"The Internet connection appears to be offline." message:@"" delegate:nil cancelButtonTitle:@"Ok" otherButtonTitles:nil, nil];
+                    alertView.tag = 002;
+                    [alertView show];
+                });
+            }
+            
+        }else{
+            id jsonData = [NSJSONSerialization JSONObjectWithData:data options:kNilOptions error:&error];
+            NSLog(@"%@",jsonData);
+             if([[NSNumber numberWithBool:[[[NSJSONSerialization JSONObjectWithData:data options:kNilOptions error:&error] objectForKey:@"success"] boolValue]] isEqualToNumber:[NSNumber numberWithInt:0]]){
+                 
+                 
+             }else{
+            NSArray *dammyArray = [jsonData valueForKey:@"categories"];
+            int index;
+            addressData = [[NSMutableArray alloc]init];
+            for (index = 0; index < dammyArray.count; index++) {
+                NSDictionary *dict = dammyArray[index];
+                addressModel = [[AddressDetailsModel alloc]init];
+                [addressModel getAddressModelWithDictionary:dict];
+                [addressData addObject:addressModel];
+            }
+            NSLog(@"%@",addressData);
+                 dispatch_async(dispatch_get_main_queue(),^{
+  
+                 CityTextField.text = addressModel.city;
+                 PincodeTextField.text = addressModel.pincode;
+                 StateTextField.text = addressModel.state;
+                 LocalityTextField.text = addressModel.full_address;
+                 LandMarktextField.text = addressModel.landmark;
+                 NameTextField.text = addressModel.name;
+                 PhnoneNumberTextField.text = addressModel.mobile;
+                 AlternatePhoneNumberTextField.text = addressModel.mobile_sec;
+                 
+                 });
+        }
+        }
+    }];
+    [task resume];
+    
+}
 @end

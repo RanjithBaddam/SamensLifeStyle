@@ -243,9 +243,9 @@
 //            [[NSUserDefaults standardUserDefaults] setValue:@"no" forKey:@"login"];
 
             
-            FBSDKLoginManager *loginManager = [[FBSDKLoginManager alloc] init];
-            [loginManager logOut];
-            [FBSDKAccessToken setCurrentAccessToken:nil];
+//            FBSDKLoginManager *loginManager = [[FBSDKLoginManager alloc] init];
+//            [loginManager logOut];
+//            [FBSDKAccessToken setCurrentAccessToken:nil];
 
             [_AccountTableView reloadData];
             wishlistArray = [[NSMutableArray alloc]init];

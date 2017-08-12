@@ -1162,6 +1162,7 @@ NSLog(@"%@",params);
                             
                             UIAlertView *alert = [[UIAlertView alloc]initWithTitle:@"Add To Cart" message:@"User Already Added Product" delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil, nil];
                             [alert show];
+                            
                         });
                         
                     }else{

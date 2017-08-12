@@ -82,6 +82,8 @@
 		345B0E5C1EF91B7F00B68B63 /* SizeModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 345B0E5B1EF91B7F00B68B63 /* SizeModel.m */; };
 		345B0E5F1EF938BC00B68B63 /* itemSizeCollectionViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 345B0E5E1EF938BB00B68B63 /* itemSizeCollectionViewCell.m */; };
 		345B5CB31F21FE740028D373 /* ProductPriceOfferTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 345B5CB21F21FE740028D373 /* ProductPriceOfferTableViewCell.m */; };
+		345CC4AD1F3C8A8600BC3BBF /* AddressDetailsModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 345CC4AC1F3C8A8600BC3BBF /* AddressDetailsModel.m */; };
+		345CC4B01F3C8E6300BC3BBF /* AddressTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 345CC4AF1F3C8E6300BC3BBF /* AddressTableViewCell.m */; };
 		345E83D61F2678A700E78407 /* IndivisualFilterModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 345E83D51F2678A700E78407 /* IndivisualFilterModel.m */; };
 		345E841B1F28746A00E78407 /* FetchFilterSizeItemModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 345E841A1F28746A00E78407 /* FetchFilterSizeItemModel.m */; };
 		345E841E1F28BE1800E78407 /* FetchSortColorModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 345E841D1F28BE1800E78407 /* FetchSortColorModel.m */; };
@@ -277,6 +279,10 @@
 		345B0E5E1EF938BB00B68B63 /* itemSizeCollectionViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = itemSizeCollectionViewCell.m; sourceTree = "<group>"; };
 		345B5CB11F21FE740028D373 /* ProductPriceOfferTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ProductPriceOfferTableViewCell.h; sourceTree = "<group>"; };
 		345B5CB21F21FE740028D373 /* ProductPriceOfferTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ProductPriceOfferTableViewCell.m; sourceTree = "<group>"; };
+		345CC4AB1F3C8A8600BC3BBF /* AddressDetailsModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AddressDetailsModel.h; sourceTree = "<group>"; };
+		345CC4AC1F3C8A8600BC3BBF /* AddressDetailsModel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AddressDetailsModel.m; sourceTree = "<group>"; };
+		345CC4AE1F3C8E6300BC3BBF /* AddressTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AddressTableViewCell.h; sourceTree = "<group>"; };
+		345CC4AF1F3C8E6300BC3BBF /* AddressTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AddressTableViewCell.m; sourceTree = "<group>"; };
 		345E83D41F2678A700E78407 /* IndivisualFilterModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = IndivisualFilterModel.h; sourceTree = "<group>"; };
 		345E83D51F2678A700E78407 /* IndivisualFilterModel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = IndivisualFilterModel.m; sourceTree = "<group>"; };
 		345E84191F28746A00E78407 /* FetchFilterSizeItemModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FetchFilterSizeItemModel.h; sourceTree = "<group>"; };
@@ -502,6 +508,10 @@
 		341A778D1EDD719D001968E1 = {
 			isa = PBXGroup;
 			children = (
+				345CC4AE1F3C8E6300BC3BBF /* AddressTableViewCell.h */,
+				345CC4AF1F3C8E6300BC3BBF /* AddressTableViewCell.m */,
+				345CC4AB1F3C8A8600BC3BBF /* AddressDetailsModel.h */,
+				345CC4AC1F3C8A8600BC3BBF /* AddressDetailsModel.m */,
 				344526DB1F3B1BC000051C57 /* AddressDetailsViewController.h */,
 				344526DC1F3B1BC000051C57 /* AddressDetailsViewController.m */,
 				344526421F319E4500051C57 /* OffersShowingViewController */,
@@ -1535,6 +1545,7 @@
 				342B89861EFA6320000DCC7D /* RelatedImagesCollectionViewCell.m in Sources */,
 				340E18DB1F17496C00F1F77B /* TermsAndConditionsViewController.m in Sources */,
 				34DB78991EE87889008A9818 /* CategoryModel.m in Sources */,
+				345CC4AD1F3C8A8600BC3BBF /* AddressDetailsModel.m in Sources */,
 				341A78011EDFEED9001968E1 /* verificationViewController.m in Sources */,
 				341CFAE01F04C9CD00064B16 /* ColorImagesCollectionViewCell.m in Sources */,
 				34D64D781EF3F3EE00DA174A /* FullyImageViewController.m in Sources */,
@@ -1595,6 +1606,7 @@
 				34D64D001EEDAEBB00DA174A /* AdsBannerModel.m in Sources */,
 				344526451F319E6A00051C57 /* OffersViewController.m in Sources */,
 				342B898A1EFA7433000DCC7D /* RelatedImageModel.m in Sources */,
+				345CC4B01F3C8E6300BC3BBF /* AddressTableViewCell.m in Sources */,
 				341CFB561F0A072000064B16 /* AllReviewsTableViewCell.m in Sources */,
 				340C60441F0BC937003C1AA8 /* WishlistTableViewCell.m in Sources */,
 				345E84211F29A8F300E78407 /* FetchSortColorModelDetails.m in Sources */,
