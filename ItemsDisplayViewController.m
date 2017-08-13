@@ -500,286 +500,296 @@ else{
     if ([[NSUserDefaults.standardUserDefaults valueForKey:@"Direct"]isEqualToString:@"yes"]) {
 
     DisplayItemsCollectionViewCell *cell = [_DisplayItemsCollectionView dequeueReusableCellWithReuseIdentifier:@"DisplayItemsCollectionViewCell" forIndexPath:indexPath];
-    self.subModel = [_subCatMainData objectAtIndex:indexPath.item];
-       
+        cell.displayItemImage.frame = CGRectMake(0, 0, (_DisplayItemsCollectionView.frame.size.width/2)-0.5, 300);
+        [cell addSubview:cell.displayItemImage];
+        
+        UIButton *wishListButton = [[UIButton alloc]init];
+        wishListButton.frame = CGRectMake((cell.displayItemImage.frame.size.width)-35, 0, 70, 70);
+        [cell.displayItemImage addSubview:wishListButton];
+        
+        self.subModel = [_subCatMainData objectAtIndex:indexPath.item];
+        NSLog(@"%@",self.subModel);
     [cell.displayItemImage setImageWithURL:[NSURL URLWithString:self.subModel.image] placeholderImage:nil];
     cell.displayItemTextLabel.text = self.subModel.Name;
         cell.starRatingLabel.text = self.subModel.rating;
-        cell.wishListButton.tag =  indexPath.item;
+        wishListButton.tag =  indexPath.item;
     
-    [cell.wishListButton addTarget:self action:@selector(ClickOnWishlist:) forControlEvents:UIControlEventTouchUpInside];
+    [wishListButton addTarget:self action:@selector(ClickOnWishlist:) forControlEvents:UIControlEventTouchUpInside];
         if ([[NSUserDefaults.standardUserDefaults valueForKey:@"LoggedIn"]isEqualToString:@"yes"]) {
             self.subModel  = [_subCatMainData objectAtIndex:indexPath.item];
 
         if ([self.subModel.like_v isKindOfClass:[NSNull class]]) {
-   [cell.wishListButton setBackgroundImage:[UIImage imageNamed:@"like"] forState:UIControlStateNormal];        }else if ([self.subModel.like_v isEqualToString:@"N"]){
-   [cell.wishListButton setBackgroundImage:[UIImage imageNamed:@"like"] forState:UIControlStateNormal];        }else{
-            [cell.wishListButton setBackgroundImage:[UIImage imageNamed:@"like1"] forState:UIControlStateNormal];
+   [wishListButton setBackgroundImage:[UIImage imageNamed:@"like"] forState:UIControlStateNormal];        }else if ([self.subModel.like_v isEqualToString:@"N"]){
+   [wishListButton setBackgroundImage:[UIImage imageNamed:@"like"] forState:UIControlStateNormal];        }else{
+            [wishListButton setBackgroundImage:[UIImage imageNamed:@"like1"] forState:UIControlStateNormal];
         }
         }else{
-   [cell.wishListButton setBackgroundImage:[UIImage imageNamed:@"like"] forState:UIControlStateNormal];        }
-            if ([_subModel.offer isEqualToString:@"yes"]) {
+   [wishListButton setBackgroundImage:[UIImage imageNamed:@"like"] forState:UIControlStateNormal];        }
+        NSString *offer = self.subModel.offer;
+        NSLog(@"%@",offer);
+            if ([self.subModel.offer isEqualToString:@"yes"]) {
+                cell.offerLabel = [[UILabel alloc]init];
+                cell.offerLabel.frame = CGRectMake(0, 0, 30, 30);
+                [cell.displayItemImage addSubview:cell.offerLabel];
+
                 cell.priceLabel.text = self.subModel.off_price;
                 
-                NSAttributedString *priceOffString = [[NSAttributedString alloc]initWithString:cell.priceOffLabel.text= _subModel.price attributes:@{NSStrikethroughStyleAttributeName:
+                NSAttributedString *priceOffString = [[NSAttributedString alloc]initWithString:cell.priceOffLabel.text= self.subModel.price attributes:@{NSStrikethroughStyleAttributeName:
                                                                                                                                                          [NSNumber numberWithInteger:NSUnderlineStyleSingle]}];
                 [cell.priceOffLabel setAttributedText:priceOffString];
                 NSString *string = cell.priceLabel.text;
-                NSLog(@"%@",string);
                 float value = [string floatValue];
                 NSString *string1 = cell.priceOffLabel.text;
-                NSLog(@"%@",string1);
                 float value1 = [string1 floatValue];
                 float pers = 100;
                 float percentage = (value * pers)/value1;
-                NSLog(@"%f",percentage);
                 int totalValue = pers - percentage;
-                NSLog(@"%d",totalValue);
                 NSString *persentage = [NSString stringWithFormat:@"%d%@",totalValue,@"%"];
-                NSLog(@"%@",persentage);
                 cell.offerLabel.text = persentage;
                 NSLog(@"%@",cell.offerLabel.text);
-                cell.offerLabel.hidden = NO;
-                cell.offerLabel.layer.cornerRadius = 13;
+                cell.offerLabel.layer.cornerRadius = 15;
                 cell.offerLabel.clipsToBounds = YES;
+                cell.offerLabel.font = [UIFont systemFontOfSize:14];
+                [cell.offerLabel setBackgroundColor:[UIColor redColor]];
                 return cell;
                 
             }else{
-                cell.offerLabel.hidden = YES;
-
-                cell.priceLabel.text = _subModel.price;
+                cell.priceLabel.text = self.subModel.price;
                 cell.priceOffLabel.text = nil;
-                cell.offerLabel.text = nil;
                 return cell;
             }
             
-        
-    
-    }else if ([[NSUserDefaults.standardUserDefaults valueForKey:@"Direct"]isEqualToString:@"DirectFilter"]){
-        if ([[NSUserDefaults.standardUserDefaults valueForKey:@"index"]isEqualToString:@"color"]) {
-        DisplayItemsCollectionViewCell *cell = [_DisplayItemsCollectionView dequeueReusableCellWithReuseIdentifier:@"DisplayItemsCollectionViewCell" forIndexPath:indexPath ];
-            NSLog(@"%@",self.dammyArray);
-            NSLog(@"%@",[[self.dammyArray objectAtIndex:indexPath.item]valueForKey:@"Name"]);
-        [cell.displayItemImage setImageWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"http://samenslifestyle.com/samenslifestyle123.com/admin_dashboard/image/%@",[[self.dammyArray objectAtIndex:indexPath.item]valueForKey:@"image"]]] placeholderImage:nil];
-        cell.displayItemTextLabel.text = [[self.dammyArray objectAtIndex:indexPath.item]valueForKey:@"Name"];
-        cell.wishListButton.tag = indexPath.item;
-        NSLog(@"%ld",(long)cell.wishListButton.tag);
-        [cell.wishListButton addTarget:self action:@selector(ClickOnWishlist:) forControlEvents:UIControlEventTouchUpInside];
-            
-        cell.starRatingLabel.text = [NSString stringWithFormat:@"%@",[[self.dammyArray objectAtIndex:indexPath.item]valueForKey:@"rating"]];
-        if ([[[self.dammyArray objectAtIndex:indexPath.item]valueForKey:@"offer"] isEqualToString:@"yes"]) {
-            cell.priceLabel.text = [[self.dammyArray objectAtIndex:indexPath.item]valueForKey:@"off_price"];
-            
-            NSAttributedString *priceOffString = [[NSAttributedString alloc]initWithString:cell.priceOffLabel.text= [[self.dammyArray objectAtIndex:indexPath.item]valueForKey:@"price"] attributes:@{NSStrikethroughStyleAttributeName:
-                                                                                                                                                     [NSNumber numberWithInteger:NSUnderlineStyleSingle]}];
-            [cell.priceOffLabel setAttributedText:priceOffString];
-            NSString *string = cell.priceLabel.text;
-            NSLog(@"%@",string);
-            float value = [string floatValue];
-            NSString *string1 = cell.priceOffLabel.text;
-            NSLog(@"%@",string1);
-            float value1 = [string1 floatValue];
-            float pers = 100;
-            float percentage = (value * pers)/value1;
-            NSLog(@"%f",percentage);
-            int totalValue = pers - percentage;
-            NSLog(@"%d",totalValue);
-            NSString *persentage = [NSString stringWithFormat:@"%d%@",totalValue,@"%"];
-            NSLog(@"%@",persentage);
-            cell.offerLabel.text = persentage;
-            NSLog(@"%@",cell.offerLabel.text);
-            cell.offerLabel.backgroundColor = [UIColor redColor];
-            cell.offerLabel.layer.cornerRadius = 13;
-            cell.offerLabel.clipsToBounds = YES;
-            return cell;
-
-        }else{
-            cell.offerLabel.backgroundColor = [UIColor whiteColor];
-            cell.priceLabel.text = [[self.dammyArray objectAtIndex:indexPath.item]valueForKey:@"price"];
-            cell.priceOffLabel.text = nil;
-            cell.offerLabel.text = nil;
-            return cell;
-        }
-    
-    }else if ([[NSUserDefaults.standardUserDefaults valueForKey:@"index"]isEqualToString:@"size"]){
-         DisplayItemsCollectionViewCell *cell = [_DisplayItemsCollectionView dequeueReusableCellWithReuseIdentifier:@"DisplayItemsCollectionViewCell" forIndexPath:indexPath ];
-        self.fetchFilterSizeModel = [fetchFilterSizeDataArray objectAtIndex:indexPath.item];
-        NSLog(@"%@",self.fetchFilterSizeModel.image);
-        NSLog(@"%@",self.fetchFilterSizeModel.Name);
-        [cell.displayItemImage setImageWithURL:[NSURL URLWithString:self.fetchFilterSizeModel.image] placeholderImage:nil];
-        cell.displayItemTextLabel.text = self.fetchFilterSizeModel.Name;
-        cell.wishListButton.tag = indexPath.item;
-        NSLog(@"%ld",(long)cell.wishListButton.tag);
-        [cell.wishListButton addTarget:self action:@selector(ClickOnWishlist:) forControlEvents:UIControlEventTouchUpInside];
-        if ([[NSUserDefaults.standardUserDefaults valueForKey:@"LoggedIn"]isEqualToString:@"yes"]) {
-//            self.fetchFilterSizeModel  = [fetchFilterSizeDataArray objectAtIndex:indexPath.item];
-//            
-//            if ([self.fetchFilterSizeModel.like_v isKindOfClass:[NSNull class]]) {
-//                [cell.wishListButton setBackgroundImage:[UIImage imageNamed:@"like"] forState:UIControlStateNormal];        }else if ([self.fetchFilterSizeModel.like_v isEqualToString:@"N"]){
-//                    [cell.wishListButton setBackgroundImage:[UIImage imageNamed:@"like"] forState:UIControlStateNormal];        }else{
-//                        [cell.wishListButton setBackgroundImage:[UIImage imageNamed:@"like1"] forState:UIControlStateNormal];
-//                    }
-        }else{
-            [cell.wishListButton setBackgroundImage:[UIImage imageNamed:@"like"] forState:UIControlStateNormal];        }
-
-        
-        cell.starRatingLabel.text = [NSString stringWithFormat:@"%@",self.fetchFilterSizeModel.rating];
-        if ([self.fetchFilterSizeModel.offer isEqualToString:@"yes"]) {
-            cell.priceLabel.text = self.fetchFilterSizeModel.off_price;
-            
-            NSAttributedString *priceOffString = [[NSAttributedString alloc]initWithString:cell.priceOffLabel.text= self.fetchFilterSizeModel.price attributes:@{NSStrikethroughStyleAttributeName:
-                                                                                                                                                                  [NSNumber numberWithInteger:NSUnderlineStyleSingle]}];
-            [cell.priceOffLabel setAttributedText:priceOffString];
-            NSString *string = cell.priceLabel.text;
-            NSLog(@"%@",string);
-            float value = [string floatValue];
-            NSString *string1 = cell.priceOffLabel.text;
-            NSLog(@"%@",string1);
-            float value1 = [string1 floatValue];
-            float pers = 100;
-            float percentage = (value * pers)/value1;
-            NSLog(@"%f",percentage);
-            int totalValue = pers - percentage;
-            NSLog(@"%d",totalValue);
-            NSString *persentage = [NSString stringWithFormat:@"%d%@",totalValue,@"%"];
-            NSLog(@"%@",persentage);
-            cell.offerLabel.text = persentage;
-            NSLog(@"%@",cell.offerLabel.text);
-            cell.offerLabel.backgroundColor = [UIColor redColor];
-            cell.offerLabel.layer.cornerRadius = 13;
-            cell.offerLabel.clipsToBounds = YES;
-            return cell;
-            
-        }else{
-            cell.offerLabel.backgroundColor = [UIColor whiteColor];
-            cell.priceLabel.text = self.fetchFilterSizeModel.price;
-            cell.priceOffLabel.text = nil;
-            cell.offerLabel.text = nil;
-            return cell;
-        }
-
-        
     }else{
-        DisplayItemsCollectionViewCell *cell = [_DisplayItemsCollectionView dequeueReusableCellWithReuseIdentifier:@"DisplayItemsCollectionViewCell" forIndexPath:indexPath ];
-        PriceModel = [priceDataArray objectAtIndex:indexPath.item];
-        NSLog(@"%@",PriceModel.image);
-        NSLog(@"%@",PriceModel.Name);
-        [cell.displayItemImage setImageWithURL:[NSURL URLWithString:PriceModel.image] placeholderImage:nil];
-        cell.displayItemTextLabel.text = PriceModel.Name;
-        cell.wishListButton.tag = indexPath.item;
-        NSLog(@"%ld",(long)cell.wishListButton.tag);
-        [cell.wishListButton addTarget:self action:@selector(ClickOnWishlist:) forControlEvents:UIControlEventTouchUpInside];
-        if ([[NSUserDefaults.standardUserDefaults valueForKey:@"LoggedIn"]isEqualToString:@"yes"]) {
-//            self.PriceModel  = [priceDataArray objectAtIndex:indexPath.item];
+        DisplayItemsCollectionViewCell *cell = [_DisplayItemsCollectionView dequeueReusableCellWithReuseIdentifier:@"DisplayItemsCollectionViewCell" forIndexPath:indexPath];
+        return cell;
+    }
+    
+//    }else if ([[NSUserDefaults.standardUserDefaults valueForKey:@"Direct"]isEqualToString:@"DirectFilter"]){
+//        if ([[NSUserDefaults.standardUserDefaults valueForKey:@"index"]isEqualToString:@"color"]) {
+//        DisplayItemsCollectionViewCell *cell = [_DisplayItemsCollectionView dequeueReusableCellWithReuseIdentifier:@"DisplayItemsCollectionViewCell" forIndexPath:indexPath ];
+//            NSLog(@"%@",self.dammyArray);
+//            NSLog(@"%@",[[self.dammyArray objectAtIndex:indexPath.item]valueForKey:@"Name"]);
+//        [cell.displayItemImage setImageWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"http://samenslifestyle.com/samenslifestyle123.com/admin_dashboard/image/%@",[[self.dammyArray objectAtIndex:indexPath.item]valueForKey:@"image"]]] placeholderImage:nil];
+//        cell.displayItemTextLabel.text = [[self.dammyArray objectAtIndex:indexPath.item]valueForKey:@"Name"];
+//        cell.wishListButton.tag = indexPath.item;
+//        NSLog(@"%ld",(long)cell.wishListButton.tag);
+//        [cell.wishListButton addTarget:self action:@selector(ClickOnWishlist:) forControlEvents:UIControlEventTouchUpInside];
 //            
-//            if ([PriceModel.like_v isKindOfClass:[NSNull class]]) {
-//                [cell.wishListButton setBackgroundImage:[UIImage imageNamed:@"like"] forState:UIControlStateNormal];
-//            }else if ([PriceModel.like_v isEqualToString:@"N"]){
+//        cell.starRatingLabel.text = [NSString stringWithFormat:@"%@",[[self.dammyArray objectAtIndex:indexPath.item]valueForKey:@"rating"]];
+//        if ([[[self.dammyArray objectAtIndex:indexPath.item]valueForKey:@"offer"] isEqualToString:@"yes"]) {
+//            cell.priceLabel.text = [[self.dammyArray objectAtIndex:indexPath.item]valueForKey:@"off_price"];
+//            
+//            NSAttributedString *priceOffString = [[NSAttributedString alloc]initWithString:cell.priceOffLabel.text= [[self.dammyArray objectAtIndex:indexPath.item]valueForKey:@"price"] attributes:@{NSStrikethroughStyleAttributeName:
+//                                                                                                                                                     [NSNumber numberWithInteger:NSUnderlineStyleSingle]}];
+//            [cell.priceOffLabel setAttributedText:priceOffString];
+//            NSString *string = cell.priceLabel.text;
+//            NSLog(@"%@",string);
+//            float value = [string floatValue];
+//            NSString *string1 = cell.priceOffLabel.text;
+//            NSLog(@"%@",string1);
+//            float value1 = [string1 floatValue];
+//            float pers = 100;
+//            float percentage = (value * pers)/value1;
+//            NSLog(@"%f",percentage);
+//            int totalValue = pers - percentage;
+//            NSLog(@"%d",totalValue);
+//            NSString *persentage = [NSString stringWithFormat:@"%d%@",totalValue,@"%"];
+//            NSLog(@"%@",persentage);
+//            cell.offerLabel.text = persentage;
+//            NSLog(@"%@",cell.offerLabel.text);
+//            cell.offerLabel.backgroundColor = [UIColor redColor];
+//            cell.offerLabel.layer.cornerRadius = 13;
+//            cell.offerLabel.clipsToBounds = YES;
+//            return cell;
+//
+//        }else{
+//            cell.offerLabel.backgroundColor = [UIColor whiteColor];
+//            cell.priceLabel.text = [[self.dammyArray objectAtIndex:indexPath.item]valueForKey:@"price"];
+//            cell.priceOffLabel.text = nil;
+//            cell.offerLabel.text = nil;
+//            return cell;
+//        }
+//    
+//    }else if ([[NSUserDefaults.standardUserDefaults valueForKey:@"index"]isEqualToString:@"size"]){
+//         DisplayItemsCollectionViewCell *cell = [_DisplayItemsCollectionView dequeueReusableCellWithReuseIdentifier:@"DisplayItemsCollectionViewCell" forIndexPath:indexPath ];
+//        self.fetchFilterSizeModel = [fetchFilterSizeDataArray objectAtIndex:indexPath.item];
+//        NSLog(@"%@",self.fetchFilterSizeModel.image);
+//        NSLog(@"%@",self.fetchFilterSizeModel.Name);
+//        [cell.displayItemImage setImageWithURL:[NSURL URLWithString:self.fetchFilterSizeModel.image] placeholderImage:nil];
+//        cell.displayItemTextLabel.text = self.fetchFilterSizeModel.Name;
+//        cell.wishListButton.tag = indexPath.item;
+//        NSLog(@"%ld",(long)cell.wishListButton.tag);
+//        [cell.wishListButton addTarget:self action:@selector(ClickOnWishlist:) forControlEvents:UIControlEventTouchUpInside];
+//        if ([[NSUserDefaults.standardUserDefaults valueForKey:@"LoggedIn"]isEqualToString:@"yes"]) {
+////            self.fetchFilterSizeModel  = [fetchFilterSizeDataArray objectAtIndex:indexPath.item];
+////            
+////            if ([self.fetchFilterSizeModel.like_v isKindOfClass:[NSNull class]]) {
+////                [cell.wishListButton setBackgroundImage:[UIImage imageNamed:@"like"] forState:UIControlStateNormal];        }else if ([self.fetchFilterSizeModel.like_v isEqualToString:@"N"]){
+////                    [cell.wishListButton setBackgroundImage:[UIImage imageNamed:@"like"] forState:UIControlStateNormal];        }else{
+////                        [cell.wishListButton setBackgroundImage:[UIImage imageNamed:@"like1"] forState:UIControlStateNormal];
+////                    }
+//        }else{
+//            [cell.wishListButton setBackgroundImage:[UIImage imageNamed:@"like"] forState:UIControlStateNormal];        }
+//
+//        
+//        cell.starRatingLabel.text = [NSString stringWithFormat:@"%@",self.fetchFilterSizeModel.rating];
+//        if ([self.fetchFilterSizeModel.offer isEqualToString:@"yes"]) {
+//            cell.priceLabel.text = self.fetchFilterSizeModel.off_price;
+//            
+//            NSAttributedString *priceOffString = [[NSAttributedString alloc]initWithString:cell.priceOffLabel.text= self.fetchFilterSizeModel.price attributes:@{NSStrikethroughStyleAttributeName:
+//                                                                                                                                                                  [NSNumber numberWithInteger:NSUnderlineStyleSingle]}];
+//            [cell.priceOffLabel setAttributedText:priceOffString];
+//            NSString *string = cell.priceLabel.text;
+//            NSLog(@"%@",string);
+//            float value = [string floatValue];
+//            NSString *string1 = cell.priceOffLabel.text;
+//            NSLog(@"%@",string1);
+//            float value1 = [string1 floatValue];
+//            float pers = 100;
+//            float percentage = (value * pers)/value1;
+//            NSLog(@"%f",percentage);
+//            int totalValue = pers - percentage;
+//            NSLog(@"%d",totalValue);
+//            NSString *persentage = [NSString stringWithFormat:@"%d%@",totalValue,@"%"];
+//            NSLog(@"%@",persentage);
+//            cell.offerLabel.text = persentage;
+//            NSLog(@"%@",cell.offerLabel.text);
+//            cell.offerLabel.backgroundColor = [UIColor redColor];
+//            cell.offerLabel.layer.cornerRadius = 13;
+//            cell.offerLabel.clipsToBounds = YES;
+//            return cell;
+//            
+//        }else{
+//            cell.offerLabel.backgroundColor = [UIColor whiteColor];
+//            cell.priceLabel.text = self.fetchFilterSizeModel.price;
+//            cell.priceOffLabel.text = nil;
+//            cell.offerLabel.text = nil;
+//            return cell;
+//        }
+//    }
+
+        
+//    }else{
+//        DisplayItemsCollectionViewCell *cell = [_DisplayItemsCollectionView dequeueReusableCellWithReuseIdentifier:@"DisplayItemsCollectionViewCell" forIndexPath:indexPath ];
+//        PriceModel = [priceDataArray objectAtIndex:indexPath.item];
+//        NSLog(@"%@",PriceModel.image);
+//        NSLog(@"%@",PriceModel.Name);
+//        [cell.displayItemImage setImageWithURL:[NSURL URLWithString:PriceModel.image] placeholderImage:nil];
+//        cell.displayItemTextLabel.text = PriceModel.Name;
+//        cell.wishListButton.tag = indexPath.item;
+//        NSLog(@"%ld",(long)cell.wishListButton.tag);
+//        [cell.wishListButton addTarget:self action:@selector(ClickOnWishlist:) forControlEvents:UIControlEventTouchUpInside];
+//        if ([[NSUserDefaults.standardUserDefaults valueForKey:@"LoggedIn"]isEqualToString:@"yes"]) {
+////            self.PriceModel  = [priceDataArray objectAtIndex:indexPath.item];
+////            
+////            if ([PriceModel.like_v isKindOfClass:[NSNull class]]) {
+////                [cell.wishListButton setBackgroundImage:[UIImage imageNamed:@"like"] forState:UIControlStateNormal];
+////            }else if ([PriceModel.like_v isEqualToString:@"N"]){
+////                    [cell.wishListButton setBackgroundImage:[UIImage imageNamed:@"like"] forState:UIControlStateNormal];
+////            }else{
+////                        [cell.wishListButton setBackgroundImage:[UIImage imageNamed:@"like1"] forState:UIControlStateNormal];
+////                    }
+//        }else{
+//            [cell.wishListButton setBackgroundImage:[UIImage imageNamed:@"like"] forState:UIControlStateNormal];        }
+//        
+//        cell.starRatingLabel.text = [NSString stringWithFormat:@"%@",PriceModel.rating];
+//        if ([PriceModel.offer isEqualToString:@"yes"]) {
+//            cell.priceLabel.text = PriceModel.off_price;
+//            
+//            NSAttributedString *priceOffString = [[NSAttributedString alloc]initWithString:cell.priceOffLabel.text= PriceModel.price attributes:@{NSStrikethroughStyleAttributeName:
+//                                                                                                                                                                     [NSNumber numberWithInteger:NSUnderlineStyleSingle]}];
+//            [cell.priceOffLabel setAttributedText:priceOffString];
+//            NSString *string = cell.priceLabel.text;
+//            NSLog(@"%@",string);
+//            float value = [string floatValue];
+//            NSString *string1 = cell.priceOffLabel.text;
+//            NSLog(@"%@",string1);
+//            float value1 = [string1 floatValue];
+//            float pers = 100;
+//            float percentage = (value * pers)/value1;
+//            NSLog(@"%f",percentage);
+//            int totalValue = pers - percentage;
+//            NSLog(@"%d",totalValue);
+//            NSString *persentage = [NSString stringWithFormat:@"%d%@",totalValue,@"%"];
+//            NSLog(@"%@",persentage);
+//            cell.offerLabel.text = persentage;
+//            NSLog(@"%@",cell.offerLabel.text);
+//            cell.offerLabel.backgroundColor = [UIColor redColor];
+//            cell.offerLabel.layer.cornerRadius = 13;
+//            cell.offerLabel.clipsToBounds = YES;
+//            return cell;
+//            
+//        }else{
+//            cell.offerLabel.backgroundColor = [UIColor whiteColor];
+//            cell.priceLabel.text = PriceModel.price;
+//            cell.priceOffLabel.text = nil;
+//            cell.offerLabel.text = nil;
+//            return cell;
+//        }
+//
+//    }
+//    }
+
+//    else{
+//        DisplayItemsCollectionViewCell *cell = [_DisplayItemsCollectionView dequeueReusableCellWithReuseIdentifier:@"DisplayItemsCollectionViewCell" forIndexPath:indexPath];
+//        searchDataModel = [searchDataArray objectAtIndex:indexPath.item];
+//        
+//        [cell.displayItemImage setImageWithURL:[NSURL URLWithString:searchDataModel.image] placeholderImage:nil];
+//        cell.displayItemTextLabel.text = searchDataModel.Name;
+//        cell.wishListButton.tag = indexPath.item;
+//        NSLog(@"%ld",(long)cell.wishListButton.tag);
+//        
+//        [cell.wishListButton addTarget:self action:@selector(ClickOnWishlist:) forControlEvents:UIControlEventTouchUpInside];
+//        
+//        if ([[NSUserDefaults.standardUserDefaults valueForKey:@"LoggedIn"]isEqualToString:@"yes"]) {
+//            searchDataModel  = [searchDataArray objectAtIndex:indexPath.item];
+//            
+//            if ([searchDataModel.like_v isKindOfClass:[NSNull class]]) {
+//                [cell.wishListButton setBackgroundImage:[UIImage imageNamed:@"like"] forState:UIControlStateNormal];        }
+//            else if ([searchDataModel.like_v isEqualToString:@"N"]){
 //                    [cell.wishListButton setBackgroundImage:[UIImage imageNamed:@"like"] forState:UIControlStateNormal];
 //            }else{
 //                        [cell.wishListButton setBackgroundImage:[UIImage imageNamed:@"like1"] forState:UIControlStateNormal];
 //                    }
-        }else{
-            [cell.wishListButton setBackgroundImage:[UIImage imageNamed:@"like"] forState:UIControlStateNormal];        }
-        
-        cell.starRatingLabel.text = [NSString stringWithFormat:@"%@",PriceModel.rating];
-        if ([PriceModel.offer isEqualToString:@"yes"]) {
-            cell.priceLabel.text = PriceModel.off_price;
-            
-            NSAttributedString *priceOffString = [[NSAttributedString alloc]initWithString:cell.priceOffLabel.text= PriceModel.price attributes:@{NSStrikethroughStyleAttributeName:
-                                                                                                                                                                     [NSNumber numberWithInteger:NSUnderlineStyleSingle]}];
-            [cell.priceOffLabel setAttributedText:priceOffString];
-            NSString *string = cell.priceLabel.text;
-            NSLog(@"%@",string);
-            float value = [string floatValue];
-            NSString *string1 = cell.priceOffLabel.text;
-            NSLog(@"%@",string1);
-            float value1 = [string1 floatValue];
-            float pers = 100;
-            float percentage = (value * pers)/value1;
-            NSLog(@"%f",percentage);
-            int totalValue = pers - percentage;
-            NSLog(@"%d",totalValue);
-            NSString *persentage = [NSString stringWithFormat:@"%d%@",totalValue,@"%"];
-            NSLog(@"%@",persentage);
-            cell.offerLabel.text = persentage;
-            NSLog(@"%@",cell.offerLabel.text);
-            cell.offerLabel.backgroundColor = [UIColor redColor];
-            cell.offerLabel.layer.cornerRadius = 13;
-            cell.offerLabel.clipsToBounds = YES;
-            return cell;
-            
-        }else{
-            cell.offerLabel.backgroundColor = [UIColor whiteColor];
-            cell.priceLabel.text = PriceModel.price;
-            cell.priceOffLabel.text = nil;
-            cell.offerLabel.text = nil;
-            return cell;
-        }
+//        }else{
+//            [cell.wishListButton setBackgroundImage:[UIImage imageNamed:@"like"] forState:UIControlStateNormal];        }
+//
+//        cell.starRatingLabel.text = searchDataModel.rating;
+//        if ([searchDataModel.offer isEqualToString:@"yes"]) {
+//            cell.priceLabel.text = searchDataModel.off_price;
+//            
+//            NSAttributedString *priceOffString = [[NSAttributedString alloc]initWithString:cell.priceOffLabel.text= searchDataModel.price attributes:@{NSStrikethroughStyleAttributeName:
+//                                                                                                                                                     [NSNumber numberWithInteger:NSUnderlineStyleSingle]}];
+//            [cell.priceOffLabel setAttributedText:priceOffString];
+//            NSString *string = cell.priceLabel.text;
+//            NSLog(@"%@",string);
+//            float value = [string floatValue];
+//            NSString *string1 = cell.priceOffLabel.text;
+//            NSLog(@"%@",string1);
+//            float value1 = [string1 floatValue];
+//            float pers = 100;
+//            float percentage = (value * pers)/value1;
+//            NSLog(@"%f",percentage);
+//            int totalValue = pers - percentage;
+//            NSLog(@"%d",totalValue);
+//            NSString *persentage = [NSString stringWithFormat:@"%d%@",totalValue,@"%"];
+//            NSLog(@"%@",persentage);
+//            cell.offerLabel.text = persentage;
+//            NSLog(@"%@",cell.offerLabel.text);
+//            cell.offerLabel.backgroundColor = [UIColor redColor];
+//            cell.offerLabel.layer.cornerRadius = 13;
+//            cell.offerLabel.clipsToBounds = YES;
+//            return cell;
+//            
+//        }else{
+//            cell.offerLabel.backgroundColor = [UIColor whiteColor];
+//            cell.priceLabel.text = searchDataModel.price;
+//            cell.priceOffLabel.text = nil;
+//            cell.offerLabel.text = nil;
+//            return cell;
+//        }
+//
 
-    }
-    }
-
-    else{
-        DisplayItemsCollectionViewCell *cell = [_DisplayItemsCollectionView dequeueReusableCellWithReuseIdentifier:@"DisplayItemsCollectionViewCell" forIndexPath:indexPath];
-        searchDataModel = [searchDataArray objectAtIndex:indexPath.item];
-        
-        [cell.displayItemImage setImageWithURL:[NSURL URLWithString:searchDataModel.image] placeholderImage:nil];
-        cell.displayItemTextLabel.text = searchDataModel.Name;
-        cell.wishListButton.tag = indexPath.item;
-        NSLog(@"%ld",(long)cell.wishListButton.tag);
-        
-        [cell.wishListButton addTarget:self action:@selector(ClickOnWishlist:) forControlEvents:UIControlEventTouchUpInside];
-        
-        if ([[NSUserDefaults.standardUserDefaults valueForKey:@"LoggedIn"]isEqualToString:@"yes"]) {
-            searchDataModel  = [searchDataArray objectAtIndex:indexPath.item];
-            
-            if ([searchDataModel.like_v isKindOfClass:[NSNull class]]) {
-                [cell.wishListButton setBackgroundImage:[UIImage imageNamed:@"like"] forState:UIControlStateNormal];        }
-            else if ([searchDataModel.like_v isEqualToString:@"N"]){
-                    [cell.wishListButton setBackgroundImage:[UIImage imageNamed:@"like"] forState:UIControlStateNormal];
-            }else{
-                        [cell.wishListButton setBackgroundImage:[UIImage imageNamed:@"like1"] forState:UIControlStateNormal];
-                    }
-        }else{
-            [cell.wishListButton setBackgroundImage:[UIImage imageNamed:@"like"] forState:UIControlStateNormal];        }
-
-        cell.starRatingLabel.text = searchDataModel.rating;
-        if ([searchDataModel.offer isEqualToString:@"yes"]) {
-            cell.priceLabel.text = searchDataModel.off_price;
-            
-            NSAttributedString *priceOffString = [[NSAttributedString alloc]initWithString:cell.priceOffLabel.text= searchDataModel.price attributes:@{NSStrikethroughStyleAttributeName:
-                                                                                                                                                     [NSNumber numberWithInteger:NSUnderlineStyleSingle]}];
-            [cell.priceOffLabel setAttributedText:priceOffString];
-            NSString *string = cell.priceLabel.text;
-            NSLog(@"%@",string);
-            float value = [string floatValue];
-            NSString *string1 = cell.priceOffLabel.text;
-            NSLog(@"%@",string1);
-            float value1 = [string1 floatValue];
-            float pers = 100;
-            float percentage = (value * pers)/value1;
-            NSLog(@"%f",percentage);
-            int totalValue = pers - percentage;
-            NSLog(@"%d",totalValue);
-            NSString *persentage = [NSString stringWithFormat:@"%d%@",totalValue,@"%"];
-            NSLog(@"%@",persentage);
-            cell.offerLabel.text = persentage;
-            NSLog(@"%@",cell.offerLabel.text);
-            cell.offerLabel.backgroundColor = [UIColor redColor];
-            cell.offerLabel.layer.cornerRadius = 13;
-            cell.offerLabel.clipsToBounds = YES;
-            return cell;
-            
-        }else{
-            cell.offerLabel.backgroundColor = [UIColor whiteColor];
-            cell.priceLabel.text = searchDataModel.price;
-            cell.priceOffLabel.text = nil;
-            cell.offerLabel.text = nil;
-            return cell;
-        }
-        
-    }
     
 }
 -(void)collectionView:(UICollectionView *)collectionView didSelectItemAtIndexPath:(NSIndexPath *)indexPath{
@@ -916,7 +926,7 @@ else{
                      dispatch_async(dispatch_get_main_queue(), ^{
                          NSIndexPath *selectedIndexPath = [NSIndexPath indexPathForRow:sender.tag inSection:0];
                          DisplayItemsCollectionViewCell *cell = [_DisplayItemsCollectionView cellForItemAtIndexPath:selectedIndexPath];
-   [cell.wishListButton setBackgroundImage:[UIImage imageNamed:@"like1"] forState:UIControlStateNormal];                         [MBProgressHUD hideHUDForView:self.view animated:YES];
+   //[cell.wishListButton setBackgroundImage:[UIImage imageNamed:@"like1"] forState:UIControlStateNormal];                         [MBProgressHUD hideHUDForView:self.view animated:YES];
                          
                      });
                      
@@ -925,7 +935,8 @@ else{
                          [MBProgressHUD hideHUDForView:self.view animated:YES];
                          NSIndexPath *selectedIndexPath = [NSIndexPath indexPathForRow:sender.tag inSection:0];
                          DisplayItemsCollectionViewCell *cell = [_DisplayItemsCollectionView cellForItemAtIndexPath:selectedIndexPath];
-   [cell.wishListButton setBackgroundImage:[UIImage imageNamed:@"like1"] forState:UIControlStateNormal];                         UIAlertView *alert = [[UIAlertView alloc]initWithTitle:@"User Wishlist" message:@"Successfully Added" delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil, nil];
+//[cell.wishListButton setBackgroundImage:[UIImage imageNamed:@"like1"] forState:UIControlStateNormal];
+                         UIAlertView *alert = [[UIAlertView alloc]initWithTitle:@"User Wishlist" message:@"Successfully Added" delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil, nil];
                          [alert show];
                          
                      });
@@ -995,7 +1006,8 @@ else{
                      dispatch_async(dispatch_get_main_queue(), ^{
                          NSIndexPath *selectedIndexPath = [NSIndexPath indexPathForRow:sender.tag inSection:0];
                          DisplayItemsCollectionViewCell *cell = [_DisplayItemsCollectionView cellForItemAtIndexPath:selectedIndexPath];
-   [cell.wishListButton setBackgroundImage:[UIImage imageNamed:@"like"] forState:UIControlStateNormal];                         [MBProgressHUD hideHUDForView:self.view animated:YES];
+  // [cell.wishListButton setBackgroundImage:[UIImage imageNamed:@"like"] forState:UIControlStateNormal];
+                         [MBProgressHUD hideHUDForView:self.view animated:YES];
                          
                      });
                      
@@ -1004,7 +1016,8 @@ else{
                          [MBProgressHUD hideHUDForView:self.view animated:YES];
                          NSIndexPath *selectedIndexPath = [NSIndexPath indexPathForRow:sender.tag inSection:0];
                          DisplayItemsCollectionViewCell *cell = [_DisplayItemsCollectionView cellForItemAtIndexPath:selectedIndexPath];
-   [cell.wishListButton setBackgroundImage:[UIImage imageNamed:@"like1"] forState:UIControlStateNormal];                         UIAlertView *alert = [[UIAlertView alloc]initWithTitle:@"User Wishlist" message:@"Successfully Added" delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil, nil];
+  // [cell.wishListButton setBackgroundImage:[UIImage imageNamed:@"like1"] forState:UIControlStateNormal];
+                         UIAlertView *alert = [[UIAlertView alloc]initWithTitle:@"User Wishlist" message:@"Successfully Added" delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil, nil];
                          [alert show];
                          
                      });
@@ -1216,6 +1229,7 @@ else{
 -(void)getPrice:(NSString *)price{
     priceMainId = price;
 }
+
 -(void)getPid:(NSString *)Pid{
     pidMainId = Pid;
 }
@@ -1238,12 +1252,17 @@ else{
     [self.navigationController pushViewController:searchBarVc animated:YES];
     return NO;
 }
-//- (CGSize)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout*)collectionViewLayout sizeForItemAtIndexPath:(NSIndexPath *)indexPath{
-//    CGFloat widthOfCell =(self.view.frame.size.width-3)/2;
-//    CGSize returnValue = CGSizeMake(widthOfCell, widthOfCell);
-//
-//    return returnValue;
-//}
+- (CGFloat)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout*)collectionViewLayout minimumInteritemSpacingForSectionAtIndex:(NSInteger)section {
+    return 1.0;
+}
+
+- (CGFloat)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout*)collectionViewLayout minimumLineSpacingForSectionAtIndex:(NSInteger)section {
+    return 1.0;
+}
+
+- (CGSize)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout*)collectionViewLayout sizeForItemAtIndexPath:(NSIndexPath *)indexPath {
+    return CGSizeMake((collectionView.frame.size.width/2)-0.5, 300);
+}
 
 
 

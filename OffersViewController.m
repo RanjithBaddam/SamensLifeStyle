@@ -331,7 +331,7 @@ categoryArray = [NSUserDefaults.standardUserDefaults valueForKey:@"CategoryNameK
     }];
     [task resume];
 }
--(IBAction)ClickOnWishlist:(UIButton *)sender{
+-(void)ClickOnWishlist:(UIButton *)sender{
     NSArray *token = [[NSUserDefaults standardUserDefaults] objectForKey:@"WishListData"];
     NSLog(@"%@",[[NSUserDefaults standardUserDefaults] objectForKey:@"WishListData"]);
     

@@ -13,10 +13,9 @@
 @property(nonatomic,weak)IBOutlet UILabel *displayItemTextLabel;
 @property(nonatomic,weak)IBOutlet UILabel *priceLabel;
 @property(nonatomic,weak)IBOutlet UILabel *priceOffLabel;
-@property(nonatomic,weak)IBOutlet UILabel *percentageLabel;
 
 @property(nonatomic,weak)IBOutlet UILabel *starRatingLabel;
-@property(nonatomic,weak)IBOutlet UIButton *wishListButton;
-@property(nonatomic,weak)IBOutlet UILabel *offerLabel;
+@property(nonatomic,strong)UILabel *offerLabel;
+
 
 @end
