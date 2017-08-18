@@ -16,4 +16,5 @@
 @property(nonatomic,weak)IBOutlet UILabel *StarRatingLabel;
 @property(nonatomic,weak)IBOutlet UIButton *WishListButton;
 @property(nonatomic,weak)IBOutlet UILabel *offerLabel;
+@property(nonatomic,weak)IBOutlet UIButton *wishListButton;
 @end

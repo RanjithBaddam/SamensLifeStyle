@@ -42,11 +42,16 @@
     FullImageViewCollectionViewCell *cell = [_fullImageCollectionView dequeueReusableCellWithReuseIdentifier:@"FullImageViewCollectionViewCell" forIndexPath:indexPath];
        [cell.fullImageView setImageWithURL:[NSURL URLWithString:[self.fullImageModel.sliderImages objectAtIndex:indexPath.item]] placeholderImage:nil];
     cell.fullImageView.tag = indexPath.item;
+    cell.fullImageView.frame = CGRectMake(0, 0, self.fullImageCollectionView.frame.size.width, self.fullImageCollectionView.frame.size.height);
     UIPinchGestureRecognizer *pinchGesture = [[UIPinchGestureRecognizer alloc]initWithTarget:self action:@selector(clickOnPinch:)];
     [cell.fullImageView addGestureRecognizer:pinchGesture];
     
     
     return cell;
+}
+- (CGSize)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout*)collectionViewLayout sizeForItemAtIndexPath:(NSIndexPath *)indexPath {
+    
+    return CGSizeMake(self.fullImageCollectionView.frame.size.width, self.fullImageCollectionView.frame.size.height);
 }
 -(IBAction)clickOnPinch:(UIGestureRecognizer *)sender{
     NSLog(@"PinchGesture");

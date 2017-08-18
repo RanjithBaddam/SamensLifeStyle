@@ -18,7 +18,7 @@
 
 
 -(IBAction)ClickOnForgot:(id)sender;
-@property (weak, nonatomic) IBOutlet FBSDKLoginButton *loginButton;
+
 @property(nonatomic,strong)UIButton *facebookButton;
 
 @end

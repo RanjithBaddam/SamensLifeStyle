@@ -20,6 +20,7 @@
 @property(nonatomic,strong)NSString *price;
 @property(nonatomic,strong)NSString *rating;
 
+
 -(void)getFetchOfferDataModelWithDictionary:(NSDictionary *)dict;
 
 @end

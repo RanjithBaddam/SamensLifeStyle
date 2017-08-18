@@ -10,6 +10,7 @@
 #import <MBProgressHUD.h>
 #import "verificationViewController.h"
 #import "AccountViewController.h"
+#import <FirebaseInstanceID/FirebaseInstanceID.h>
 
 @interface signupViewController (){
     NSTimer *myTimer;
@@ -51,7 +52,7 @@
     NSMutableURLRequest *request=[NSMutableURLRequest requestWithURL:url];
     [request setHTTPMethod:@"POST"];
     
-    NSString *params = [NSString stringWithFormat:@"name=%@&email=%@&password=%@&mobile=%@",nameTF.text,emailTF.text,passwordTF.text,mobileNumTF.text];
+    NSString *params = [NSString stringWithFormat:@"name=%@&email=%@&password=%@&mobile=%@&regId=%@",nameTF.text,emailTF.text,passwordTF.text,mobileNumTF.text,[FIRInstanceID instanceID].token];
         NSLog(@"%@",params);
         
     NSData *requestData = [params dataUsingEncoding:NSUTF8StringEncoding];

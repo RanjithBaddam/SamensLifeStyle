@@ -68,7 +68,7 @@
         [imgView setContentMode:UIViewContentModeScaleAspectFit];
         self.navigationItem.titleView = imgView;
         
-        self.scrollView.contentSize = CGSizeMake(self.view.frame.size.width, 900);
+        self.scrollView.contentSize = CGSizeMake(self.view.frame.size.width, 800);
         CALayer *border = [CALayer layer];
         CGFloat borderWidth = 2;
         border.borderColor = [UIColor darkGrayColor].CGColor;
@@ -164,12 +164,15 @@
 }
 
 -(IBAction)clickOnSave:(UIButton *)sender{
+  
     if ([HomeDeliveryButton isSelected]) {
         
     if ([CityTextField.text isEqualToString:@""]|| [PincodeTextField.text isEqualToString:@""]||[StateTextField.text isEqualToString:@""]||[LocalityTextField.text isEqualToString:@""]||[LandMarktextField.text isEqualToString:@""]||[NameTextField.text isEqualToString:@""]||[PhnoneNumberTextField.text isEqualToString:@""]||[AlternatePhoneNumberTextField.text isEqualToString:@""]) {
         alert = [[UIAlertView alloc]initWithTitle:@"Error" message:@"Please fill all the details correctly" delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil, nil];
         [alert show];
     }else{
+        if ([PincodeTextField.text length]==6 || [PhnoneNumberTextField.text length] == 10  || [AlternatePhoneNumberTextField.text length] == 10) {
+            
     dispatch_async(dispatch_get_main_queue(),^{
 
     [MBProgressHUD showHUDAddedTo:self.view animated:YES];
@@ -228,13 +231,17 @@
         }
     }];
     [task resume];
-
+        }else{
+            alert = [[UIAlertView alloc]initWithTitle:@"Failed" message:@"Please enter valid details" delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil, nil];
+            [alert show];
+        }
     }
     }else{
         if ([CityTextField.text isEqualToString:@""]|| [PincodeTextField.text isEqualToString:@""]||[StateTextField.text isEqualToString:@""]||[LocalityTextField.text isEqualToString:@""]||[LandMarktextField.text isEqualToString:@""]||[NameTextField.text isEqualToString:@""]||[PhnoneNumberTextField.text isEqualToString:@""]||[AlternatePhoneNumberTextField.text isEqualToString:@""]) {
             alert = [[UIAlertView alloc]initWithTitle:@"Error" message:@"Please fill all the details correctly" delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil, nil];
             [alert show];
         }else{
+              if ([PincodeTextField.text length]==6 || [PhnoneNumberTextField.text length] == 10  || [AlternatePhoneNumberTextField.text length] == 10) {
             dispatch_async(dispatch_get_main_queue(),^{
                 
                 [MBProgressHUD showHUDAddedTo:self.view animated:YES];
@@ -294,6 +301,11 @@
             }];
             [task resume];
             
+              }else{
+                  alert = [[UIAlertView alloc]initWithTitle:@"Failed" message:@"Please enter valid details" delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil, nil];
+                  [alert show];
+
+              }
         }
 
     }
@@ -335,7 +347,6 @@
     if ([sender isSelected]) {
         [sender setSelected: NO];
         [WorkDeliveryButton setBackgroundImage:[UIImage imageNamed:@"untick"] forState:UIControlStateNormal];
-       
         
     } else {
         [sender setSelected: YES];

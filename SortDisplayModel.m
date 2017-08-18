@@ -24,7 +24,7 @@
     self.off_price = [sortDict valueForKey:@"off_price"];
     self.offer = [sortDict valueForKey:@"offer"];
     self.rating = [sortDict valueForKey:@"rating"];
-
+    self.like_v = [sortDict valueForKey:@"like_v"];
 
 }
 

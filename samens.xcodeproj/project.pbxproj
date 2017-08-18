@@ -89,6 +89,7 @@
 		345E841E1F28BE1800E78407 /* FetchSortColorModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 345E841D1F28BE1800E78407 /* FetchSortColorModel.m */; };
 		345E84211F29A8F300E78407 /* FetchSortColorModelDetails.m in Sources */ = {isa = PBXBuildFile; fileRef = 345E84201F29A8F300E78407 /* FetchSortColorModelDetails.m */; };
 		345E84241F29B2F200E78407 /* FetchSortFilterSizeModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 345E84231F29B2F200E78407 /* FetchSortFilterSizeModel.m */; };
+		34A1A4871F4428D3002D5090 /* editAddressViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 34A1A4861F4428D3002D5090 /* editAddressViewController.m */; };
 		34C139851F1FE6DC003073E9 /* CustomStepper.m in Sources */ = {isa = PBXBuildFile; fileRef = 34C139841F1FE6DC003073E9 /* CustomStepper.m */; };
 		34D64CEF1EEC71CA00DA174A /* ItemsDisplayViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 34D64CEE1EEC71CA00DA174A /* ItemsDisplayViewController.m */; };
 		34D64CF21EEC7BB300DA174A /* DisplayItemsCollectionViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 34D64CF11EEC7BB300DA174A /* DisplayItemsCollectionViewCell.m */; };
@@ -293,6 +294,9 @@
 		345E84201F29A8F300E78407 /* FetchSortColorModelDetails.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FetchSortColorModelDetails.m; sourceTree = "<group>"; };
 		345E84221F29B2F200E78407 /* FetchSortFilterSizeModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FetchSortFilterSizeModel.h; sourceTree = "<group>"; };
 		345E84231F29B2F200E78407 /* FetchSortFilterSizeModel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FetchSortFilterSizeModel.m; sourceTree = "<group>"; };
+		34A1A4851F4428D3002D5090 /* editAddressViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = editAddressViewController.h; sourceTree = "<group>"; };
+		34A1A4861F4428D3002D5090 /* editAddressViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = editAddressViewController.m; sourceTree = "<group>"; };
+		34A1A4C71F46B0B7002D5090 /* samens.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = samens.entitlements; sourceTree = "<group>"; };
 		34C139831F1FE6DC003073E9 /* CustomStepper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CustomStepper.h; sourceTree = "<group>"; };
 		34C139841F1FE6DC003073E9 /* CustomStepper.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CustomStepper.m; sourceTree = "<group>"; };
 		34D64CED1EEC71CA00DA174A /* ItemsDisplayViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ItemsDisplayViewController.h; sourceTree = "<group>"; };
@@ -508,6 +512,8 @@
 		341A778D1EDD719D001968E1 = {
 			isa = PBXGroup;
 			children = (
+				34A1A4851F4428D3002D5090 /* editAddressViewController.h */,
+				34A1A4861F4428D3002D5090 /* editAddressViewController.m */,
 				345CC4AE1F3C8E6300BC3BBF /* AddressTableViewCell.h */,
 				345CC4AF1F3C8E6300BC3BBF /* AddressTableViewCell.m */,
 				345CC4AB1F3C8A8600BC3BBF /* AddressDetailsModel.h */,
@@ -558,6 +564,7 @@
 		341A77981EDD719D001968E1 /* samens */ = {
 			isa = PBXGroup;
 			children = (
+				34A1A4C71F46B0B7002D5090 /* samens.entitlements */,
 				341A77A21EDD719D001968E1 /* Main.storyboard */,
 				341A77A51EDD719D001968E1 /* Assets.xcassets */,
 				341A77A71EDD719D001968E1 /* LaunchScreen.storyboard */,
@@ -1331,6 +1338,9 @@
 							com.apple.BackgroundModes = {
 								enabled = 1;
 							};
+							com.apple.Keychain = {
+								enabled = 1;
+							};
 						};
 					};
 					341A77AE1EDD719D001968E1 = {
@@ -1579,6 +1589,7 @@
 				3445262E1F2E3B7D00051C57 /* PaymentAddressViewController.m in Sources */,
 				34DB78A21EE87EC1008A9818 /* CatogorysTableViewCell.m in Sources */,
 				345E841B1F28746A00E78407 /* FetchFilterSizeItemModel.m in Sources */,
+				34A1A4871F4428D3002D5090 /* editAddressViewController.m in Sources */,
 				343E8F441F25FB1F00547EEB /* FetchFilterViewController.m in Sources */,
 				3421032F1EEBF85700A97D4F /* customProductCollectionViewCell.m in Sources */,
 				345B0E541EF909BB00B68B63 /* ItemVariantViewController.m in Sources */,
@@ -1780,6 +1791,7 @@
 			baseConfigurationReference = 68BA4FE505C466140C2F6A52 /* Pods-samens.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_ENTITLEMENTS = samens/samens.entitlements;
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				DEVELOPMENT_TEAM = P847CQ3QXJ;
 				FRAMEWORK_SEARCH_PATHS = (
@@ -1802,6 +1814,7 @@
 			baseConfigurationReference = A02A635E4FDC701BA40FDEAC /* Pods-samens.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_ENTITLEMENTS = samens/samens.entitlements;
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				DEVELOPMENT_TEAM = P847CQ3QXJ;
 				FRAMEWORK_SEARCH_PATHS = (

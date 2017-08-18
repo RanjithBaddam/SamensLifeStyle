@@ -24,6 +24,8 @@
     self.pid = [dict valueForKey:@"pid"];
     self.price = [dict valueForKey:@"price"];
     self.rating = [NSString stringWithFormat:@"%@",[dict valueForKey:@"rating"]];
+    self.price = [dict valueForKey:@"like_v"];
+
 }
 
 @end

@@ -18,4 +18,5 @@
 @property(nonatomic,weak)IBOutlet UILabel *alternateMobileNumber;
 @property(nonatomic,weak)IBOutlet UILabel *homePopUpLabel;
 @property(nonatomic,weak)IBOutlet UILabel *officePopUpLabel;
+@property(nonatomic,weak)IBOutlet UIButton *defaultSaveButton;
 @end

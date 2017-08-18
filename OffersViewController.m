@@ -16,6 +16,7 @@
 #import "FetchOfferDataModel.h"
 #import "ItemDisplayCollectionViewCell.h"
 #import "SubSubViewController.h"
+#import "ViewController.h"
 
 
 
@@ -32,6 +33,9 @@
 @end
 
 @implementation OffersViewController
+-(void)viewWillAppear:(BOOL)animated{
+    [self getOfferScrollingImages];
+}
 
 - (void)viewDidLoad {
     [super viewDidLoad];
@@ -103,16 +107,18 @@ categoryArray = [NSUserDefaults.standardUserDefaults valueForKey:@"CategoryNameK
        
 
         [cell2.wishListButton addTarget:self action:@selector(ClickOnWishlist:) forControlEvents:UIControlEventTouchUpInside];
-        if ([offerDataModel.like_v isKindOfClass:[NSNull class]]) {
-            cell2.wishListButton.backgroundColor = [UIColor whiteColor];
-            NSLog(@"%@",offerDataModel.like_v);
-        }else if ([offerDataModel.like_v isEqualToString:@"N"]){
-            cell2.wishListButton.backgroundColor = [UIColor whiteColor];
-            NSLog(@"%@",offerDataModel.like_v);
+        if ([[NSUserDefaults.standardUserDefaults valueForKey:@"LoggedIn"]isEqualToString:@"yes"]) {
+        offerDataModel  = [offerDataArray objectAtIndex:indexPath.item];
             
+            if ([offerDataModel.like_v isKindOfClass:[NSNull class]]) {
+                [cell2.wishListButton setBackgroundImage:[UIImage imageNamed:@"like"] forState:UIControlStateNormal];        }
+            else if ([offerDataModel.like_v isEqualToString:@"N"]){
+                    [cell2.wishListButton setBackgroundImage:[UIImage imageNamed:@"like"] forState:UIControlStateNormal];        }
+            else{
+                        [cell2.wishListButton setBackgroundImage:[UIImage imageNamed:@"like1"] forState:UIControlStateNormal];
+                    }
         }else{
-            cell2.wishListButton.backgroundColor = [UIColor redColor];
-            NSLog(@"%@",offerDataModel.like_v);
+            [cell2.wishListButton setBackgroundImage:[UIImage imageNamed:@"like"] forState:UIControlStateNormal];
         }
         cell2.starRatingLabel.text = offerDataModel.rating;
         if ([offerDataModel.offer isEqualToString:@"yes"]) {
@@ -138,7 +144,6 @@ categoryArray = [NSUserDefaults.standardUserDefaults valueForKey:@"CategoryNameK
             
             .offerLabel.text = persentage;
             NSLog(@"%@",cell2.offerLabel.text);
-            cell2.offerLabel.backgroundColor = [UIColor redColor];
             cell2.offerLabel.layer.cornerRadius = 13;
             cell2.offerLabel.clipsToBounds = YES;
             return cell2;
@@ -189,7 +194,7 @@ categoryArray = [NSUserDefaults.standardUserDefaults valueForKey:@"CategoryNameK
     NSURL *url=[NSURL URLWithString:urlInstring];
     NSMutableURLRequest *request=[NSMutableURLRequest requestWithURL:url];
     [request setHTTPMethod:@"POST"];
-    NSString *params = [NSString stringWithFormat:@"samens=%@",@"samens"];
+    NSString *params = [NSString stringWithFormat:@"samens=%@&cid=%@&api=%@",@"samens",[NSUserDefaults.standardUserDefaults valueForKey:@"custid"],[NSUserDefaults.standardUserDefaults valueForKey:@"api"]];
     NSLog(@"%@",params);
     
     NSData *requestData = [params dataUsingEncoding:NSUTF8StringEncoding];
@@ -332,6 +337,8 @@ categoryArray = [NSUserDefaults.standardUserDefaults valueForKey:@"CategoryNameK
     [task resume];
 }
 -(IBAction)ClickOnWishlist:(UIButton *)sender{
+    if ([[NSUserDefaults.standardUserDefaults valueForKey:@"LoggedIn"]isEqualToString:@"yes"]) {
+        
     NSArray *token = [[NSUserDefaults standardUserDefaults] objectForKey:@"WishListData"];
     NSLog(@"%@",[[NSUserDefaults standardUserDefaults] objectForKey:@"WishListData"]);
     
@@ -395,7 +402,8 @@ categoryArray = [NSUserDefaults.standardUserDefaults valueForKey:@"CategoryNameK
                     dispatch_async(dispatch_get_main_queue(), ^{
                         NSIndexPath *selectedIndexPath = [NSIndexPath indexPathForRow:sender.tag inSection:0];
                         ItemDisplayCollectionViewCell *cell = [_offerItemDisplayCollectionView cellForItemAtIndexPath:selectedIndexPath];
-                        cell.wishListButton.backgroundColor = [UIColor whiteColor];
+ [cell.wishListButton setBackgroundImage:[UIImage imageNamed:@"like1"] forState:UIControlStateNormal];
+                        [MBProgressHUD hideHUDForView:self.view animated:YES];
                         [MBProgressHUD hideHUDForView:self.view animated:YES];
                         
                     });
@@ -405,7 +413,8 @@ categoryArray = [NSUserDefaults.standardUserDefaults valueForKey:@"CategoryNameK
                         [MBProgressHUD hideHUDForView:self.view animated:YES];
                         NSIndexPath *selectedIndexPath = [NSIndexPath indexPathForRow:sender.tag inSection:0];
                         ItemDisplayCollectionViewCell *cell = [_offerItemDisplayCollectionView cellForItemAtIndexPath:selectedIndexPath];
-                        cell.wishListButton.backgroundColor = [UIColor redColor];
+ [cell.wishListButton setBackgroundImage:[UIImage imageNamed:@"like1"] forState:UIControlStateNormal];
+                        [MBProgressHUD hideHUDForView:self.view animated:YES];
                         UIAlertView *alert = [[UIAlertView alloc]initWithTitle:@"User Wishlist" message:@"Successfully Added" delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil, nil];
                         [alert show];
                         
@@ -475,8 +484,8 @@ categoryArray = [NSUserDefaults.standardUserDefaults valueForKey:@"CategoryNameK
                     dispatch_async(dispatch_get_main_queue(), ^{
                         NSIndexPath *selectedIndexPath = [NSIndexPath indexPathForRow:sender.tag inSection:0];
                         ItemDisplayCollectionViewCell *cell = [_offerItemDisplayCollectionView cellForItemAtIndexPath:selectedIndexPath];
-                        cell.wishListButton.backgroundColor = [UIColor redColor];
-                        [MBProgressHUD hideHUDForView:self.view animated:YES];
+ [cell.wishListButton setBackgroundImage:[UIImage imageNamed:@"like"] forState:UIControlStateNormal];
+                        [MBProgressHUD hideHUDForView:self.view animated:YES];                        [MBProgressHUD hideHUDForView:self.view animated:YES];
                         
                     });
                     
@@ -485,7 +494,8 @@ categoryArray = [NSUserDefaults.standardUserDefaults valueForKey:@"CategoryNameK
                         [MBProgressHUD hideHUDForView:self.view animated:YES];
                         NSIndexPath *selectedIndexPath = [NSIndexPath indexPathForRow:sender.tag inSection:0];
                         ItemDisplayCollectionViewCell *cell = [_offerItemDisplayCollectionView cellForItemAtIndexPath:selectedIndexPath];
-                        cell.wishListButton.backgroundColor = [UIColor whiteColor];
+ [cell.wishListButton setBackgroundImage:[UIImage imageNamed:@"like1"] forState:UIControlStateNormal];
+                        [MBProgressHUD hideHUDForView:self.view animated:YES];
                         UIAlertView *alert = [[UIAlertView alloc]initWithTitle:@"User Wishlist" message:@"Successfully Added" delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil, nil];
                         [alert show];
                         
@@ -500,5 +510,12 @@ categoryArray = [NSUserDefaults.standardUserDefaults valueForKey:@"CategoryNameK
         [task resume];
         
     }
+    }else{
+        ViewController *vc = [self.storyboard instantiateViewControllerWithIdentifier:@"ViewController"];
+        self.tabBarController.tabBar.hidden = YES;
+        [self.navigationController pushViewController:vc animated:YES];
+        
+    }
+    
 }
 @end

@@ -22,6 +22,7 @@
 #import "SliderModel.h"
 #import "SearchViewController.h"
 #import "AccountViewController.h"
+#import <FirebaseInstanceID/FirebaseInstanceID.h>
 
 
 @interface homeViewController ()<UICollectionViewDelegate,UICollectionViewDataSource,UITableViewDataSource,UITableViewDelegate,UIAlertViewDelegate,UISearchBarDelegate,UITabBarControllerDelegate>{
@@ -43,16 +44,7 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     
-    UIImage *img = [UIImage imageNamed:@"NavigationImage"];
-    UIImageView *imgView = [[UIImageView alloc] initWithFrame:CGRectMake(0, 0, 100, 44)];
-    [imgView setImage:img];
-    // setContent mode aspect fit
-    [imgView setContentMode:UIViewContentModeScaleAspectFit];
-    self.navigationItem.titleView = imgView;
-    
-    UINavigationBar *bar = [self.navigationController navigationBar];
-    [bar setBarTintColor:[UIColor colorWithRed:38.0/255.0 green:47.0/255.0 blue:88.0/255.0 alpha:0]];
-    
+    NSLog(@"%@",[FIRInstanceID instanceID].token);
     timer = [[NSTimer alloc]init];
     _mainArray = [[NSMutableArray alloc]init];
     [self refreshMethod];
@@ -227,10 +219,6 @@
                                                          NSLog(@"%@",catID);
                                                          [NSUserDefaults.standardUserDefaults setObject:catID forKey:@"catIdkey"];
                                         
-                                                        
-                //[NSUserDefaults.standardUserDefaults setObject:dammycatagoryArray forKey:@"CategoryKey"];
-                                      //  [[NSUserDefaults standardUserDefaults] synchronize];
-
                                                          
                                                          int catIndex;
                                                          for (catIndex = 0; catIndex < dammycatagoryArray.count; catIndex++) {
@@ -305,7 +293,7 @@
         NSLog(@"%@",catModel);
         UIStoryboard *story = [UIStoryboard storyboardWithName:@"Main" bundle:nil];
         ItemsDisplayViewController *items = [story instantiateViewControllerWithIdentifier:@"ItemsDisplayViewController"];
-        self.title = catModel.category_name;
+//        self.title = catModel.category_name;
         items.loginDetailsArray = self.loginDetailsArray;
         items.loginModel = self.loginModel;
         [items getId:catModel.category_id];
@@ -369,9 +357,21 @@
 }
 -(void)viewWillAppear:(BOOL)animated{
     [super viewWillAppear:animated];
-//    [self refreshMethod];
+    
+    UIImage *img = [UIImage imageNamed:@"NavigationImage"];
+    UIImageView *imgView = [[UIImageView alloc] initWithFrame:CGRectMake(0, 0, 130, 44)];
+    [imgView setImage:img];
+    // setContent mode aspect fit
+    [imgView setContentMode:UIViewContentModeScaleAspectFit];
+    self.navigationItem.titleView = imgView;
+    [self.navigationController.navigationBar setTranslucent:NO];
+  [self.navigationController.navigationBar setBarStyle:UIBarStyleBlack];
+    
+    UINavigationBar *bar = [self.navigationController navigationBar];
+    [bar setBarTintColor:[UIColor colorWithRed:38.0/255.0 green:47.0/255.0 blue:88.0/255.0 alpha:0]];
+//    [self refreshMethod];`
     [_searchBar resignFirstResponder];
-    [[self.tabBarController.tabBar.items objectAtIndex:0] setTitle:@"Home"];
+  //  [[self.tabBarController.tabBar.items objectAtIndex:0] setTitle:@"Home"];
     if ([[NSUserDefaults.standardUserDefaults valueForKey:@"LoggedIn"]isEqualToString:@"yes"])
  {
      
@@ -474,15 +474,19 @@
 }
 - (BOOL)searchBarShouldBeginEditing:(UISearchBar *)searchBar{
     SearchViewController *searchBarVc = [self.storyboard instantiateViewControllerWithIdentifier:@"SearchViewController"];
+    searchBarVc.categoryMainId = catModel.category_id;
   [self.navigationController pushViewController:searchBarVc animated:YES];
     return NO;
 }
-
 //-(void) tabBarController:(UITabBarController *)tabBarController didSelectViewController:(UIViewController *)viewController
 //{
 //    if ([[NSUserDefaults.standardUserDefaults valueForKey:@"LoggedIn"]isEqualToString:@"yes"]) {
 //        if (tabBarController.selectedIndex == 3) {
-//            
+//            [self.tabBarController setSelectedIndex:3];
+//        }
+//    }else{
+//        if (tabBarController.selectedIndex == 3) {
+//            [self.tabBarController setSelectedIndex:3];
 //        }
 //    }
 //}

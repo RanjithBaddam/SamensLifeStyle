@@ -23,6 +23,7 @@
     self.pid = [dict valueForKey:@"pid"];
     self.price = [dict valueForKey:@"price"];
     self.rating = [dict valueForKey:@"rating"];
+    self.like_v = [dict valueForKey:@"like_v"];
 
 }
 

@@ -21,7 +21,7 @@
 @property(nonatomic,strong)NSString *pid;
 @property(nonatomic,strong)NSString *price;
 @property(nonatomic,strong)NSString *rating;
-
+@property(nonatomic,strong)NSString *like_v;
 -(void)getColor1DetailsModelWithDictionary:(NSDictionary *)dict;
 
 @end

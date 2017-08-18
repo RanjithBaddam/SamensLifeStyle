@@ -36,6 +36,7 @@
 #import <MBProgressHUD.h>
 #import "URLhandler.h"
 #import "ProductPriceOfferTableViewCell.h"
+#import "ViewController.h"
 
 
 @interface SubSubViewController ()<UICollectionViewDelegate,UICollectionViewDataSource,UIScrollViewDelegate,UITableViewDelegate,UITableViewDataSource,UIAlertViewDelegate>
@@ -57,6 +58,9 @@
     IBOutlet UILabel *RatingShowLabel;
     IBOutlet UIImageView *travelImage;
     IBOutlet UILabel *starRatingLabel;
+    IBOutlet UILabel *starRatingLabel1;
+    IBOutlet UIView *ratingView;
+    IBOutlet UIView *ratingView1;
     NSMutableArray *colorImagesData;
     NSMutableArray *sliderImagesData;
     NSMutableArray *SliderImages;
@@ -126,11 +130,15 @@
     NSLog(@"%@",self.sliderModel.rating);
     NSString *ratingText = [NSString stringWithFormat:@"%@",self.sliderModel.rating];
     NSLog(@"%@",ratingText);
-    starRatingLabel.text = ratingText;
+    ratingView.hidden = NO;
+    starRatingLabel1.text = ratingText;
     if ([_sliderModel.offer isEqualToString:@"yes"]) {
         self.itemPriceLabel.text = _sliderModel.off_price;
         NSAttributedString *priceOfferString = [[NSAttributedString alloc]initWithString:self.priceOffLabel.text = _sliderModel.price attributes:@{NSStrikethroughStyleAttributeName:
                                                                                                                                                             [NSNumber numberWithInteger:NSUnderlineStyleSingle]}];
+        ratingView.hidden = YES;
+        ratingView1.hidden = NO;
+        self.priceOffLabel.hidden = NO;
         [self.priceOffLabel setAttributedText:priceOfferString];
         NSString *string = self.itemPriceLabel.text;
         NSLog(@"%@",string);
@@ -143,8 +151,11 @@
         int totalValue = pers - percentage;
         NSString *persentage = [NSString stringWithFormat:@"%d%@",totalValue,@"% off"];
         NSLog(@"%@",persentage);
+        self.persentageOffLabel.hidden = NO;
         self.persentageOffLabel.text = persentage;
-        
+        NSString *ratingText = [NSString stringWithFormat:@"%@",self.sliderModel.rating];
+        NSLog(@"%@",ratingText);
+        starRatingLabel.text = ratingText;
         
     }else{
         self.itemPriceLabel.text = _sliderModel.price;
@@ -194,7 +205,7 @@
     
        FullViewCollectionViewCell *cell = [_fullViewCollectionView dequeueReusableCellWithReuseIdentifier:@"FullViewCollectionViewCell" forIndexPath:indexPath];
        [cell.fullViewImage setImageWithURL:[NSURL URLWithString:[self.sliderModel.sliderImages objectAtIndex:indexPath.item]] placeholderImage:nil];
-      
+//       cell.fullViewImage.frame = CGRectMake(0, 0, self.fullViewCollectionView.frame.size.width, self.fullViewCollectionView.frame.size.height);
        return cell;
        
     }else if (collectionView == _sizeCollectionView){
@@ -1184,7 +1195,9 @@ NSLog(@"%@",params);
             
         }
     }else{
-        [self.navigationController popToRootViewControllerAnimated:YES];
+        ViewController *vc = [self.storyboard instantiateViewControllerWithIdentifier:@"ViewController"];
+        self.tabBarController.tabBar.hidden = YES;
+        [self.navigationController pushViewController:vc animated:YES];
             }
 }
 
@@ -1205,6 +1218,11 @@ NSLog(@"%@",params);
     allReviewsVc.ReviewsMainArray = FetchReviewData;
     [self.navigationController pushViewController:allReviewsVc animated:YES];
     
+    
+}
+- (CGSize)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout*)collectionViewLayout sizeForItemAtIndexPath:(NSIndexPath *)indexPath {
+    
+        return CGSizeMake(_fullViewCollectionView.frame.size.width, 413);
     
 }
 @end

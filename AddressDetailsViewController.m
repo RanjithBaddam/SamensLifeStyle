@@ -11,13 +11,14 @@
 #import <MBProgressHUD.h>
 #import "AddressDetailsModel.h"
 #import "AddressTableViewCell.h"
+#import "editAddressViewController.h"
 
 @interface AddressDetailsViewController ()<UITableViewDelegate,UITableViewDataSource>{
     NSMutableArray *AddressData;
     AddressDetailsModel *addressDetailsModel;
     IBOutlet UILabel *noAddressLabel;
+  
 }
-
 @end
 
 @implementation AddressDetailsViewController
@@ -80,9 +81,11 @@
             NSLog(@"%@",jsonData);
             if([[NSNumber numberWithBool:[[[NSJSONSerialization JSONObjectWithData:data options:kNilOptions error:&error] objectForKey:@"success"] boolValue]] isEqualToNumber:[NSNumber numberWithInt:1]]){
                 dispatch_async(dispatch_get_main_queue(),^{
-
-                PaymentAddressViewController *paymentAddVc = [self.storyboard instantiateViewControllerWithIdentifier:@"PaymentAddressViewController"];
-                [self.navigationController pushViewController:paymentAddVc animated:YES];
+                    editAddressViewController *editAddressVc = [self.storyboard instantiateViewControllerWithIdentifier:@"editAddressViewController"];
+                    editAddressVc.addressDetailsModel = addressDetailsModel;
+                    NSLog(@"%@",editAddressVc.addressDetailsModel);
+                    [self.navigationController pushViewController:editAddressVc animated:YES];
+             
                 });
             }else{
                 dispatch_async(dispatch_get_main_queue(),^{
@@ -329,6 +332,14 @@
     cell.pincode.text = addressDetailsModel.pincode;
     cell.custMobile.text = addressDetailsModel.mobile;
     cell.alternateMobileNumber.text = addressDetailsModel.mobile_sec;
+    cell.defaultSaveButton.layer.borderWidth = 1;
+    cell.defaultSaveButton.layer.borderColor = [UIColor blackColor].CGColor;
+    [cell.defaultSaveButton addTarget:self action:@selector(clickOnDefaultsSave:) forControlEvents:UIControlEventTouchUpInside];
+    if ([addressDetailsModel.add_type isEqualToString:@"H"]) {
+        cell.homePopUpLabel.hidden = NO;
+    }else{
+        cell.officePopUpLabel.hidden = NO;
+    }
     
     return cell;
    
@@ -337,14 +348,14 @@
 
     UIView *FooterView =  [[UIView alloc]initWithFrame:CGRectMake(0, 0, 414, 44)];
         [FooterView setBackgroundColor:[UIColor orangeColor]];
-        UIButton *editButton = [[UIButton alloc]initWithFrame:CGRectMake(0, 0, 207, 44)];
+        UIButton *editButton = [[UIButton alloc]initWithFrame:CGRectMake(0, 0, FooterView.frame.size.width/2, FooterView.frame.size.height)];
         [editButton setBackgroundColor:[UIColor orangeColor]];
         [editButton setTitle:@"EDIT" forState:UIControlStateNormal];
         [editButton setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
         editButton.tag = section;
         NSLog(@"%ld",(long)editButton.tag);
         [editButton addTarget:self action:@selector(clickOnEdit:) forControlEvents:UIControlEventTouchUpInside];
-        UIButton *RemoveButton = [[UIButton alloc]initWithFrame:CGRectMake(207, 0, 207, 44)];
+        UIButton *RemoveButton = [[UIButton alloc]initWithFrame:CGRectMake((FooterView.frame.size.width)-207, 0, FooterView.frame.size.width/2, 44)];
         [RemoveButton setBackgroundColor:[UIColor blueColor]];
         [RemoveButton setTitle:@"REMOVE" forState:UIControlStateNormal];
         [RemoveButton setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
@@ -362,6 +373,8 @@
     return 44;
 }
 
-
+-(IBAction)clickOnDefaultsSave:(UIButton *)sender{
+    
+}
 
 @end

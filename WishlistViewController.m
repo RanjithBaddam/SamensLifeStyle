@@ -126,8 +126,6 @@
     [task resume];
     }else{
         
-//        ViewController *vc= [self.storyboard instantiateViewControllerWithIdentifier:@"ViewController"];
-//        [self.navigationController pushViewController:vc animated:YES];
         [self.tabBarController setSelectedIndex:3];
 
     }

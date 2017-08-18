@@ -13,4 +13,5 @@
 @property(nonatomic,weak)IBOutlet UISearchBar *searchBar;
 @property(nonatomic,weak)IBOutlet UITableView *searchTableView;
 @property(nonatomic,strong)CategoryModel *catModel;
+@property(nonatomic,strong)NSString *categoryMainId;
 @end

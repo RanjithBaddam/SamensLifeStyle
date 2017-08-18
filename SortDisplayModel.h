@@ -21,6 +21,7 @@
 @property(nonatomic,strong)NSString *off_price;
 @property(nonatomic,strong)NSString *offer;
 @property(nonatomic,strong)NSString *rating;
+@property(nonatomic,strong)NSString *like_v;
 
 
 

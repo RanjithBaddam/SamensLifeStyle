@@ -9,13 +9,13 @@
             shouldBeEnabled = "Yes"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
-            filePath = "AddressDetailsViewController.m"
-            timestampString = "524224487.042027"
+            filePath = "signupViewController.m"
+            timestampString = "524748355.159635"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "147"
-            endingLineNumber = "147"
-            landmarkName = "-FetchAddressDetails"
+            startingLineNumber = "86"
+            endingLineNumber = "86"
+            landmarkName = "-clickOnSignUp:"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
@@ -25,13 +25,13 @@
             shouldBeEnabled = "Yes"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
-            filePath = "AddressDetailsViewController.m"
-            timestampString = "524224640.255378"
+            filePath = "samens/ViewController.m"
+            timestampString = "524773157.350609"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "48"
-            endingLineNumber = "48"
-            landmarkName = "-clickOnEdit:"
+            startingLineNumber = "127"
+            endingLineNumber = "127"
+            landmarkName = "-clickOnFacebookLogin"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
@@ -41,13 +41,13 @@
             shouldBeEnabled = "Yes"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
-            filePath = "AddressDetailsViewController.m"
-            timestampString = "524224686.579968"
+            filePath = "samens/ViewController.m"
+            timestampString = "524773157.350609"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "80"
-            endingLineNumber = "80"
-            landmarkName = "-clickOnEdit:"
+            startingLineNumber = "213"
+            endingLineNumber = "213"
+            landmarkName = "-clickOnFacebookLogin"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
@@ -57,13 +57,13 @@
             shouldBeEnabled = "Yes"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
-            filePath = "ItemsDisplayViewController.m"
-            timestampString = "524226700.316745"
+            filePath = "samens/ViewController.m"
+            timestampString = "524773157.350609"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "511"
-            endingLineNumber = "511"
-            landmarkName = "-collectionView:cellForItemAtIndexPath:"
+            startingLineNumber = "166"
+            endingLineNumber = "166"
+            landmarkName = "-clickOnFacebookLogin"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
@@ -73,13 +73,13 @@
             shouldBeEnabled = "Yes"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
-            filePath = "ItemsDisplayViewController.m"
-            timestampString = "524231913.046079"
+            filePath = "samens/ViewController.m"
+            timestampString = "524773157.350609"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "520"
-            endingLineNumber = "520"
-            landmarkName = "-collectionView:cellForItemAtIndexPath:"
+            startingLineNumber = "632"
+            endingLineNumber = "632"
+            landmarkName = "-didTapSignOut:"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
@@ -89,13 +89,61 @@
             shouldBeEnabled = "Yes"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
-            filePath = "ItemsDisplayViewController.m"
-            timestampString = "524233646.593363"
+            filePath = "samens/ViewController.m"
+            timestampString = "524773157.350609"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "850"
-            endingLineNumber = "850"
-            landmarkName = "-collectionView:layout:sizeForItemAtIndexPath:"
+            startingLineNumber = "480"
+            endingLineNumber = "480"
+            landmarkName = "-didTapSignIn:"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            shouldBeEnabled = "Yes"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "samens/ViewController.m"
+            timestampString = "524772634.330727"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "514"
+            endingLineNumber = "514"
+            landmarkName = "-didTapSignIn:"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            shouldBeEnabled = "Yes"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "samens/ViewController.m"
+            timestampString = "524773373.478682"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "556"
+            endingLineNumber = "556"
+            landmarkName = "-didTapSignIn:"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            shouldBeEnabled = "Yes"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "samens/ViewController.m"
+            timestampString = "524773382.632428"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "617"
+            endingLineNumber = "617"
+            landmarkName = "-didTapSignIn:"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>

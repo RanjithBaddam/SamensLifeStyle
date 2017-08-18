@@ -23,7 +23,7 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    // Do any additional setup after loading the view.
+//     Do any additional setup after loading the view.
     [self.navigationController.navigationBar setTranslucent:NO];
     [self.navigationController.navigationBar setBackgroundImage:[UIImage new] forBarMetrics:UIBarMetricsDefault];
     [self.navigationController.navigationBar setBarStyle:UIBarStyleBlack];
@@ -137,6 +137,7 @@
     NSLog(@"%@",searchListModel);
     NSLog(@"%@",searchListModel.name);
     itemDisplayVc.searchName = searchListModel.name;
+    itemDisplayVc.categoryMainId = self.categoryMainId;
     NSLog(@"%@",itemDisplayVc.searchName);
     [NSUserDefaults.standardUserDefaults setValue:@"search" forKey:@"Direct"];
     [self.navigationController pushViewController:itemDisplayVc animated:YES];

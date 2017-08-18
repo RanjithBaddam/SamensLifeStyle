@@ -24,6 +24,8 @@
     NSMutableArray *fourthSectionArray;
     NSMutableArray *fifthSectionArray;
     NSMutableArray *wishlistArray;
+   
+   
 }
 
 @end
@@ -238,20 +240,20 @@
 {
      if (alertView.tag == 100){
         if (buttonIndex == 1){
+           
             [[NSUserDefaults standardUserDefaults] setValue:@"no" forKey:@"LoggedIn"];
-//            [[NSUserDefaults standardUserDefaults] setValue:@"no" forKey:@"login"];
-//            [[NSUserDefaults standardUserDefaults] setValue:@"no" forKey:@"login"];
+            [[NSUserDefaults standardUserDefaults] removeObjectForKey:@"api"] ;
+            [[NSUserDefaults standardUserDefaults] removeObjectForKey:@"custid"];
+           [[NSUserDefaults standardUserDefaults] removeObjectForKey:@"dor"];
+            [[NSUserDefaults standardUserDefaults] removeObjectForKey:@"email"];
+            [[NSUserDefaults standardUserDefaults] removeObjectForKey:@"mobile"];
+            [[NSUserDefaults standardUserDefaults] removeObjectForKey:@"name"];
+            [[NSUserDefaults standardUserDefaults] removeObjectForKey:@"pass"];
 
             
-//            FBSDKLoginManager *loginManager = [[FBSDKLoginManager alloc] init];
-//            [loginManager logOut];
-//            [FBSDKAccessToken setCurrentAccessToken:nil];
-
             [_AccountTableView reloadData];
-            wishlistArray = [[NSMutableArray alloc]init];
-            wishlistArray = [NSUserDefaults.standardUserDefaults valueForKey:@"WishListData"];
-            NSLog(@"%@",wishlistArray);
-            wishlistArray = [[NSMutableArray alloc]init];
+            
+            
         }
     }
 }
@@ -269,13 +271,22 @@
         [self.tabBarController setSelectedIndex:3];
     }else if (tabBarController.selectedIndex == 0){
         [self.tabBarController setSelectedIndex:0];
+    }else{
+        [self.tabBarController setSelectedIndex:3];
     }
     }else{
         if (tabBarController.selectedIndex == 0) {
-            homeViewController *homeVc = [self.storyboard instantiateViewControllerWithIdentifier:@"homeViewController"];
-            [self.navigationController pushViewController:homeVc animated:YES];
             [self.tabBarController setSelectedIndex:0];
             
+        }else if (tabBarController.selectedIndex == 1){
+            [self.tabBarController setSelectedIndex:1];
+            
+        }else if (tabBarController.selectedIndex == 2){
+            [self.tabBarController setSelectedIndex:2];
+        }else if (tabBarController.selectedIndex == 3){
+            [self.tabBarController setSelectedIndex:3];
+        }else{
+            [self.tabBarController setSelectedIndex:4];
         }
     }
 }

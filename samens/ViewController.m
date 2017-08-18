@@ -19,6 +19,12 @@
 #import "AccountViewController.h"
 #import <FBSDKCoreKit/FBSDKCoreKit.h>
 #import "AccountViewController.h"
+#import <FirebaseInstanceID/FirebaseInstanceID.h>
+#import <FBSDKLoginKit/FBSDKLoginKit.h>
+
+
+
+
 
 
 
@@ -28,7 +34,17 @@
     NSInteger currentAnimationIndex;
     NSMutableArray *loginDetailsArray;
     LoginDetailsModel *loginModel;
+    NSString *userid ;
+    NSString *name;
+    NSString *email;
+    NSString *fbPhotoUrl;
     
+    NSURL *imageURL;
+    NSString *imgUrlString;
+    NSString *GuserId;
+    NSString *GidToken;
+    NSString *GfullName;
+    NSString *Gemail;
 }
 @property(nonatomic,weak)IBOutlet UITextField *emailTextField;
 @property(nonatomic,weak)IBOutlet UITextField *passwordTextField;
@@ -41,20 +57,27 @@
 @synthesize emailTextField;
 
 
+-(void)viewWillAppear:(BOOL)animated{
+   // [self clickOnFacebookLogin];
 
+}
 - (void)viewDidLoad {
     [super viewDidLoad];
-        [GIDSignIn sharedInstance].uiDelegate = self;
-
-    [NSUserDefaults.standardUserDefaults setValue:@"facebook" forKey:@"login"];
-    FBSDKLoginButton *loginButton = [[FBSDKLoginButton alloc] init];
-    loginButton.readPermissions =
+//    [self clickOnFacebookLogin];
+    [self.navigationItem setHidesBackButton:YES];
+    emailTextField.text = @"ojhasaurabh1992@gmail.com";
+    passwordTextField.text = @"12345";
+    [self getAdsImages];
+    [GIDSignIn sharedInstance].uiDelegate = self;
+    
+    FBSDKLoginButton *loginView = [[FBSDKLoginButton alloc] init];
+    loginView.frame = CGRectMake(20, 400, 100, 20);
+    [self.view addSubview:loginView];
+    
+    loginView.readPermissions =
     @[@"public_profile", @"email"];
-    NSLog(@"%@",loginButton.readPermissions);
-
-    // Optional: Place the button in the center of your view.
-    loginButton.center = self.view.center;
-    [self.view addSubview:loginButton];
+    NSLog(@"%@",loginView.readPermissions);
+    
     if ([FBSDKAccessToken currentAccessToken]) {
         // User is logged in, do work such as go to next view controller.
         NSLog(@"Token is available : %@",[[FBSDKAccessToken currentAccessToken]tokenString]);
@@ -63,23 +86,31 @@
         [[[FBSDKGraphRequest alloc] initWithGraphPath:@"me" parameters:parameters]
          startWithCompletionHandler:^(FBSDKGraphRequestConnection *connection, id result, NSError *error) {
              if (!error) {
-                 NSString *fbPhotoUrl = [[[result objectForKey:@"picture"]objectForKey:@"data"]objectForKey:@"url"];
+                 fbPhotoUrl = [[[result objectForKey:@"picture"]objectForKey:@"data"]objectForKey:@"url"];
                  NSLog(@"%@",fbPhotoUrl);
-                 NSString *email = [result objectForKey:@"email"];
-                 NSString *name = [result objectForKey:@"name"];
-                 NSString *userid = [result objectForKey:@"id"];
+                 email = [result objectForKey:@"email"];
+                 name = [result objectForKey:@"name"];
+                 userid = [result objectForKey:@"id"];
                  
                  NSLog(@"%@%@%@",email,name,userid);
-            
-//                 MBProgressHUD * hud = [MBProgressHUD showHUDAddedTo:self.view animated:YES];
-//                 NSString *strloadingText = [NSString stringWithFormat:@"Loading Data."];
-//                 hud.label.text = strloadingText;
+                 
+             }
+         }];
+    }else{
+        email = nil;
+        name = nil;
+        userid = nil;
+    }
+}
+-(void)clickOnFacebookLogin{
+    [NSUserDefaults.standardUserDefaults setValue:@"facebook" forKey:@"login"];
+    
                  NSString *urlInstring =[NSString stringWithFormat:@"http://samenslifestyle.com/samenslifestyle123.com/samens_mob/registration_ios_social-media.php"];
                  
                  NSURL *url=[NSURL URLWithString:urlInstring];
                  NSMutableURLRequest *request=[NSMutableURLRequest requestWithURL:url];
                  [request setHTTPMethod:@"POST"];
-                 NSString *params = [NSString stringWithFormat:@"userid=%@&name=%@&type=%@&image=%@&email=%@",userid,name,@"F",fbPhotoUrl,email];
+                 NSString *params = [NSString stringWithFormat:@"userid=%@&name=%@&type=%@&image=%@&email=%@&regId=%@",userid,name,@"F",fbPhotoUrl,email,[FIRInstanceID instanceID].token];
                  NSLog(@"%@",params);
                  NSData *requestData = [params dataUsingEncoding:NSUTF8StringEncoding];
                  NSLog(@"%@",requestData);
@@ -93,31 +124,129 @@
                      }else{
                          id jsonData = [NSJSONSerialization JSONObjectWithData:data options:kNilOptions error:&error];
                          NSLog(@"%@",jsonData);
+                         if([[NSNumber numberWithBool:[[[NSJSONSerialization JSONObjectWithData:data options:kNilOptions error:&error] objectForKey:@"success"] boolValue]] isEqualToNumber:[NSNumber numberWithInt:1]]){
+                             dispatch_async(dispatch_get_main_queue(), ^{
+                                 NSString *urlInstring =[NSString stringWithFormat:@"http://samenslifestyle.com/samenslifestyle123.com/samens_mob/registration_detail_social-media.php"];
+                                 NSURL *url=[NSURL URLWithString:urlInstring];
+                                 NSMutableURLRequest *request=[NSMutableURLRequest requestWithURL:url];
+                                 [request setHTTPMethod:@"POST"];
+                                 NSString *params = [NSString stringWithFormat:@"userid=%@&type=%@",userid,@"F"];
+                                 NSLog(@"%@",params);
+                                 
+                                 NSData *requestData = [params dataUsingEncoding:NSUTF8StringEncoding];
+                                 NSLog(@"%@",requestData);
+                                 [request setHTTPBody:requestData];
+                                 
+                                 NSURLSessionConfiguration *config=[NSURLSessionConfiguration defaultSessionConfiguration];
+                                 [config setTimeoutIntervalForRequest:30.0];
+                                 NSURLSession *session=[NSURLSession sessionWithConfiguration:config];
+                                 NSURLSessionDataTask *task=[session dataTaskWithRequest:request completionHandler:^(NSData * _Nullable data, NSURLResponse * _Nullable response, NSError * _Nullable error) {
+                                     
+                                     NSError *err;
+                                     
+                                     if (error) {
+                                         NSLog(@"%@",err);
+                                         
+                                         if ([error.localizedDescription isEqualToString:@"The request timed out."]){
+                                             dispatch_async(dispatch_get_main_queue(), ^{
+                                                 UIAlertView *alertView = [[UIAlertView alloc]initWithTitle:@"The requste timed out. Please try again" message:@"" delegate:self cancelButtonTitle:@"Cancel" otherButtonTitles:@"Retry", nil];
+                                                 alertView.tag = 001;
+                                                 [alertView show];
+                                             });
+                                         }else if ([error.localizedDescription isEqualToString:@"The Internet connection appears to be offline."]){
+                                             dispatch_async(dispatch_get_main_queue(),^{
+                                                 UIAlertView *alertView = [[UIAlertView alloc]initWithTitle:@"The Internet connection appears to be offline." message:@"" delegate:nil cancelButtonTitle:@"Ok" otherButtonTitles:@"Retry", nil];
+                                                 alertView.tag = 002;
+                                                 [alertView show];
+                                             });
+                                         }
+                                         
+                                     }else{
+                                         
+                                         id jsonData = [NSJSONSerialization JSONObjectWithData:data options:kNilOptions error:&error];
+                                         NSLog(@"%@",jsonData);
+                                     }
+                                 }];
+                                 [task resume];
+                             });
+                         }else{
+                                 dispatch_async(dispatch_get_main_queue(), ^{
+                                     {
+                                         dispatch_async(dispatch_get_main_queue(), ^{
+                                             NSString *urlInstring =[NSString stringWithFormat:@"http://samenslifestyle.com/samenslifestyle123.com/samens_mob/registration_detail_social-media.php"];
+                                             NSURL *url=[NSURL URLWithString:urlInstring];
+                                             NSMutableURLRequest *request=[NSMutableURLRequest requestWithURL:url];
+                                             [request setHTTPMethod:@"POST"];
+                                             NSString *params = [NSString stringWithFormat:@"userid=%@&type=%@",userid,@"F"];
+                                             NSLog(@"%@",params);
+                                             
+                                             NSData *requestData = [params dataUsingEncoding:NSUTF8StringEncoding];
+                                             NSLog(@"%@",requestData);
+                                             [request setHTTPBody:requestData];
+                                             
+                                             NSURLSessionConfiguration *config=[NSURLSessionConfiguration defaultSessionConfiguration];
+                                             [config setTimeoutIntervalForRequest:30.0];
+                                             NSURLSession *session=[NSURLSession sessionWithConfiguration:config];
+                                             NSURLSessionDataTask *task=[session dataTaskWithRequest:request completionHandler:^(NSData * _Nullable data, NSURLResponse * _Nullable response, NSError * _Nullable error) {
+                                                 
+                                                 NSError *err;
+                                                 
+                                                 if (error) {
+                                                     NSLog(@"%@",err);
+                                                     
+                                                     if ([error.localizedDescription isEqualToString:@"The request timed out."]){
+                                                         dispatch_async(dispatch_get_main_queue(), ^{
+                                                             UIAlertView *alertView = [[UIAlertView alloc]initWithTitle:@"The requste timed out. Please try again" message:@"" delegate:self cancelButtonTitle:@"Cancel" otherButtonTitles:@"Retry", nil];
+                                                             alertView.tag = 001;
+                                                             [alertView show];
+                                                         });
+                                                     }else if ([error.localizedDescription isEqualToString:@"The Internet connection appears to be offline."]){
+                                                         dispatch_async(dispatch_get_main_queue(),^{
+                                                             UIAlertView *alertView = [[UIAlertView alloc]initWithTitle:@"The Internet connection appears to be offline." message:@"" delegate:nil cancelButtonTitle:@"Ok" otherButtonTitles:@"Retry", nil];
+                                                             alertView.tag = 002;
+                                                             [alertView show];
+                                                         });
+                                                     }
+                                                     
+                                                 }else{
+                                                     
+                                                     id jsonData = [NSJSONSerialization JSONObjectWithData:data options:kNilOptions error:&error];
+                                                     NSLog(@"%@",jsonData);
+                                                 }
+                                             }];
+                                             [task resume];
+                                         });
+                                     }
+                                     
+                                 });
+                            }
+                         
                      }
                  }];
                  [task resume];
                  
         
     }
-         }];
-    }
-    
-    [self.navigationItem setHidesBackButton:YES];
 
-    emailTextField.text = @"baddamranjith@gmail.com";
-    passwordTextField.text = @"baddam123";
-
-    [self getAdsImages];
-    UIImage *image = [UIImage imageNamed:@"Title head"];
-    self.navigationItem.titleView = [[UIImageView alloc] initWithImage:image];
-    [self.navigationItem.backBarButtonItem setAccessibilityElementsHidden:YES];
-    [self.navigationItem setHidesBackButton:YES animated:YES];
-    
-
-
-}
-
-
+//- (void)logout:(id<FBSessionDelegate>)delegate {
+//    
+//    self.sessionDelegate = delegate;
+//    [_accessToken release];
+//    _accessToken = nil;
+//    [_expirationDate release];
+//    _expirationDate = nil;
+//    
+//    NSHTTPCookieStorage* cookies = [NSHTTPCookieStorage sharedHTTPCookieStorage];
+//    NSArray* facebookCookies = [cookies cookiesForURL:[NSURL URLWithString:@"http://login.facebook.com"]];
+//    
+//    for (NSHTTPCookie* cookie in facebookCookies) {
+//        [cookies deleteCookie:cookie];
+//    }
+//    
+//    if ([self.sessionDelegate respondsToSelector:@selector(fbDidLogout)]) {
+//        [_sessionDelegate fbDidLogout];
+//    }
+//}
 -(IBAction)clickOnLogin:(id)sender{
     
     if ([emailTextField.text isEqualToString:@""] || [passwordTextField.text isEqualToString:@""]) {
@@ -319,12 +448,190 @@ presentViewController:(UIViewController *)viewController {
 dismissViewController:(UIViewController *)viewController {
     [self dismissViewControllerAnimated:YES completion:nil];
 }
+- (void)signIn:(GIDSignIn *)signIn
+didSignInForUser:(GIDGoogleUser *)user
+     withError:(NSError *)error {
+    GuserId = user.userID;                  // For client-side use only!
+    GidToken = user.authentication.idToken; // Safe to send to the server
+    GfullName = user.profile.name;
+    Gemail = user.profile.email;
+    [GIDSignIn sharedInstance].shouldFetchBasicProfile = YES;
+    if ([GIDSignIn sharedInstance].currentUser.profile.hasImage)
+    {
+        NSUInteger dimension = round(50 * [[UIScreen mainScreen] scale]);
+        imageURL = [user.profile imageURLWithDimension:dimension];
+        NSLog(@"%@",imageURL);
+        imgUrlString = [NSString stringWithFormat:@"%@",imageURL];
+        NSLog(@"%@",imgUrlString);
+    }
+    NSLog(@"%@",[FIRInstanceID instanceID].token);
+    
+    
+    NSLog(@"%@%@%@%@",GuserId,GidToken,GfullName,Gemail);
+}
 - (IBAction)didTapSignIn:(id)sender {
-    [NSUserDefaults.standardUserDefaults setValue:@"google" forKey:@"login"];
-    [[GIDSignIn sharedInstance] signIn];
+    [NSUserDefaults.standardUserDefaults setValue:@"google" forKey:@"LoggedIn"];
+
+    NSString *urlInstring =[NSString stringWithFormat:@"http://samenslifestyle.com/samenslifestyle123.com/samens_mob/registration_ios_social-media.php"];
+    NSURL *url=[NSURL URLWithString:urlInstring];
+    NSMutableURLRequest *request=[NSMutableURLRequest requestWithURL:url];
+    [request setHTTPMethod:@"POST"];
+    NSString *params = [NSString stringWithFormat:@"userid=%@&name=%@&type=%@&image=%@&email=%@&regId=%@",GuserId,GfullName,@"G",imgUrlString,Gemail,[FIRInstanceID instanceID].token];
+    NSLog(@"%@",params);
+    
+    NSData *requestData = [params dataUsingEncoding:NSUTF8StringEncoding];
+    NSLog(@"%@",requestData);
+    [request setHTTPBody:requestData];
+    
+    NSURLSessionConfiguration *config=[NSURLSessionConfiguration defaultSessionConfiguration];
+    [config setTimeoutIntervalForRequest:30.0];
+    NSURLSession *session=[NSURLSession sessionWithConfiguration:config];
+    NSURLSessionDataTask *task=[session dataTaskWithRequest:request completionHandler:^(NSData * _Nullable data, NSURLResponse * _Nullable response, NSError * _Nullable error) {
+        
+        NSError *err;
+        
+        if (error) {
+            NSLog(@"%@",err);
+            
+            if ([error.localizedDescription isEqualToString:@"The request timed out."]){
+                dispatch_async(dispatch_get_main_queue(), ^{
+                    UIAlertView *alertView = [[UIAlertView alloc]initWithTitle:@"The requste timed out. Please try again" message:@"" delegate:self cancelButtonTitle:@"Cancel" otherButtonTitles:@"Retry", nil];
+                    alertView.tag = 001;
+                    [alertView show];
+                });
+            }else if ([error.localizedDescription isEqualToString:@"The Internet connection appears to be offline."]){
+                dispatch_async(dispatch_get_main_queue(),^{
+                    UIAlertView *alertView = [[UIAlertView alloc]initWithTitle:@"The Internet connection appears to be offline." message:@"" delegate:nil cancelButtonTitle:@"Ok" otherButtonTitles:@"Retry", nil];
+                    alertView.tag = 002;
+                    [alertView show];
+                });
+            }
+            
+        }else{
+            
+            id jsonData = [NSJSONSerialization JSONObjectWithData:data options:kNilOptions error:&error];
+            NSLog(@"%@",response);
+            NSLog(@"%@",jsonData);
+            if([[NSNumber numberWithBool:[[[NSJSONSerialization JSONObjectWithData:data options:kNilOptions error:&error] objectForKey:@"success"] boolValue]] isEqualToNumber:[NSNumber numberWithInt:1]]){
+                dispatch_async(dispatch_get_main_queue(), ^{
+                    NSString *urlInstring =[NSString stringWithFormat:@"http://samenslifestyle.com/samenslifestyle123.com/samens_mob/registration_detail_social-media.php"];
+                    NSURL *url=[NSURL URLWithString:urlInstring];
+                    NSMutableURLRequest *request=[NSMutableURLRequest requestWithURL:url];
+                    [request setHTTPMethod:@"POST"];
+                    NSString *params = [NSString stringWithFormat:@"userid=%@&type=%@",GuserId,@"G"];
+                    NSLog(@"%@",params);
+                    
+                    NSData *requestData = [params dataUsingEncoding:NSUTF8StringEncoding];
+                    NSLog(@"%@",requestData);
+                    [request setHTTPBody:requestData];
+                    
+                    NSURLSessionConfiguration *config=[NSURLSessionConfiguration defaultSessionConfiguration];
+                    [config setTimeoutIntervalForRequest:30.0];
+                    NSURLSession *session=[NSURLSession sessionWithConfiguration:config];
+                    NSURLSessionDataTask *task=[session dataTaskWithRequest:request completionHandler:^(NSData * _Nullable data, NSURLResponse * _Nullable response, NSError * _Nullable error) {
+                        
+                        NSError *err;
+                        
+                        if (error) {
+                            NSLog(@"%@",err);
+                            
+                            if ([error.localizedDescription isEqualToString:@"The request timed out."]){
+                                dispatch_async(dispatch_get_main_queue(), ^{
+                                    UIAlertView *alertView = [[UIAlertView alloc]initWithTitle:@"The requste timed out. Please try again" message:@"" delegate:self cancelButtonTitle:@"Cancel" otherButtonTitles:@"Retry", nil];
+                                    alertView.tag = 001;
+                                    [alertView show];
+                                });
+                            }else if ([error.localizedDescription isEqualToString:@"The Internet connection appears to be offline."]){
+                                dispatch_async(dispatch_get_main_queue(),^{
+                                    UIAlertView *alertView = [[UIAlertView alloc]initWithTitle:@"The Internet connection appears to be offline." message:@"" delegate:nil cancelButtonTitle:@"Ok" otherButtonTitles:@"Retry", nil];
+                                    alertView.tag = 002;
+                                    [alertView show];
+                                });
+                            }
+                            
+                        }else{
+                            
+                            id jsonData = [NSJSONSerialization JSONObjectWithData:data options:kNilOptions error:&error];
+                            NSLog(@"%@",response);
+                            NSLog(@"%@",jsonData);
+                           // NSArray *dammyArray = [jsonData objectForKey:@"categories"];
+                            
+//                            for (NSDictionary *eachUser in dammyArray){
+//                                [NSUserDefaults.standardUserDefaults setValue:[eachUser valueForKey:@"api"] forKey:@"api"];
+//                                NSLog(@"%@",eachUser);
+//                                [NSUserDefaults.standardUserDefaults setValue:[eachUser valueForKey:@"custid"] forKey:@"custid"];
+//                                [NSUserDefaults.standardUserDefaults setValue:[eachUser valueForKey:@"dor"] forKey:@"dor"];
+//                                [NSUserDefaults.standardUserDefaults setValue:[eachUser valueForKey:@"email"] forKey:@"email"];
+//                                [NSUserDefaults.standardUserDefaults setValue:[eachUser valueForKey:@"mobile"] forKey:@"mobile"];
+//                                [NSUserDefaults.standardUserDefaults setValue:[eachUser valueForKey:@"name"] forKey:@"name"];
+//                                NSLog(@"%@",eachUser);
+//                                
+//                                
+//                            }
+                            
+                        }
+                    }];
+                    [task resume];
+                    
+                });
+            }else{
+                dispatch_async(dispatch_get_main_queue(), ^{
+                    NSString *urlInstring =[NSString stringWithFormat:@"http://samenslifestyle.com/samenslifestyle123.com/samens_mob/registration_detail_social-media.php"];
+                    NSURL *url=[NSURL URLWithString:urlInstring];
+                    NSMutableURLRequest *request=[NSMutableURLRequest requestWithURL:url];
+                    [request setHTTPMethod:@"POST"];
+                    NSString *params = [NSString stringWithFormat:@"userid=%@&type=%@",GuserId,@"G"];
+                    NSLog(@"%@",params);
+                    
+                    NSData *requestData = [params dataUsingEncoding:NSUTF8StringEncoding];
+                    NSLog(@"%@",requestData);
+                    [request setHTTPBody:requestData];
+                    
+                    NSURLSessionConfiguration *config=[NSURLSessionConfiguration defaultSessionConfiguration];
+                    [config setTimeoutIntervalForRequest:30.0];
+                    NSURLSession *session=[NSURLSession sessionWithConfiguration:config];
+                    NSURLSessionDataTask *task=[session dataTaskWithRequest:request completionHandler:^(NSData * _Nullable data, NSURLResponse * _Nullable response, NSError * _Nullable error) {
+                        
+                        NSError *err;
+                        
+                        if (error) {
+                            NSLog(@"%@",err);
+                            
+                            if ([error.localizedDescription isEqualToString:@"The request timed out."]){
+                                dispatch_async(dispatch_get_main_queue(), ^{
+                                    UIAlertView *alertView = [[UIAlertView alloc]initWithTitle:@"The requste timed out. Please try again" message:@"" delegate:self cancelButtonTitle:@"Cancel" otherButtonTitles:@"Retry", nil];
+                                    alertView.tag = 001;
+                                    [alertView show];
+                                });
+                            }else if ([error.localizedDescription isEqualToString:@"The Internet connection appears to be offline."]){
+                                dispatch_async(dispatch_get_main_queue(),^{
+                                    UIAlertView *alertView = [[UIAlertView alloc]initWithTitle:@"The Internet connection appears to be offline." message:@"" delegate:nil cancelButtonTitle:@"Ok" otherButtonTitles:@"Retry", nil];
+                                    alertView.tag = 002;
+                                    [alertView show];
+                                });
+                            }
+                            
+                        }else{
+                            
+                            id jsonData = [NSJSONSerialization JSONObjectWithData:data options:kNilOptions error:&error];
+                            NSLog(@"%@",response);
+                            NSLog(@"%@",jsonData);
+                        }
+                    }];
+                    [task resume];
+                    
+                    
+                });
+            }
+        }
+    }];
+    [task resume];
+
 }
 - (IBAction)didTapSignOut:(id)sender {
     [[GIDSignIn sharedInstance] signOut];
 }
-        
+-(IBAction)fbLogin:(id)sender{
+    
+}
 @end
