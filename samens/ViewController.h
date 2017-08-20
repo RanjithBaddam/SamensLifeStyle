@@ -12,7 +12,7 @@
 
 
 
-@interface ViewController : UIViewController<UITextFieldDelegate , UIGestureRecognizerDelegate,GIDSignInUIDelegate>
+@interface ViewController : UIViewController<UITextFieldDelegate , UIGestureRecognizerDelegate,GIDSignInUIDelegate,GIDSignInDelegate>
 @property(nonatomic,weak)IBOutlet UICollectionView *adsScrollCollectionView;
 @property(nonatomic,weak)IBOutlet UIButton *loginWithFacebook;
 
@@ -20,6 +20,6 @@
 -(IBAction)ClickOnForgot:(id)sender;
 
 @property(nonatomic,strong)UIButton *facebookButton;
-
+//-(void)AllLoginDetails;
 @end
 

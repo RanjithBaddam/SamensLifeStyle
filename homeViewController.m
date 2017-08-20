@@ -232,7 +232,6 @@
                                                          }
                                                          dispatch_async(dispatch_get_main_queue(), ^(void){
                                                              //Run UI Updates
-                                                             [MBProgressHUD hideHUDForView:self.view animated:YES];
                                                              [_catogorysTableView reloadData];
                                                              _collectionView.dataSource = self;
                                                              _collectionView.delegate = self;

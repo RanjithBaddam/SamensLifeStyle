@@ -28,6 +28,7 @@
 
 
 
+
 @interface ViewController ()<UICollectionViewDelegate,UICollectionViewDataSource>{
     NSMutableArray *adsMainData;
     NSTimer *timer;
@@ -41,10 +42,6 @@
     
     NSURL *imageURL;
     NSString *imgUrlString;
-    NSString *GuserId;
-    NSString *GidToken;
-    NSString *GfullName;
-    NSString *Gemail;
 }
 @property(nonatomic,weak)IBOutlet UITextField *emailTextField;
 @property(nonatomic,weak)IBOutlet UITextField *passwordTextField;
@@ -63,7 +60,8 @@
 }
 - (void)viewDidLoad {
     [super viewDidLoad];
-//    [self clickOnFacebookLogin];
+      [GIDSignIn sharedInstance].delegate = self;
+    [self clickOnFacebookLogin];
     [self.navigationItem setHidesBackButton:YES];
     emailTextField.text = @"ojhasaurabh1992@gmail.com";
     passwordTextField.text = @"12345";
@@ -97,9 +95,7 @@
              }
          }];
     }else{
-        email = nil;
-        name = nil;
-        userid = nil;
+       
     }
 }
 -(void)clickOnFacebookLogin{
@@ -228,25 +224,7 @@
         
     }
 
-//- (void)logout:(id<FBSessionDelegate>)delegate {
-//    
-//    self.sessionDelegate = delegate;
-//    [_accessToken release];
-//    _accessToken = nil;
-//    [_expirationDate release];
-//    _expirationDate = nil;
-//    
-//    NSHTTPCookieStorage* cookies = [NSHTTPCookieStorage sharedHTTPCookieStorage];
-//    NSArray* facebookCookies = [cookies cookiesForURL:[NSURL URLWithString:@"http://login.facebook.com"]];
-//    
-//    for (NSHTTPCookie* cookie in facebookCookies) {
-//        [cookies deleteCookie:cookie];
-//    }
-//    
-//    if ([self.sessionDelegate respondsToSelector:@selector(fbDidLogout)]) {
-//        [_sessionDelegate fbDidLogout];
-//    }
-//}
+
 -(IBAction)clickOnLogin:(id)sender{
     
     if ([emailTextField.text isEqualToString:@""] || [passwordTextField.text isEqualToString:@""]) {
@@ -323,7 +301,7 @@
 
                         [MBProgressHUD hideHUDForView:self.view animated:YES];
                         AccountViewController *accountVc = [self.storyboard instantiateViewControllerWithIdentifier:@"AccountViewController"];
-                        self.tabBarController.tabBar.hidden = NO;
+                       self.tabBarController.tabBar.hidden = NO;
                         [self.tabBarController setSelectedIndex:3];
                         accountVc.loginModel = loginModel;
                         [self.navigationController pushViewController:accountVc animated:YES];
@@ -436,25 +414,15 @@
     NSLog(@"%@",signIn);
 
 }
-
-// Present a view that prompts the user to sign in with Google
-- (void)signIn:(GIDSignIn *)signIn
-presentViewController:(UIViewController *)viewController {
-    [self presentViewController:viewController animated:YES completion:nil];
-}
-
-// Dismiss the "Sign in with Google" view
-- (void)signIn:(GIDSignIn *)signIn
-dismissViewController:(UIViewController *)viewController {
-    [self dismissViewControllerAnimated:YES completion:nil];
-}
 - (void)signIn:(GIDSignIn *)signIn
 didSignInForUser:(GIDGoogleUser *)user
      withError:(NSError *)error {
-    GuserId = user.userID;                  // For client-side use only!
-    GidToken = user.authentication.idToken; // Safe to send to the server
-    GfullName = user.profile.name;
-    Gemail = user.profile.email;
+    //  Perform any operations on signed in user here.
+    NSString *userId = user.userID;                  // For client-side use only!
+    NSString *idToken = user.authentication.idToken; // Safe to send to the server
+    NSString *fullName = user.profile.name;
+    NSString *email1 = user.profile.email;
+    NSLog(@"%@%@%@%@",userId,idToken,fullName,email1);
     [GIDSignIn sharedInstance].shouldFetchBasicProfile = YES;
     if ([GIDSignIn sharedInstance].currentUser.profile.hasImage)
     {
@@ -467,16 +435,14 @@ didSignInForUser:(GIDGoogleUser *)user
     NSLog(@"%@",[FIRInstanceID instanceID].token);
     
     
-    NSLog(@"%@%@%@%@",GuserId,GidToken,GfullName,Gemail);
-}
-- (IBAction)didTapSignIn:(id)sender {
-    [NSUserDefaults.standardUserDefaults setValue:@"google" forKey:@"LoggedIn"];
-
+    NSLog(@"%@%@%@%@",userId,idToken,fullName,email);
+    
+    
     NSString *urlInstring =[NSString stringWithFormat:@"http://samenslifestyle.com/samenslifestyle123.com/samens_mob/registration_ios_social-media.php"];
     NSURL *url=[NSURL URLWithString:urlInstring];
     NSMutableURLRequest *request=[NSMutableURLRequest requestWithURL:url];
     [request setHTTPMethod:@"POST"];
-    NSString *params = [NSString stringWithFormat:@"userid=%@&name=%@&type=%@&image=%@&email=%@&regId=%@",GuserId,GfullName,@"G",imgUrlString,Gemail,[FIRInstanceID instanceID].token];
+    NSString *params = [NSString stringWithFormat:@"userid=%@&name=%@&type=%@&image=%@&email=%@&regId=%@",userId,fullName,@"G",imgUrlString,email,[FIRInstanceID instanceID].token];
     NSLog(@"%@",params);
     
     NSData *requestData = [params dataUsingEncoding:NSUTF8StringEncoding];
@@ -518,7 +484,7 @@ didSignInForUser:(GIDGoogleUser *)user
                     NSURL *url=[NSURL URLWithString:urlInstring];
                     NSMutableURLRequest *request=[NSMutableURLRequest requestWithURL:url];
                     [request setHTTPMethod:@"POST"];
-                    NSString *params = [NSString stringWithFormat:@"userid=%@&type=%@",GuserId,@"G"];
+                    NSString *params = [NSString stringWithFormat:@"userid=%@&type=%@",userId,@"G"];
                     NSLog(@"%@",params);
                     
                     NSData *requestData = [params dataUsingEncoding:NSUTF8StringEncoding];
@@ -554,20 +520,26 @@ didSignInForUser:(GIDGoogleUser *)user
                             id jsonData = [NSJSONSerialization JSONObjectWithData:data options:kNilOptions error:&error];
                             NSLog(@"%@",response);
                             NSLog(@"%@",jsonData);
-                           // NSArray *dammyArray = [jsonData objectForKey:@"categories"];
+                            NSArray *dammyArray = [jsonData objectForKey:@"categories"];
                             
-//                            for (NSDictionary *eachUser in dammyArray){
-//                                [NSUserDefaults.standardUserDefaults setValue:[eachUser valueForKey:@"api"] forKey:@"api"];
-//                                NSLog(@"%@",eachUser);
-//                                [NSUserDefaults.standardUserDefaults setValue:[eachUser valueForKey:@"custid"] forKey:@"custid"];
-//                                [NSUserDefaults.standardUserDefaults setValue:[eachUser valueForKey:@"dor"] forKey:@"dor"];
-//                                [NSUserDefaults.standardUserDefaults setValue:[eachUser valueForKey:@"email"] forKey:@"email"];
-//                                [NSUserDefaults.standardUserDefaults setValue:[eachUser valueForKey:@"mobile"] forKey:@"mobile"];
-//                                [NSUserDefaults.standardUserDefaults setValue:[eachUser valueForKey:@"name"] forKey:@"name"];
-//                                NSLog(@"%@",eachUser);
-//                                
-//                                
-//                            }
+                            for (NSDictionary *eachUser in dammyArray){
+                                [NSUserDefaults.standardUserDefaults setValue:[eachUser valueForKey:@"api"] forKey:@"api"];
+                                NSLog(@"%@",eachUser);
+                                [NSUserDefaults.standardUserDefaults setValue:[eachUser valueForKey:@"custid"] forKey:@"custid"];
+                                [NSUserDefaults.standardUserDefaults setValue:[eachUser valueForKey:@"dor"] forKey:@"dor"];
+                                [NSUserDefaults.standardUserDefaults setValue:[eachUser valueForKey:@"email"] forKey:@"email"];
+                                [NSUserDefaults.standardUserDefaults setValue:[eachUser valueForKey:@"mobile"] forKey:@"mobile"];
+                                [NSUserDefaults.standardUserDefaults setValue:[eachUser valueForKey:@"name"] forKey:@"name"];
+                                NSLog(@"%@",eachUser);
+                            [[NSUserDefaults standardUserDefaults] setValue:@"yes" forKey:@"LoggedIn"];
+                                dispatch_async(dispatch_get_main_queue(), ^{
+                                    self.tabBarController.tabBar.hidden = NO;
+                                AccountViewController *accountVc = [self.storyboard instantiateViewControllerWithIdentifier:@"AccountViewController"];
+                                [self.navigationController pushViewController:accountVc animated:YES];
+                                });
+                                
+                            }
+                            
                             
                         }
                     }];
@@ -580,7 +552,7 @@ didSignInForUser:(GIDGoogleUser *)user
                     NSURL *url=[NSURL URLWithString:urlInstring];
                     NSMutableURLRequest *request=[NSMutableURLRequest requestWithURL:url];
                     [request setHTTPMethod:@"POST"];
-                    NSString *params = [NSString stringWithFormat:@"userid=%@&type=%@",GuserId,@"G"];
+                    NSString *params = [NSString stringWithFormat:@"userid=%@&type=%@",userId,@"G"];
                     NSLog(@"%@",params);
                     
                     NSData *requestData = [params dataUsingEncoding:NSUTF8StringEncoding];
@@ -616,6 +588,27 @@ didSignInForUser:(GIDGoogleUser *)user
                             id jsonData = [NSJSONSerialization JSONObjectWithData:data options:kNilOptions error:&error];
                             NSLog(@"%@",response);
                             NSLog(@"%@",jsonData);
+                            NSArray *dammyArray = [jsonData objectForKey:@"categories"];
+                            
+                            for (NSDictionary *eachUser in dammyArray){
+                                [NSUserDefaults.standardUserDefaults setValue:[eachUser valueForKey:@"api"] forKey:@"api"];
+                                NSLog(@"%@",eachUser);
+                                [NSUserDefaults.standardUserDefaults setValue:[eachUser valueForKey:@"custid"] forKey:@"custid"];
+                                [NSUserDefaults.standardUserDefaults setValue:[eachUser valueForKey:@"dor"] forKey:@"dor"];
+                                [NSUserDefaults.standardUserDefaults setValue:[eachUser valueForKey:@"email"] forKey:@"email"];
+                                [NSUserDefaults.standardUserDefaults setValue:[eachUser valueForKey:@"mobile"] forKey:@"mobile"];
+                                [NSUserDefaults.standardUserDefaults setValue:[eachUser valueForKey:@"name"] forKey:@"name"];
+                                NSLog(@"%@",eachUser);
+                            [[NSUserDefaults standardUserDefaults] setValue:@"yes" forKey:@"LoggedIn"];
+                                dispatch_async(dispatch_get_main_queue(), ^{
+                                    self.tabBarController.tabBar.hidden = NO;
+                                AccountViewController *accountVc = [self.storyboard instantiateViewControllerWithIdentifier:@"AccountViewController"];
+                                [self.navigationController pushViewController:accountVc animated:YES];
+                                });
+                               
+                            }
+                            
+                            
                         }
                     }];
                     [task resume];
@@ -626,12 +619,37 @@ didSignInForUser:(GIDGoogleUser *)user
         }
     }];
     [task resume];
+   
+}
 
+// Present a view that prompts the user to sign in with Google
+- (void)signIn:(GIDSignIn *)signIn
+presentViewController:(UIViewController *)viewController {
+    [self presentViewController:viewController animated:YES completion:nil];
+}
+
+// Dismiss the "Sign in with Google" view
+- (void)signIn:(GIDSignIn *)signIn
+dismissViewController:(UIViewController *)viewController {
+    [self dismissViewControllerAnimated:YES completion:nil];
+}
+
+- (IBAction)didTapSignIn:(id)sender {
+    [NSUserDefaults.standardUserDefaults setValue:@"google" forKey:@"login"];
+    if ([[GIDSignIn sharedInstance] hasAuthInKeychain]){
+        GIDProfileData *data;
+        NSString *mail = data.email;
+        NSLog(@"%@",mail);
+    }else{
+        [[GIDSignIn sharedInstance] signIn];
+    }
 }
 - (IBAction)didTapSignOut:(id)sender {
     [[GIDSignIn sharedInstance] signOut];
 }
 -(IBAction)fbLogin:(id)sender{
     
+}
+-(void)AllLoginDetails{
 }
 @end

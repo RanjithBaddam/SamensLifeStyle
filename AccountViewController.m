@@ -240,7 +240,7 @@
 {
      if (alertView.tag == 100){
         if (buttonIndex == 1){
-           
+            [[GIDSignIn sharedInstance] signOut];
             [[NSUserDefaults standardUserDefaults] setValue:@"no" forKey:@"LoggedIn"];
             [[NSUserDefaults standardUserDefaults] removeObjectForKey:@"api"] ;
             [[NSUserDefaults standardUserDefaults] removeObjectForKey:@"custid"];
