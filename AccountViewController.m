@@ -208,8 +208,9 @@
             
         }else{
             ViewController *vc = [self.storyboard instantiateViewControllerWithIdentifier:@"ViewController"];
-            self.tabBarController.tabBar.hidden = YES;
             [self.navigationController pushViewController:vc animated:YES];
+            self.tabBarController.tabBar.hidden = YES;
+          
         }
         }else if (indexPath.row==1){
         if ([[[NSUserDefaults standardUserDefaults] valueForKey:@"LoggedIn"] isEqualToString:@"yes"]) {

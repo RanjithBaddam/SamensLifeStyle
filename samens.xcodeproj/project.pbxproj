@@ -90,6 +90,7 @@
 		345E84211F29A8F300E78407 /* FetchSortColorModelDetails.m in Sources */ = {isa = PBXBuildFile; fileRef = 345E84201F29A8F300E78407 /* FetchSortColorModelDetails.m */; };
 		345E84241F29B2F200E78407 /* FetchSortFilterSizeModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 345E84231F29B2F200E78407 /* FetchSortFilterSizeModel.m */; };
 		34A1A4871F4428D3002D5090 /* editAddressViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 34A1A4861F4428D3002D5090 /* editAddressViewController.m */; };
+		34A1A4D51F4AB022002D5090 /* CoreLocation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 34A1A4D41F4AB022002D5090 /* CoreLocation.framework */; };
 		34C139851F1FE6DC003073E9 /* CustomStepper.m in Sources */ = {isa = PBXBuildFile; fileRef = 34C139841F1FE6DC003073E9 /* CustomStepper.m */; };
 		34D64CEF1EEC71CA00DA174A /* ItemsDisplayViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 34D64CEE1EEC71CA00DA174A /* ItemsDisplayViewController.m */; };
 		34D64CF21EEC7BB300DA174A /* DisplayItemsCollectionViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 34D64CF11EEC7BB300DA174A /* DisplayItemsCollectionViewCell.m */; };
@@ -297,6 +298,7 @@
 		34A1A4851F4428D3002D5090 /* editAddressViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = editAddressViewController.h; sourceTree = "<group>"; };
 		34A1A4861F4428D3002D5090 /* editAddressViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = editAddressViewController.m; sourceTree = "<group>"; };
 		34A1A4C71F46B0B7002D5090 /* samens.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = samens.entitlements; sourceTree = "<group>"; };
+		34A1A4D41F4AB022002D5090 /* CoreLocation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreLocation.framework; path = System/Library/Frameworks/CoreLocation.framework; sourceTree = SDKROOT; };
 		34C139831F1FE6DC003073E9 /* CustomStepper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CustomStepper.h; sourceTree = "<group>"; };
 		34C139841F1FE6DC003073E9 /* CustomStepper.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CustomStepper.m; sourceTree = "<group>"; };
 		34D64CED1EEC71CA00DA174A /* ItemsDisplayViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ItemsDisplayViewController.h; sourceTree = "<group>"; };
@@ -350,6 +352,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				34A1A4D51F4AB022002D5090 /* CoreLocation.framework in Frameworks */,
 				3445263E1F30528900051C57 /* AdSupport.framework in Frameworks */,
 				344526271F2DC87500051C57 /* FBSDKLoginKit.framework in Frameworks */,
 				344526291F2DCB2700051C57 /* FBSDKCoreKit.framework in Frameworks */,
@@ -1233,6 +1236,7 @@
 		540996C182CC93BFB88A5E8C /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				34A1A4D41F4AB022002D5090 /* CoreLocation.framework */,
 				3445263D1F30528900051C57 /* AdSupport.framework */,
 				344526281F2DCB2700051C57 /* FBSDKCoreKit.framework */,
 				344526261F2DC87500051C57 /* FBSDKLoginKit.framework */,

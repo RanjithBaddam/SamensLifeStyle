@@ -14,6 +14,7 @@
 #import <UIImageView+AFNetworking.h>
 #import "ViewController.h"
 #import "AccountViewController.h"
+#import "SubSubViewController.h"
 
 
 @interface WishlistViewController ()<UITableViewDelegate,UITableViewDataSource,UIAlertViewDelegate,UITabBarControllerDelegate>{
@@ -179,6 +180,20 @@
     
     return cell;
     
+}
+-(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath{
+    SubSubViewController *subsubVc = [self.storyboard instantiateViewControllerWithIdentifier:@"SubSubViewController"];
+    wishlistModel = [_wishListDataArray objectAtIndex:indexPath.item];
+    NSLog(@"%@",wishlistModel.pid);
+    [subsubVc getId:wishlistModel.pid];
+    [subsubVc getColor_code:wishlistModel.color_code];
+    
+    [subsubVc getItemName:wishlistModel.Name];
+    NSLog(@"%@",wishlistModel.Name);
+    [subsubVc getItemPrice:wishlistModel.price];
+    [self.navigationController pushViewController:subsubVc animated:YES];
+
+
 }
 
 -(IBAction)clickOnRemoveFromWishlist:(UIButton *)sender{

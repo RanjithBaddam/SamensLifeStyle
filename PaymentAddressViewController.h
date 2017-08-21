@@ -10,5 +10,7 @@
 
 @interface PaymentAddressViewController : UIViewController
 @property(nonatomic,strong)IBOutlet UIScrollView *scrollView;
-
+@property(nonatomic,weak)IBOutlet UIButton *LocationAccessBtn;
+-(IBAction)clickOnLocatinAccess:(UIButton *)sender;
+@property(nonatomic,weak)IBOutlet UIView *fullView;
 @end

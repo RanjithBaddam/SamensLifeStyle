@@ -11,8 +11,9 @@
 #import "AddressDetailsViewController.h"
 #import <MBProgressHUD.h>
 #import "AddressDetailsModel.h"
+#import <CoreLocation/CoreLocation.h>
 
-@interface PaymentAddressViewController ()<UITextFieldDelegate,UIAlertViewDelegate>{
+@interface PaymentAddressViewController ()<UITextFieldDelegate,UIAlertViewDelegate,CLLocationManagerDelegate>{
    IBOutlet UITextField *CityTextField;
    IBOutlet UITextField *PincodeTextField;
    IBOutlet UITextField *StateTextField;
@@ -38,6 +39,9 @@
     UIAlertView *alert;
     AddressDetailsModel *addressModel;
     NSMutableArray *addressData;
+    CLLocationManager *locationManager;
+    CLPlacemark *placemark;
+
 }
 
 @end
@@ -50,6 +54,9 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     // Do any additional setup after loading the view.
+//    self.fullView.frame = CGRectMake(self.scrollView.frame.origin.x, self.scrollView.frame.origin.y, self.scrollView.frame.size.width, self.scrollView.frame.size.height);
+//    [self.scrollView addSubview:self.fullView];
+
     CityTextField.delegate = self;
     PincodeTextField.delegate = self;
     StateTextField.delegate = self;
@@ -61,14 +68,14 @@
 
 
     
-        UIImage *img = [UIImage imageNamed:@"NavigationImage"];
-        UIImageView *imgView = [[UIImageView alloc] initWithFrame:CGRectMake(0, 0, 100, 44)];
-        [imgView setImage:img];
-        // setContent mode aspect fit
-        [imgView setContentMode:UIViewContentModeScaleAspectFit];
-        self.navigationItem.titleView = imgView;
-        
-        self.scrollView.contentSize = CGSizeMake(self.view.frame.size.width, 800);
+//        UIImage *img = [UIImage imageNamed:@"NavigationImage"];
+//        UIImageView *imgView = [[UIImageView alloc] initWithFrame:CGRectMake(0, 0, 100, 44)];
+//        [imgView setImage:img];
+//        // setContent mode aspect fit
+//        [imgView setContentMode:UIViewContentModeScaleAspectFit];
+//        self.navigationItem.titleView = imgView;
+//        
+        self.scrollView.contentSize = CGSizeMake(self.view.frame.size.width, 710);
         CALayer *border = [CALayer layer];
         CGFloat borderWidth = 2;
         border.borderColor = [UIColor darkGrayColor].CGColor;
@@ -152,6 +159,21 @@
     defaultSavingBtn.layer.borderWidth = 1;
     defaultSavingBtn.layer.borderColor = [UIColor blackColor].CGColor;
     
+    locationManager = [[CLLocationManager alloc] init];
+    locationManager.delegate = self;
+    locationManager.distanceFilter = kCLDistanceFilterNone;
+    locationManager.desiredAccuracy = kCLLocationAccuracyBest;
+    
+    if ([[[UIDevice currentDevice] systemVersion] floatValue] >= 8.0)
+        [locationManager requestWhenInUseAuthorization];
+    
+    [locationManager startUpdatingLocation];
+    if ([locationManager respondsToSelector:@selector(requestWhenInUseAuthorization)])
+    {
+        [locationManager requestWhenInUseAuthorization];
+    }
+    
+
 
     }
 - (void)didReceiveMemoryWarning {
@@ -512,4 +534,118 @@
     [task resume];
     
 }
+- (void)locationManager:(CLLocationManager *)manager didUpdateLocations:(NSArray *)locations
+{
+    CLLocation *location = [locations lastObject];
+    CLGeocoder *ceo = [[CLGeocoder alloc]init];
+    CLLocation *loc = [[CLLocation alloc]initWithLatitude:location.coordinate.latitude longitude:location.coordinate.longitude]; //insert your coordinates
+    
+    [ceo reverseGeocodeLocation:loc
+              completionHandler:^(NSArray *placemarks, NSError *error) {
+                  placemark = [placemarks objectAtIndex:0];
+//                  if (placemark) {
+//                      NSDictionary *address = [placemark valueForKey:@"addressDictionary"];
+//                      NSLog(@"%@",address);
+//                      CityTextField.text = [address valueForKey:@"City"];
+//                      PincodeTextField.text = [address valueForKey:@"ZIP"];
+//                      StateTextField.text = [address valueForKey:@"State"];
+//                      LocalityTextField.text = [[address valueForKey:@"FormattedAddressLines"]componentsJoinedByString:@", "];
+//                      NameTextField.text = [NSUserDefaults.standardUserDefaults valueForKey:@"name"];
+//                      PhnoneNumberTextField.text = [NSUserDefaults.standardUserDefaults valueForKey:@"mobile"];
+//                      
+//                NSString *locatedAt = [[placemark.addressDictionary valueForKey:@"FormattedAddressLines"] componentsJoinedByString:@", "];
+//                      
+//                       NSLog(@"addressDictionary %@", placemark.addressDictionary);
+//                      
+//                      
+//                      NSLog(@"I am currently at %@",locatedAt);
+//                      
+//                  }
+//                  else {
+//                      NSLog(@"Could not locate");
+//                  }
+              }
+     ];
+}
+-(void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex
+{
+    
+    if(buttonIndex == 0)//Settings button pressed
+    {
+        if (alertView.tag == 100)
+        {
+            //This will open ios devices location settings
+            [alertView dismissWithClickedButtonIndex:buttonIndex animated:YES];
+            [[UIApplication sharedApplication] openURL: [NSURL URLWithString: UIApplicationOpenSettingsURLString]];
+        }
+        else if (alertView.tag == 200)
+        {
+            //This will opne particular app location settings
+            [[UIApplication sharedApplication] openURL:[NSURL URLWithString:UIApplicationOpenSettingsURLString]];
+        }
+    }
+    else if(buttonIndex == 1)//Cancel button pressed.
+    {
+        //TODO for cancel
+    }
+}
+
+-(IBAction)clickOnLocatinAccess:(UIButton *)sender{
+    if ([CLLocationManager authorizationStatus] == kCLAuthorizationStatusDenied)
+    {
+        
+        UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:@"Location Services Disabled!"
+                                                            message:@"Please enable Location Based Services for better results! We promise to keep your location private"
+                                                           delegate:self
+                                                  cancelButtonTitle:@"Settings"
+                                                  otherButtonTitles:@"Cancel", nil];
+        
+        //TODO if user has not given permission to device
+        if (![CLLocationManager locationServicesEnabled])
+        {
+            alertView.tag = 100;
+        }
+        //TODO if user has not given permission to particular app
+        else
+        {
+            alertView.tag = 200;
+        }
+        
+        [alertView show];
+        
+        return;
+    }
+    else
+    {
+        //Location Services Enabled, let's start location updates
+        [locationManager startUpdatingLocation];
+        if (placemark) {
+            NSDictionary *address = [placemark valueForKey:@"addressDictionary"];
+            NSLog(@"%@",address);
+            CityTextField.text = [address valueForKey:@"City"];
+            PincodeTextField.text = [address valueForKey:@"ZIP"];
+            StateTextField.text = [address valueForKey:@"State"];
+            LocalityTextField.text = [[address valueForKey:@"FormattedAddressLines"]componentsJoinedByString:@", "];
+            NameTextField.text = [NSUserDefaults.standardUserDefaults valueForKey:@"name"];
+            PhnoneNumberTextField.text = [NSUserDefaults.standardUserDefaults valueForKey:@"mobile"];
+            
+            NSString *locatedAt = [[placemark.addressDictionary valueForKey:@"FormattedAddressLines"] componentsJoinedByString:@", "];
+            
+            NSLog(@"addressDictionary %@", placemark.addressDictionary);
+            
+            
+            NSLog(@"I am currently at %@",locatedAt);
+            
+        }
+        else {
+            NSLog(@"Could not locate");
+        }
+
+        
+    }
+
+    
+}
+
+
 @end

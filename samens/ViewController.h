@@ -20,6 +20,8 @@
 -(IBAction)ClickOnForgot:(id)sender;
 
 @property(nonatomic,strong)UIButton *facebookButton;
+
+
 //-(void)AllLoginDetails;
 @end
 

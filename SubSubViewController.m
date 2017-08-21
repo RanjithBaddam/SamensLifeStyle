@@ -1101,9 +1101,7 @@ NSLog(@"%@",params);
     }
 -(IBAction)ClickOnAddToCart:(id)sender{
     if ([[NSUserDefaults.standardUserDefaults valueForKey:@"LoggedIn"]isEqualToString:@"yes"]) {
-        
-        
-        
+      
         NSMutableArray *paramsArray=[[NSMutableArray alloc]init];
         [paramsArray addObject:[NSString stringWithFormat:@"pid=%@",_subsubCatId]];
         [paramsArray addObject:[NSString stringWithFormat:@"cid=%@",[NSUserDefaults.standardUserDefaults valueForKey:@"custid"]]];
